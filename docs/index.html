@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DotBox UI - Component Library</title>
+    <link rel="stylesheet" href="/dist/styles.css">
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .component-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .component-title {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+        .component-description {
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        .component-demo {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .component-code {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background: #fff;
+            border-right: 1px solid #eee;
+            padding: 2rem;
+        }
+        .nav-link {
+            display: block;
+            padding: 0.5rem 0;
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+        .content {
+            margin-left: 250px;
+        }
+        .header {
+            background: #fff;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <h2>DotBox UI</h2>
+        <a href="#buttons" class="nav-link">Buttons</a>
+        <a href="#modals" class="nav-link">Modal Dialogs</a>
+        <a href="#tabs" class="nav-link">Tab Views</a>
+        <a href="#textbox" class="nav-link">Text Boxes</a>
+        <a href="#metrics" class="nav-link">Metric Items</a>
+        <a href="#toolbuttons" class="nav-link">Tool Buttons</a>
+    </nav>
+
+    <div class="content">
+        <header class="header">
+            <h1>DotBox UI Components</h1>
+            <p>A modern, lightweight UI component library for building beautiful web applications.</p>
+        </header>
+
+        <div class="container">
+            <section id="buttons" class="component-section">
+                <h2 class="component-title">Buttons</h2>
+                <p class="component-description">Flexible button component with multiple variants and states.</p>
+                
+                <div class="component-demo">
+                    <div id="button-demo"></div>
+                </div>
+
+                <div class="component-code">
+                    <pre><code>const button = new DotBox.Button({
+    text: 'Click Me',
+    variant: 'primary',
+    size: 'medium',
+    onClick: () => console.log('Clicked!')
+});
+
+document.body.appendChild(button.getElement());</code></pre>
+                </div>
+            </section>
+
+            <section id="modals" class="component-section">
+                <h2 class="component-title">Modal Dialogs</h2>
+                <p class="component-description">Modal dialogs for displaying content in an overlay.</p>
+                
+                <div class="component-demo">
+                    <div id="modal-demo"></div>
+                </div>
+
+                <div class="component-code">
+                    <pre><code>const modal = new DotBox.ModalDialog('demo-modal', {
+    closeOnOverlayClick: true,
+    closeOnEsc: true
+});
+
+modal.setTitle('Demo Modal')
+    .setBody('<p>This is a demo modal dialog.</p>')
+    .addFooterButton('Close', 'action-btn', () => modal.close());
+
+const openModalBtn = new DotBox.Button({
+    text: 'Open Modal',
+    onClick: () => modal.show()
+});
+document.getElementById('modal-demo').appendChild(openModalBtn.getElement());</code></pre>
+                </div>
+            </section>
+
+            <section id="tabs" class="component-section">
+                <h2 class="component-title">Tab Views</h2>
+                <p class="component-description">Tabbed interface for organizing content.</p>
+                
+                <div class="component-demo">
+                    <div id="tab-demo"></div>
+                </div>
+
+                <div class="component-code">
+                    <pre><code>const tabView = new DotBox.TabView({
+    tabs: [
+        { id: 'tab1', label: 'Tab 1', content: 'Content 1' },
+        { id: 'tab2', label: 'Tab 2', content: 'Content 2' }
+    ]
+});
+
+document.body.appendChild(tabView.getElement());</code></pre>
+                </div>
+            </section>
+
+            <section id="textbox" class="component-section">
+                <h2 class="component-title">Text Boxes</h2>
+                <p class="component-description">Input fields with various states and validations.</p>
+                
+                <div class="component-demo">
+                    <div id="textbox-demo"></div>
+                </div>
+
+                <div class="component-code">
+                    <pre><code>const textBox = new DotBox.TextBox({
+    label: 'Username',
+    placeholder: 'Enter your username',
+    helpText: 'This will be your display name',
+    onChange: (e) => console.log('Text changed:', e.target.value)
+});
+
+document.getElementById('textbox-demo').appendChild(textBox.getContainer());</code></pre>
+                </div>
+            </section>
+
+            <section id="metrics" class="component-section">
+                <h2 class="component-title">Metric Items</h2>
+                <p class="component-description">Display metrics with trends and icons.</p>
+                
+                <div class="component-demo">
+                    <div id="metric-demo"></div>
+                </div>
+
+                <div class="component-code">
+                    <pre><code>const metric = new DotBox.MetricItem({
+    label: 'CPU Usage',
+    value: '75%',
+    trend: 'up',
+    icon: '📈'
+});
+
+document.body.appendChild(metric.getElement());</code></pre>
+                </div>
+            </section>
+
+            <section id="toolbuttons" class="component-section">
+                <h2 class="component-title">Tool Buttons</h2>
+                <p class="component-description">Specialized buttons for tools and actions.</p>
+                
+                <div class="component-demo">
+                    <div id="toolbutton-demo"></div>
+                </div>
+
+                <div class="component-code">
+                    <pre><code>const toolButton = new DotBox.ToolButton({
+    icon: '🔧',
+    tooltip: 'Settings',
+    onClick: () => console.log('Tool clicked!')
+});
+
+document.body.appendChild(toolButton.getElement());</code></pre>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="/dist/index.js"></script>
+    <script>
+        // Initialize demo components
+        document.addEventListener('DOMContentLoaded', () => {
+            // Button demo
+            const buttonDemo = document.getElementById('button-demo');
+            const button = new DotBox.Button({
+                text: 'Click Me',
+                variant: 'primary',
+                size: 'medium',
+                onClick: () => alert('Button clicked!')
+            });
+            buttonDemo.appendChild(button.getElement());
+
+            // Modal demo
+            const modalDemo = document.getElementById('modal-demo');
+            const modal = new DotBox.ModalDialog('demo-modal', {
+                closeOnOverlayClick: true,
+                closeOnEsc: true
+            });
+            
+            modal.setTitle('Demo Modal')
+                .setBody('<p>This is a demo modal dialog.</p>')
+                .addFooterButton('Close', 'action-btn', () => modal.close());
+            
+            const openModalBtn = new DotBox.Button({
+                text: 'Open Modal',
+                onClick: () => modal.show()
+            });
+            modalDemo.appendChild(openModalBtn.getElement());
+
+            // Tab demo
+            const tabDemo = document.getElementById('tab-demo');
+            const tabView = new DotBox.TabView({
+                tabs: [
+                    { id: 'tab1', label: 'Tab 1', content: 'Content for Tab 1' },
+                    { id: 'tab2', label: 'Tab 2', content: 'Content for Tab 2' }
+                ]
+            });
+            tabDemo.appendChild(tabView.getElement());
+
+            // TextBox demo
+            const textboxDemo = document.getElementById('textbox-demo');
+            const textBox = new DotBox.TextBox({
+                label: 'Username',
+                placeholder: 'Enter your username',
+                helpText: 'This will be your display name',
+                onChange: (e) => console.log('Text changed:', e.target.value)
+            });
+            textboxDemo.appendChild(textBox.getContainer());
+
+            // Metric demo
+            const metricDemo = document.getElementById('metric-demo');
+            const metric = new DotBox.MetricItem({
+                label: 'CPU Usage',
+                value: '75%',
+                trend: 'up',
+                icon: '📈'
+            });
+            metricDemo.appendChild(metric.getElement());
+
+            // ToolButton demo
+            const toolbuttonDemo = document.getElementById('toolbutton-demo');
+            const toolButton = new DotBox.ToolButton({
+                icon: '🔧',
+                tooltip: 'Settings',
+                onClick: () => alert('Tool button clicked!')
+            });
+            toolbuttonDemo.appendChild(toolButton.getElement());
+        });
+    </script>
+</body>
+</html> 

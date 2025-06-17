@@ -1,0 +1,141 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Component Architecture Rules for DotBox Monitor
+
+## Core Principles
+- **ECMA Script Only**: Always use plain JavaScript, never TypeScript
+- **SOLID Principles**: Single responsibility, clear separation of concerns
+- **Component Separation**: Each component in its own folder with dedicated files
+
+## Directory Structure
+```
+public/
+├── components/
+│   ├── base/                    # Generic, reusable components
+│   │   └── ComponentName/
+│   │       ├── ComponentName.js    # Core functionality
+│   │       └── ComponentName.css   # Generic styling
+│   └── app/                     # Application-specific components
+│       └── ComponentName/
+│           ├── ComponentName.js     # App-specific logic extending base
+│           └── ComponentName.css    # App-specific styling
+```
+
+## Component Categories
+
+### Base Components (`components/base/`)
+- **Purpose**: Generic, reusable across any application
+- **Examples**: ModalDialog, FormValidator, NotificationSystem
+- **Characteristics**:
+  - No app-specific logic
+  - Highly configurable through options
+  - Can be extended by app components
+  - Self-contained functionality
+
+### App Components (`components/app/`)
+- **Purpose**: Application-specific implementations
+- **Examples**: SettingsDialog, AddServiceDialog, UserProfileModal
+- **Characteristics**:
+  - Extends base components when applicable
+  - Contains business logic specific to the app
+  - API integrations and data handling
+  - App-specific styling and behavior
+
+## Implementation Pattern
+
+### Base Component Structure
+```javascript
+class BaseComponent {
+    constructor(id, options = {}) {
+        this.id = id;
+        this.options = { ...defaults, ...options };
+        this.initialize();
+    }
+    
+    initialize() {
+        this.createElement();
+        this.bindEvents();
+    }
+    
+    // Generic methods for all components
+    show() { }
+    hide() { }
+    destroy() { }
+}
+```
+
+### App Component Structure
+```javascript
+class AppComponent extends BaseComponent {
+    constructor() {
+        super('componentId', appSpecificOptions);
+        this.initializeAppFeatures();
+    }
+    
+    initializeAppFeatures() {
+        this.loadData();
+        this.setupAppSpecificLogic();
+    }
+    
+    // App-specific methods
+    async loadData() { }
+    handleSubmit() { }
+}
+```
+
+## File Organization Rules
+
+1. **One Component Per Folder**: Each component gets its own folder
+2. **Naming Convention**: PascalCase for folders and files
+3. **File Structure**:
+   - `ComponentName.js` - Main component logic
+   - `ComponentName.css` - Component-specific styles
+4. **No Shared Files**: Avoid shared utility files, keep components self-contained
+5. **Clear Dependencies**: Each component explicitly declares its dependencies
+
+## Integration Rules
+
+1. **HTML Integration**:
+   ```html
+   <!-- Component CSS -->
+   <link rel="stylesheet" href="/components/base/ModalDialog/ModalDialog.css">
+   <link rel="stylesheet" href="/components/app/SettingsDialog/SettingsDialog.css">
+   
+   <!-- Component Scripts -->
+   <script src="/components/base/ModalDialog/ModalDialog.js"></script>
+   <script src="/components/app/SettingsDialog/SettingsDialog.js"></script>
+   ```
+
+2. **Server Routes**: Add `/components` static route for serving component files
+
+3. **Backward Compatibility**: Always provide global functions for existing code:
+   ```javascript
+   // In app component
+   function showSettingsModal() {
+       if (!settingsDialog) {
+           settingsDialog = new SettingsDialog();
+       }
+       settingsDialog.show();
+   }
+   ```
+
+## CSS Rules
+
+1. **Component Scoping**: Use component-specific selectors
+2. **Base Styles**: Generic in base component CSS
+3. **App Overrides**: Specific styling in app component CSS
+4. **No Global Pollution**: Avoid generic class names that could conflict
+
+## Best Practices
+
+1. **Inheritance Over Composition**: App components should extend base components
+2. **Configuration Over Hardcoding**: Use options objects for flexibility
+3. **Event-Driven**: Use callbacks and events for communication
+4. **Self-Contained**: Each component manages its own DOM, events, and lifecycle
+5. **Clean Destruction**: Always provide cleanup methods for memory management
+
+
+This architecture ensures maintainable, scalable, and reusable components while following SOLID principles.

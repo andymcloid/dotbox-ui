@@ -1,0 +1,120 @@
+/* TextBox Component Styles */
+.textbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    width: 100%;
+}
+
+.textbox-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.textbox-input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.textbox-input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+}
+
+.textbox-input::placeholder {
+    color: var(--text-muted);
+}
+
+.textbox-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--bg-secondary);
+}
+
+.textbox-input:read-only {
+    background-color: var(--background-readonly);
+    cursor: default;
+}
+
+.textbox-help {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.textbox-error {
+    color: var(--accent-red);
+    font-size: 0.8rem;
+}
+
+.textbox-error.hidden {
+    display: none;
+}
+
+.textbox-error-state .textbox-input {
+    border-color: var(--accent-red);
+}
+
+.textbox-error-state .textbox-input:focus {
+    box-shadow: 0 0 0 2px rgba(234, 76, 136, 0.2);
+}
+
+/* Sizes */
+.textbox-group.small .textbox-input {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.8rem;
+}
+
+.textbox-group.large .textbox-input {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1rem;
+}
+
+/* Variants */
+.textbox-group.required .textbox-label::after {
+    content: '*';
+    color: var(--accent-red);
+    margin-left: var(--spacing-xs);
+}
+
+.textbox-group.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Textarea specific styles */
+.textbox-input[type="textarea"] {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Number input styling */
+.textbox-input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.textbox-input[type="number"]::-webkit-outer-spin-button,
+.textbox-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Search input styling */
+.textbox-input[type="search"] {
+    -webkit-appearance: none;
+}
+
+.textbox-input[type="search"]::-webkit-search-decoration,
+.textbox-input[type="search"]::-webkit-search-cancel-button,
+.textbox-input[type="search"]::-webkit-search-results-button,
+.textbox-input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+} 

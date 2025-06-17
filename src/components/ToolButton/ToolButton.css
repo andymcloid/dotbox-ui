@@ -1,0 +1,155 @@
+/* ToolButton Component Styles */
+.tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+}
+
+.tool-btn:hover {
+    color: var(--text-primary);
+    background-color: var(--hover-bg);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.tool-btn.active {
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+    border-color: var(--accent-blue);
+}
+
+.tool-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Size variants */
+.tool-btn-small {
+    padding: var(--spacing-xs);
+    font-size: 0.8rem;
+}
+
+.tool-btn-medium {
+    padding: var(--spacing-sm);
+    font-size: 0.9rem;
+}
+
+.tool-btn-large {
+    padding: var(--spacing-md);
+    font-size: 1rem;
+}
+
+/* Color variants */
+.tool-btn-primary {
+    color: var(--text-primary);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.tool-btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.tool-btn-danger {
+    color: var(--text-primary);
+    background-color: var(--accent-red);
+    border-color: var(--accent-red);
+}
+
+.tool-btn-danger:hover {
+    background-color: #dc2626;
+    border-color: #dc2626;
+}
+
+/* Icon and text */
+.tool-btn-text {
+    white-space: nowrap;
+}
+
+/* Focus styles */
+.tool-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tool-btn {
+        padding: var(--spacing-xs);
+    }
+    
+    .tool-btn-text {
+        display: none;
+    }
+}
+
+/* Navbar specific styling */
+.navbar .tool-btn {
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 1.125rem;
+}
+
+.navbar .tool-btn:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+/* Tooltip enhancement */
+.tool-btn[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--background-dark);
+    color: var(--text-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: tooltip-fade-in 0.2s ease;
+}
+
+@keyframes tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Button group */
+.tool-btn-group {
+    display: inline-flex;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.tool-btn-group .tool-btn {
+    border-radius: 0;
+    border-right: 1px solid var(--border-color);
+}
+
+.tool-btn-group .tool-btn:last-child {
+    border-right: none;
+} 
