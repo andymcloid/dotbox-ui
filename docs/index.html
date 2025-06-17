@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DotBox UI - Component Library</title>
     <link rel="stylesheet" href="/dist/styles.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/theme-light.css">
+    <link rel="stylesheet" href="/styles/theme-dark.css">
     <style>
         .container {
             max-width: 1200px;
@@ -66,9 +69,28 @@
             border-bottom: 1px solid #eee;
             margin-bottom: 2rem;
         }
+        .theme-toggle-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 2.5rem;
+            z-index: 100;
+            background: var(--color-bg-panel);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 0.5rem 1.2rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .theme-toggle-btn:hover {
+            background: var(--color-primary);
+            color: #fff;
+        }
     </style>
 </head>
-<body>
+<body class="theme-light">
+    <button class="theme-toggle-btn" id="theme-toggle">Toggle Theme</button>
     <nav class="nav">
         <h2>DotBox UI</h2>
         <a href="#buttons" class="nav-link">Buttons</a>
@@ -283,6 +305,19 @@ document.body.appendChild(toolButton.getElement());</code></pre>
             });
             toolbuttonDemo.appendChild(toolButton.getElement());
         });
+
+        function setTheme(theme) {
+            document.body.classList.remove('theme-light', 'theme-dark');
+            document.body.classList.add('theme-' + theme);
+            localStorage.setItem('dotbox-theme', theme);
+        }
+        document.getElementById('theme-toggle').onclick = function() {
+            const isLight = document.body.classList.contains('theme-light');
+            setTheme(isLight ? 'dark' : 'light');
+        };
+        // On load, set theme from localStorage
+        const saved = localStorage.getItem('dotbox-theme');
+        if (saved) setTheme(saved);
     </script>
 </body>
 </html> 

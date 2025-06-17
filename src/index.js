@@ -5,16 +5,24 @@ const TabView = require('./components/TabView/TabView');
 const TextBox = require('./components/TextBox/TextBox');
 const MetricItem = require('./components/MetricItem/MetricItem');
 const ToolButton = require('./components/ToolButton/ToolButton');
+const Menu = require('./components/Menu/Menu');
+const CodeBlock = require('./components/CodeBlock/CodeBlock');
 
 // Import styles
 require('./styles/main.css');
 
 // Export components
-module.exports = {
+const DotBox = {
     Button,
     ModalDialog,
     TabView,
     TextBox,
     MetricItem,
-    ToolButton
-}; 
+    ToolButton,
+    Menu,
+    CodeBlock
+};
+if (typeof window !== 'undefined') {
+    window.DotBox = DotBox;
+}
+module.exports = DotBox; 

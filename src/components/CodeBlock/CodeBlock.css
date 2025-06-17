@@ -1,0 +1,27 @@
+.dotbox-codeblock {
+  background: #232733;
+  color: #f3f4f6;
+  border-radius: var(--radius-lg, 22px);
+  font-size: 1.08rem;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+  padding: 1.3em 1.7em;
+  margin: 1.2em 0;
+  overflow-x: auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.13);
+  border: 1px solid var(--color-border, #2d3340);
+}
+.dotbox-codeblock code {
+  background: none;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+}
+.dotbox-codeblock::-webkit-scrollbar {
+  height: 10px;
+  background: #232733;
+}
+.dotbox-codeblock::-webkit-scrollbar-thumb {
+  background: #2d3340;
+  border-radius: 8px;
+} 

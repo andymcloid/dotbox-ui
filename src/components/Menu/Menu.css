@@ -1,0 +1,28 @@
+.dotbox-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  background: var(--color-bg-sidebar, #232733);
+  border-radius: var(--radius-lg, 22px);
+  padding: 1.2em 0.7em;
+  min-width: 180px;
+}
+.dotbox-menu-item {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #8b98b1);
+  border-radius: var(--radius, 12px);
+  padding: 0.7em 1.2em;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s;
+  margin-bottom: 0.1em;
+  user-select: none;
+}
+.dotbox-menu-item:hover {
+  background: var(--color-accent, #ffb020);
+  color: var(--color-text-inverse, #fff);
+}
+.dotbox-menu-item.selected {
+  background: var(--color-primary, #3b82f6);
+  color: var(--color-text-inverse, #fff);
+} 

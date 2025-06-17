@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DotBox UI Docs</title>
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/styles/theme-light.css">
+  <link rel="stylesheet" href="/styles/theme-dark.css">
+  <script>
+    function setTheme(theme) {
+      document.documentElement.classList.remove('theme-light', 'theme-dark');
+      document.documentElement.classList.add('theme-' + theme);
+      localStorage.setItem('dotbox-theme', theme);
+    }
+    window.onload = function() {
+      const saved = localStorage.getItem('dotbox-theme');
+      if (saved) setTheme(saved);
+    };
+  </script>
+  <style>
+    body { overflow-x: hidden; }
+    .docs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      background: var(--color-bg-header-blur);
+      border-bottom: 1.5px solid var(--color-border-light);
+      padding: 0 2.7rem;
+      z-index: 5;
+      box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07);
+      backdrop-filter: blur(8px);
+    }
+    .docs-title {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: var(--color-accent);
+      letter-spacing: -1.5px;
+    }
+    .theme-toggle-btn {
+      background: var(--color-bg-card);
+      color: var(--color-text);
+      border: 1.5px solid var(--color-border-light);
+      border-radius: var(--radius);
+      padding: 0.5rem 1.2rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-toggle-btn:hover {
+      background: var(--color-accent);
+      color: var(--color-text-inverse);
+    }
+    .docs-main {
+      display: flex;
+      min-height: calc(100vh - var(--header-height));
+    }
+    .docs-menu {
+      min-width: 220px;
+      max-width: 270px;
+      margin: 0;
+      padding: 0;
+      background: none;
+      border: none;
+    }
+    .docs-content {
+      flex: 1;
+      padding: 2.7rem 3.2rem 2.7rem 2.7rem;
+      max-width: 900px;
+    }
+    .docs-section {
+      margin-bottom: 3.2rem;
+    }
+    .docs-section h2 {
+      margin-bottom: 0.7em;
+    }
+    .docs-section .desc {
+      color: var(--color-text-muted);
+      margin-bottom: 1.2em;
+      font-size: 1.08rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="docs-header">
+    <span class="docs-title">DotBox UI</span>
+    <button class="theme-toggle-btn" id="theme-toggle">Toggle Theme</button>
+  </header>
+  <div class="docs-main">
+    <aside class="docs-menu" id="docs-menu"></aside>
+    <main class="docs-content" id="docs-content"></main>
+  </div>
+  <script src="/dist/index.js"></script>
+  <script>
+    // Theme toggle
+    document.getElementById('theme-toggle').onclick = function() {
+      const isLight = document.documentElement.classList.contains('theme-light');
+      setTheme(isLight ? 'dark' : 'light');
+    };
+
+    // Menu items
+    const menuItems = [
+      { id: 'button', label: 'Button' },
+      { id: 'modal', label: 'Modal Dialog' },
+      { id: 'tabview', label: 'Tab View' },
+      { id: 'textbox', label: 'Text Box' },
+      { id: 'metric', label: 'Metric Item' },
+      { id: 'toolbutton', label: 'Tool Button' },
+      { id: 'codeblock', label: 'CodeBlock' },
+    ];
+    const menu = new DotBox.Menu({
+      items: menuItems,
+      selected: 'button',
+      onSelect: (id) => showSection(id)
+    });
+    document.getElementById('docs-menu').appendChild(menu.getElement());
+
+    // Sections/examples
+    const examples = {
+      button: {
+        title: 'Button',
+        desc: 'En flexibel knapp med olika varianter och states.',
+        code: `const btn = new DotBox.Button({
+  text: 'Click Me',
+  variant: 'primary',
+  size: 'medium',
+  onClick: () => alert('Clicked!')
+});
+document.body.appendChild(btn.getElement());`,
+        render: () => {
+          const btn = new DotBox.Button({
+            text: 'Click Me',
+            variant: 'primary',
+            size: 'medium',
+            onClick: () => alert('Clicked!')
+          });
+          return btn.getElement();
+        }
+      },
+      modal: {
+        title: 'Modal Dialog',
+        desc: 'Modal för att visa innehåll i en overlay.',
+        code: `const modal = new DotBox.ModalDialog('demo-modal', {
+  closeOnOverlayClick: true,
+  closeOnEsc: true
+});
+modal.setTitle('Demo Modal')
+  .setBody('<p>This is a demo modal dialog.</p>')
+  .addFooterButton('Close', 'action-btn', () => modal.close());
+const openModalBtn = new DotBox.Button({
+  text: 'Open Modal',
+  onClick: () => modal.show()
+});
+document.body.appendChild(openModalBtn.getElement());`,
+        render: () => {
+          const modal = new DotBox.ModalDialog('demo-modal', {
+            closeOnOverlayClick: true,
+            closeOnEsc: true
+          });
+          modal.setTitle('Demo Modal')
+            .setBody('<p>This is a demo modal dialog.</p>')
+            .addFooterButton('Close', 'action-btn', () => modal.close());
+          const openModalBtn = new DotBox.Button({
+            text: 'Open Modal',
+            onClick: () => modal.show()
+          });
+          return openModalBtn.getElement();
+        }
+      },
+      tabview: {
+        title: 'Tab View',
+        desc: 'Tabbed interface för att organisera innehåll.',
+        code: `const tabView = new DotBox.TabView({
+  tabs: [
+    { id: 'tab1', label: 'Tab 1', content: 'Content 1' },
+    { id: 'tab2', label: 'Tab 2', content: 'Content 2' }
+  ]
+});
+document.body.appendChild(tabView.getElement());`,
+        render: () => {
+          const tabView = new DotBox.TabView({
+            tabs: [
+              { id: 'tab1', label: 'Tab 1', content: 'Content 1' },
+              { id: 'tab2', label: 'Tab 2', content: 'Content 2' }
+            ]
+          });
+          return tabView.getElement();
+        }
+      },
+      textbox: {
+        title: 'Text Box',
+        desc: 'Inputfält med olika states och validering.',
+        code: `const textBox = new DotBox.TextBox({
+  label: 'Username',
+  placeholder: 'Enter your username',
+  helpText: 'This will be your display name',
+  onChange: (e) => console.log('Text changed:', e.target.value)
+});
+document.body.appendChild(textBox.getContainer());`,
+        render: () => {
+          const textBox = new DotBox.TextBox({
+            label: 'Username',
+            placeholder: 'Enter your username',
+            helpText: 'This will be your display name',
+            onChange: (e) => {}
+          });
+          return textBox.getContainer();
+        }
+      },
+      metric: {
+        title: 'Metric Item',
+        desc: 'Visa metrics med trend och ikon.',
+        code: `const metric = new DotBox.MetricItem({
+  label: 'CPU Usage',
+  value: '75%',
+  trend: 'up',
+  icon: '📈'
+});
+document.body.appendChild(metric.getElement());`,
+        render: () => {
+          const metric = new DotBox.MetricItem({
+            label: 'CPU Usage',
+            value: '75%',
+            trend: 'up',
+            icon: '📈'
+          });
+          return metric.getElement();
+        }
+      },
+      toolbutton: {
+        title: 'Tool Button',
+        desc: 'Specialknapp för verktyg och actions.',
+        code: `const toolBtn = new DotBox.ToolButton({
+  icon: '⚙️',
+  label: 'Settings',
+  onClick: () => alert('Settings!')
+});
+document.body.appendChild(toolBtn.getElement());`,
+        render: () => {
+          const toolBtn = new DotBox.ToolButton({
+            icon: '⚙️',
+            label: 'Settings',
+            onClick: () => alert('Settings!')
+          });
+          return toolBtn.getElement();
+        }
+      },
+      codeblock: {
+        title: 'CodeBlock',
+        desc: 'Visa kod med syntax highlighting.',
+        code: `const code = "const x = 42;\nconsole.log(x);";\nconst cb = new DotBox.CodeBlock({\n  language: 'javascript',\n  code\n});\ndocument.body.appendChild(cb.getElement());`,
+        render: () => {
+          const code = `const x = 42;\nconsole.log(x);`;
+          const cb = new DotBox.CodeBlock({
+            language: 'javascript',
+            code
+          });
+          return cb.getElement();
+        }
+      }
+    };
+
+    function showSection(id) {
+      const section = examples[id];
+      const content = document.getElementById('docs-content');
+      content.innerHTML = '';
+      const sec = document.createElement('section');
+      sec.className = 'docs-section';
+      const h2 = document.createElement('h2');
+      h2.textContent = section.title;
+      sec.appendChild(h2);
+      const desc = document.createElement('div');
+      desc.className = 'desc';
+      desc.textContent = section.desc;
+      sec.appendChild(desc);
+      const demo = document.createElement('div');
+      demo.style.marginBottom = '1.5em';
+      demo.appendChild(section.render());
+      sec.appendChild(demo);
+      const codeblock = new DotBox.CodeBlock({
+        language: 'javascript',
+        code: section.code
+      });
+      sec.appendChild(codeblock.getElement());
+      content.appendChild(sec);
+      menu.select(id);
+    }
+
+    showSection('button');
+  </script>
+</body>
+</html> 

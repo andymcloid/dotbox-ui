@@ -1,14 +1,17 @@
 /* MetricItem Component Styles */
 .metric-item {
+    background: var(--color-bg-card);
+    color: var(--color-text);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-family);
+    box-shadow: var(--color-shadow);
+    border: 1px solid var(--color-border);
+    padding: 2.2rem 2.5rem;
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-lg) var(--spacing-md);
-    background-color: var(--bg-tertiary);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-sm);
-    transition: all var(--transition-fast);
+    align-items: center;
+    gap: 1.5rem;
+    min-width: 320px;
+    font-size: 1.15rem;
 }
 
 .metric-item:hover {
@@ -17,19 +20,16 @@
 }
 
 .metric-item-label {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
     font-weight: 500;
-    margin-bottom: 0.25rem;
 }
 
 .metric-item-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    display: flex;
-    align-items: baseline;
-    gap: var(--spacing-xs);
+    color: var(--color-primary);
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -1px;
 }
 
 .metric-item-unit {
