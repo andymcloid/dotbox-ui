@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="200" height="50" viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 10C20 4.47715 24.4772 0 30 0H170C175.523 0 180 4.47715 180 10V40C180 45.5228 175.523 50 170 50H30C24.4772 50 20 45.5228 20 40V10Z" fill="#007BFF"/>
-    <path d="M40 15H160V35H40V15Z" fill="white"/>
-    <text x="100" y="30" font-family="Arial" font-size="16" fill="#007BFF" text-anchor="middle">DotBox UI</text>
-</svg> 

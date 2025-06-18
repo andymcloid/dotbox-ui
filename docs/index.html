@@ -3,12 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DotBox UI - Component Library</title>
-    <link rel="stylesheet" href="/dist/styles.css">
-    <link rel="stylesheet" href="/styles/main.css">
-    <link rel="stylesheet" href="/styles/theme-light.css">
-    <link rel="stylesheet" href="/styles/theme-dark.css">
+    <title>Dotbox UI - Component Library</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/dotbox_logo_only.svg">
+    <link rel="stylesheet" href="/dist/index.css">
+    <link rel="stylesheet" href="/dist/theme.css">
     <style>
+        @font-face {
+            font-family: 'SilomBol';
+            src: url('./assets/SilomBol.woff') format('woff');
+            font-weight: bold;
+            font-display: swap;
+        }
+    </style>
+    <style>
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+        }
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -17,29 +30,40 @@
         .component-section {
             margin-bottom: 3rem;
             padding: 2rem;
-            border: 1px solid #eee;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
+            background: var(--color-bg-panel);
         }
         .component-title {
             margin-bottom: 1rem;
-            color: var(--dark-color);
+            color: var(--color-text);
         }
         .component-description {
             margin-bottom: 2rem;
-            color: #666;
+            color: var(--color-text-muted);
         }
         .component-demo {
             margin-bottom: 2rem;
             padding: 1rem;
-            background: #f8f9fa;
+            background: var(--color-bg-card);
             border-radius: 4px;
         }
         .component-code {
-            background: #1e1e1e;
-            color: #fff;
+            background: var(--color-bg-card);
+            color: var(--color-text);
             padding: 1rem;
-            border-radius: 4px;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
             overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .component-code pre {
+            margin: 0;
+        }
+        .component-code code {
+            color: var(--color-text);
         }
         .nav {
             position: fixed;
@@ -47,52 +71,84 @@
             left: 0;
             width: 250px;
             height: 100vh;
-            background: #fff;
-            border-right: 1px solid #eee;
+            background: var(--color-bg-sidebar);
+            border-right: 1px solid var(--color-border);
             padding: 2rem;
+        }
+        .nav .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .nav .logo img {
+            width: 32px;
+            height: 32px;
+            margin-right: 0.75rem;
+        }
+        .nav .logo-text {
+            font-family: 'SilomBol', sans-serif;
+            font-size: 1.4rem;
+            color: var(--color-primary);
+            font-weight: bold;
         }
         .nav-link {
             display: block;
-            padding: 0.5rem 0;
-            color: var(--dark-color);
+            padding: 0.875rem 0;
+            color: var(--color-text-muted);
             text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.125rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+        }
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--color-primary);
+            transform: scaleY(0);
+            transition: transform 0.15s ease;
         }
         .nav-link:hover {
-            color: var(--primary-color);
+            color: var(--color-text);
+            background: var(--color-bg-card);
+            padding-left: 1.5rem;
+        }
+        .nav-link:hover::before {
+            transform: scaleY(1);
+        }
+        .nav-link:active,
+        .nav-link.active {
+            background: rgba(255, 182, 5, 0.1);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        .nav-link.active::before {
+            transform: scaleY(1);
         }
         .content {
             margin-left: 250px;
-        }
-        .header {
-            background: #fff;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 2rem;
-        }
-        .theme-toggle-btn {
-            position: absolute;
-            top: 1.5rem;
-            right: 2.5rem;
-            z-index: 100;
-            background: var(--color-bg-panel);
-            color: var(--color-text);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius);
-            padding: 0.5rem 1.2rem;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.2s, color 0.2s;
-        }
-        .theme-toggle-btn:hover {
-            background: var(--color-primary);
-            color: #fff;
+            background: var(--color-bg);
+            min-height: 100vh;
         }
     </style>
 </head>
-<body class="theme-light">
-    <button class="theme-toggle-btn" id="theme-toggle">Toggle Theme</button>
+<body>
     <nav class="nav">
-        <h2>DotBox UI</h2>
+        <div class="logo">
+            <img src="./assets/dotbox_logo_only.svg" alt="Dotbox Logo">
+            <span class="logo-text">Dotbox <span style="color: var(--color-text);">UI</span></span>
+        </div>
+        <div id="theme-toggle-container" style="margin-bottom: 1rem;"></div>
         <a href="#buttons" class="nav-link">Buttons</a>
         <a href="#modals" class="nav-link">Modal Dialogs</a>
         <a href="#tabs" class="nav-link">Tab Views</a>
@@ -102,25 +158,25 @@
     </nav>
 
     <div class="content">
-        <header class="header">
-            <h1>DotBox UI Components</h1>
-            <p>A modern, lightweight UI component library for building beautiful web applications.</p>
-        </header>
-
         <div class="container">
+            <section class="component-section">
+                <h2 class="component-title" style="font-family: 'SilomBol', sans-serif;">Dotbox UI Components</h2>
+                <p class="component-description">A modern, lightweight UI component library for building beautiful web applications.</p>
+            </section>
             <section id="buttons" class="component-section">
                 <h2 class="component-title">Buttons</h2>
                 <p class="component-description">Flexible button component with multiple variants and states.</p>
                 
                 <div class="component-demo">
-                    <div id="button-demo"></div>
+                    <div id="button-demo" style="display: flex; gap: 1rem; flex-wrap: wrap;"></div>
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const button = new DotBox.Button({
+                    <pre><code>// Available variants: primary, secondary, danger, success
+const button = new Dotbox.Button({
     text: 'Click Me',
-    variant: 'primary',
-    size: 'medium',
+    variant: 'primary', // or 'secondary', 'danger', 'success'
+    size: 'medium',     // small, medium, large
     onClick: () => console.log('Clicked!')
 });
 
@@ -137,7 +193,7 @@ document.body.appendChild(button.getElement());</code></pre>
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const modal = new DotBox.ModalDialog('demo-modal', {
+                    <pre><code>const modal = new Dotbox.ModalDialog('demo-modal', {
     closeOnOverlayClick: true,
     closeOnEsc: true
 });
@@ -146,7 +202,7 @@ modal.setTitle('Demo Modal')
     .setBody('<p>This is a demo modal dialog.</p>')
     .addFooterButton('Close', 'action-btn', () => modal.close());
 
-const openModalBtn = new DotBox.Button({
+const openModalBtn = new Dotbox.Button({
     text: 'Open Modal',
     onClick: () => modal.show()
 });
@@ -163,7 +219,7 @@ document.getElementById('modal-demo').appendChild(openModalBtn.getElement());</c
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const tabView = new DotBox.TabView({
+                    <pre><code>const tabView = new Dotbox.TabView({
     tabs: [
         { id: 'tab1', label: 'Tab 1', content: 'Content 1' },
         { id: 'tab2', label: 'Tab 2', content: 'Content 2' }
@@ -183,7 +239,7 @@ document.body.appendChild(tabView.getElement());</code></pre>
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const textBox = new DotBox.TextBox({
+                    <pre><code>const textBox = new Dotbox.TextBox({
     label: 'Username',
     placeholder: 'Enter your username',
     helpText: 'This will be your display name',
@@ -203,7 +259,7 @@ document.getElementById('textbox-demo').appendChild(textBox.getContainer());</co
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const metric = new DotBox.MetricItem({
+                    <pre><code>const metric = new Dotbox.MetricItem({
     label: 'CPU Usage',
     value: '75%',
     trend: 'up',
@@ -223,7 +279,7 @@ document.body.appendChild(metric.getElement());</code></pre>
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const toolButton = new DotBox.ToolButton({
+                    <pre><code>const toolButton = new Dotbox.ToolButton({
     icon: '🔧',
     tooltip: 'Settings',
     onClick: () => console.log('Tool clicked!')
@@ -235,23 +291,48 @@ document.body.appendChild(toolButton.getElement());</code></pre>
         </div>
     </div>
 
-    <script src="/dist/index.js"></script>
+    <script src="/dist/bundle.js"></script>
     <script>
         // Initialize demo components
         document.addEventListener('DOMContentLoaded', () => {
             // Button demo
             const buttonDemo = document.getElementById('button-demo');
-            const button = new DotBox.Button({
-                text: 'Click Me',
+            
+            const primaryBtn = new Dotbox.Button({
+                text: 'Primary',
                 variant: 'primary',
                 size: 'medium',
-                onClick: () => alert('Button clicked!')
+                onClick: () => alert('Primary clicked!')
             });
-            buttonDemo.appendChild(button.getElement());
+            buttonDemo.appendChild(primaryBtn.getElement());
+            
+            const secondaryBtn = new Dotbox.Button({
+                text: 'Secondary',
+                variant: 'secondary',
+                size: 'medium',
+                onClick: () => alert('Secondary clicked!')
+            });
+            buttonDemo.appendChild(secondaryBtn.getElement());
+            
+            const dangerBtn = new Dotbox.Button({
+                text: 'Danger',
+                variant: 'danger',
+                size: 'medium',
+                onClick: () => alert('Danger clicked!')
+            });
+            buttonDemo.appendChild(dangerBtn.getElement());
+            
+            const successBtn = new Dotbox.Button({
+                text: 'Success',
+                variant: 'success',
+                size: 'medium',
+                onClick: () => alert('Success clicked!')
+            });
+            buttonDemo.appendChild(successBtn.getElement());
 
             // Modal demo
             const modalDemo = document.getElementById('modal-demo');
-            const modal = new DotBox.ModalDialog('demo-modal', {
+            const modal = new Dotbox.ModalDialog('demo-modal', {
                 closeOnOverlayClick: true,
                 closeOnEsc: true
             });
@@ -260,7 +341,7 @@ document.body.appendChild(toolButton.getElement());</code></pre>
                 .setBody('<p>This is a demo modal dialog.</p>')
                 .addFooterButton('Close', 'action-btn', () => modal.close());
             
-            const openModalBtn = new DotBox.Button({
+            const openModalBtn = new Dotbox.Button({
                 text: 'Open Modal',
                 onClick: () => modal.show()
             });
@@ -268,7 +349,7 @@ document.body.appendChild(toolButton.getElement());</code></pre>
 
             // Tab demo
             const tabDemo = document.getElementById('tab-demo');
-            const tabView = new DotBox.TabView({
+            const tabView = new Dotbox.TabView({
                 tabs: [
                     { id: 'tab1', label: 'Tab 1', content: 'Content for Tab 1' },
                     { id: 'tab2', label: 'Tab 2', content: 'Content for Tab 2' }
@@ -278,7 +359,7 @@ document.body.appendChild(toolButton.getElement());</code></pre>
 
             // TextBox demo
             const textboxDemo = document.getElementById('textbox-demo');
-            const textBox = new DotBox.TextBox({
+            const textBox = new Dotbox.TextBox({
                 label: 'Username',
                 placeholder: 'Enter your username',
                 helpText: 'This will be your display name',
@@ -288,7 +369,7 @@ document.body.appendChild(toolButton.getElement());</code></pre>
 
             // Metric demo
             const metricDemo = document.getElementById('metric-demo');
-            const metric = new DotBox.MetricItem({
+            const metric = new Dotbox.MetricItem({
                 label: 'CPU Usage',
                 value: '75%',
                 trend: 'up',
@@ -298,7 +379,7 @@ document.body.appendChild(toolButton.getElement());</code></pre>
 
             // ToolButton demo
             const toolbuttonDemo = document.getElementById('toolbutton-demo');
-            const toolButton = new DotBox.ToolButton({
+            const toolButton = new Dotbox.ToolButton({
                 icon: '🔧',
                 tooltip: 'Settings',
                 onClick: () => alert('Tool button clicked!')
@@ -307,17 +388,24 @@ document.body.appendChild(toolButton.getElement());</code></pre>
         });
 
         function setTheme(theme) {
-            document.body.classList.remove('theme-light', 'theme-dark');
-            document.body.classList.add('theme-' + theme);
+            document.documentElement.classList.remove('theme-light', 'theme-dark');
+            document.documentElement.classList.add('theme-' + theme);
             localStorage.setItem('dotbox-theme', theme);
         }
-        document.getElementById('theme-toggle').onclick = function() {
-            const isLight = document.body.classList.contains('theme-light');
-            setTheme(isLight ? 'dark' : 'light');
-        };
-        // On load, set theme from localStorage
-        const saved = localStorage.getItem('dotbox-theme');
-        if (saved) setTheme(saved);
+        // Create theme toggle button using Dotbox Button component
+        const themeToggleBtn = new Dotbox.Button({
+            text: 'Toggle Theme',
+            variant: 'secondary',
+            size: 'small',
+            onClick: () => {
+                const isLight = document.documentElement.classList.contains('theme-light');
+                setTheme(isLight ? 'dark' : 'light');
+            }
+        });
+        document.getElementById('theme-toggle-container').appendChild(themeToggleBtn.getElement());
+        // On load, set theme from localStorage or default to light
+        const saved = localStorage.getItem('dotbox-theme') || 'light';
+        setTheme(saved);
     </script>
 </body>
 </html> 

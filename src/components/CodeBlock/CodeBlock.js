@@ -3,27 +3,9 @@ class CodeBlock {
     this.id = options.id || `codeblock-${Math.random().toString(36).substr(2, 9)}`;
     this.language = options.language || 'javascript';
     this.code = options.code || '';
-    this._loadCSS();
     this._loadPrism(() => {
       this.element = this._render();
     });
-  }
-
-  _loadCSS() {
-    if (!document.getElementById('dotbox-codeblock-css')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = '/components/CodeBlock/CodeBlock.css';
-      link.id = 'dotbox-codeblock-css';
-      document.head.appendChild(link);
-    }
-    if (!document.getElementById('prism-css')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css';
-      link.id = 'prism-css';
-      document.head.appendChild(link);
-    }
   }
 
   _loadPrism(cb) {

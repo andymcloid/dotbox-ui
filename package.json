@@ -4,11 +4,14 @@
   "description": "A modern, reusable UI component library",
   "main": "dist/index.js",
   "scripts": {
-    "build": "webpack --mode production && npm run copy-css",
+    "build:js": "esbuild src/index.js --bundle --outfile=dist/bundle.js --loader:.css=file",
+    "build:css": "esbuild src/index.css --bundle --outfile=dist/index.css",
+    "build": "npm run build:js && npm run build:css && npm run copy-themes",
+    "copy-themes": "mkdir -p dist && cp src/styles/theme.css dist/theme.css",
+    "build:prod": "esbuild src/index.js --bundle --minify --outdir=dist --loader:.css=file",
     "dev": "webpack --mode development --watch",
     "test": "jest",
-    "docs": "npm run build && node docs-server.js",
-    "copy-css": "cpx src/styles/*.css dist/styles/"
+    "docs": "npm run build && node docs-server.js"
   },
   "dependencies": {
     "express": "^4.18.2"
@@ -19,6 +22,8 @@
     "babel-loader": "^9.1.3",
     "cpx": "^1.5.0",
     "css-loader": "^6.8.1",
+    "esbuild": "^0.25.5",
+    "glob": "^11.0.3",
     "jest": "^29.7.0",
     "mini-css-extract-plugin": "^2.9.2",
     "style-loader": "^3.3.3",
@@ -39,5 +44,6 @@
     "javascript"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "sideEffects": true
 }

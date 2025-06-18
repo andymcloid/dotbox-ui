@@ -40,9 +40,10 @@
     width: 90%;
     max-width: 600px;
     max-height: 90vh;
-    background-color: var(--bg-secondary);
+    background-color: var(--color-bg-panel);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--color-shadow);
+    border: 1px solid var(--color-border);
     z-index: var(--z-modal);
     display: flex;
     flex-direction: column;
@@ -74,14 +75,14 @@
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--color-text);
 }
 
 /* Modal close button */
 .modal-close {
     background: none;
     border: none;
-    color: var(--text-secondary);
+    color: var(--color-text-muted);
     font-size: 1.5rem;
     cursor: pointer;
     padding: var(--spacing-xs);
@@ -90,7 +91,7 @@
 }
 
 .modal-close:hover {
-    color: var(--text-primary);
+    color: var(--color-text);
 }
 
 /* Modal body */
@@ -98,7 +99,7 @@
     padding: var(--spacing-md);
     overflow-y: auto;
     flex: 1;
-    color: var(--text-primary);
+    color: var(--color-text);
 }
 
 .modal-body::-webkit-scrollbar {

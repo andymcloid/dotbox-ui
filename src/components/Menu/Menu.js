@@ -4,18 +4,7 @@ class Menu {
     this.items = options.items || [];
     this.selected = options.selected || null;
     this.onSelect = options.onSelect || (() => {});
-    this._loadCSS();
     this.element = this._render();
-  }
-
-  _loadCSS() {
-    if (!document.getElementById('dotbox-menu-css')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = '/components/Menu/Menu.css';
-      link.id = 'dotbox-menu-css';
-      document.head.appendChild(link);
-    }
   }
 
   _render() {
