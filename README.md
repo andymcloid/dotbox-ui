@@ -13,12 +13,7 @@ A modern, lightweight, and themeable UI component library for building beautiful
 
 ## 📦 Installation
 
-### From npm
-```bash
-npm install dotbox-ui
-```
-
-### From GitHub Releases (Recommended)
+### From GitHub Releases
 You can use Dotbox UI directly from our GitHub releases without installing:
 
 ```html
@@ -219,7 +214,7 @@ This project uses GitHub Actions for automated builds, testing, and releases:
 - **Documentation testing**: Verifies the docs server starts successfully
 
 ### Automated Releases
-- **On release creation**: Automatically builds and publishes to npm
+- **On release creation**: Automatically builds and creates release assets
 - **GitHub Pages**: Documentation is automatically deployed
 - **Release assets**: Distribution files are attached to each GitHub release
 
