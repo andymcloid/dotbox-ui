@@ -12,6 +12,8 @@ class MetricItem {
             threshold: null,
             warningThreshold: null,
             container: null,
+            trend: null,
+            icon: null,
             ...options
         };
         this.element = null;
@@ -34,11 +36,18 @@ class MetricItem {
     }
 
     render() {
+        const iconHtml = this.options.icon ? `<div class="metric-item-icon">${this.options.icon}</div>` : '';
+        const trendHtml = this.options.trend ? `<div class="metric-item-trend trend-${this.options.trend}"></div>` : '';
+        
         this.element.innerHTML = `
-            <div class="metric-item-label">${this.options.label}</div>
-            <div class="metric-item-value value">
-                ${this.options.value}
-                <span class="metric-item-unit">${this.options.unit}</span>
+            ${iconHtml}
+            <div class="metric-item-content">
+                <div class="metric-item-label">${this.options.label}</div>
+                <div class="metric-item-value value">
+                    ${this.options.value}
+                    <span class="metric-item-unit">${this.options.unit}</span>
+                    ${trendHtml}
+                </div>
             </div>
         `;
         this.updateStatus();
@@ -48,9 +57,11 @@ class MetricItem {
         this.options.value = value;
         const valueElement = this.element.querySelector('.metric-item-value');
         if (valueElement) {
+            const trendHtml = this.options.trend ? `<div class="metric-item-trend trend-${this.options.trend}"></div>` : '';
             valueElement.innerHTML = `
                 ${value}
                 <span class="metric-item-unit">${this.options.unit}</span>
+                ${trendHtml}
             `;
             valueElement.classList.add('value');
         }

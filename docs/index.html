@@ -73,12 +73,12 @@
             height: 100vh;
             background: var(--color-bg-sidebar);
             border-right: 1px solid var(--color-border);
-            padding: 2rem;
+            padding: 1rem 0.75rem;
         }
         .nav .logo {
             display: flex;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         .nav .logo img {
             width: 32px;
@@ -91,54 +91,18 @@
             color: var(--color-primary);
             font-weight: bold;
         }
-        .nav-link {
-            display: block;
-            padding: 0.875rem 0;
-            color: var(--color-text-muted);
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 0.125rem;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.15s ease;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding-left: 1.25rem;
-            padding-right: 1.25rem;
-        }
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 3px;
-            background: var(--color-primary);
-            transform: scaleY(0);
-            transition: transform 0.15s ease;
-        }
-        .nav-link:hover {
-            color: var(--color-text);
-            background: var(--color-bg-card);
-            padding-left: 1.5rem;
-        }
-        .nav-link:hover::before {
-            transform: scaleY(1);
-        }
-        .nav-link:active,
-        .nav-link.active {
-            background: rgba(255, 182, 5, 0.1);
-            color: var(--color-primary);
-            font-weight: 600;
-        }
-        .nav-link.active::before {
-            transform: scaleY(1);
-        }
         .content {
             margin-left: 250px;
             background: var(--color-bg);
             min-height: 100vh;
+        }
+        /* Customize menu for docs navigation */
+        #nav-menu .dotbox-menu {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            min-width: 100%;
         }
     </style>
 </head>
@@ -148,13 +112,8 @@
             <img src="./assets/dotbox_logo_only.svg" alt="Dotbox Logo">
             <span class="logo-text">Dotbox <span style="color: var(--color-text);">UI</span></span>
         </div>
-        <div id="theme-toggle-container" style="margin-bottom: 1rem;"></div>
-        <a href="#buttons" class="nav-link">Buttons</a>
-        <a href="#modals" class="nav-link">Modal Dialogs</a>
-        <a href="#tabs" class="nav-link">Tab Views</a>
-        <a href="#textbox" class="nav-link">Text Boxes</a>
-        <a href="#metrics" class="nav-link">Metric Items</a>
-        <a href="#toolbuttons" class="nav-link">Tool Buttons</a>
+        <div id="theme-toggle-container" style="margin-bottom: 0.75rem;"></div>
+        <div id="nav-menu"></div>
     </nav>
 
     <div class="content">
@@ -259,7 +218,7 @@ document.getElementById('textbox-demo').appendChild(textBox.getContainer());</co
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const metric = new Dotbox.MetricItem({
+                    <pre><code>const metric = new Dotbox.MetricItem('cpu-metric', {
     label: 'CPU Usage',
     value: '75%',
     trend: 'up',
@@ -288,6 +247,30 @@ document.body.appendChild(metric.getElement());</code></pre>
 document.body.appendChild(toolButton.getElement());</code></pre>
                 </div>
             </section>
+
+            <section id="menu" class="component-section">
+                <h2 class="component-title">Menu</h2>
+                <p class="component-description">Navigation menu component with selectable items.</p>
+                
+                <div class="component-demo">
+                    <div id="menu-demo"></div>
+                </div>
+
+                <div class="component-code">
+                    <pre><code>const menu = new Dotbox.Menu({
+    items: [
+        { id: 'home', label: 'Home' },
+        { id: 'about', label: 'About' },
+        { id: 'services', label: 'Services' },
+        { id: 'contact', label: 'Contact' }
+    ],
+    selected: 'home',
+    onSelect: (id) => console.log('Selected:', id)
+});
+
+document.body.appendChild(menu.getElement());</code></pre>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -295,6 +278,27 @@ document.body.appendChild(toolButton.getElement());</code></pre>
     <script>
         // Initialize demo components
         document.addEventListener('DOMContentLoaded', () => {
+            // Navigation menu
+            const navMenu = new Dotbox.Menu({
+                items: [
+                    { id: 'buttons', label: 'Buttons' },
+                    { id: 'modals', label: 'Modal Dialogs' },
+                    { id: 'tabs', label: 'Tab Views' },
+                    { id: 'textbox', label: 'Text Boxes' },
+                    { id: 'metrics', label: 'Metric Items' },
+                    { id: 'toolbuttons', label: 'Tool Buttons' },
+                    { id: 'menu', label: 'Menu' }
+                ],
+                selected: 'buttons',
+                onSelect: (id) => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+            document.getElementById('nav-menu').appendChild(navMenu.getElement());
+
             // Button demo
             const buttonDemo = document.getElementById('button-demo');
             
@@ -369,7 +373,7 @@ document.body.appendChild(toolButton.getElement());</code></pre>
 
             // Metric demo
             const metricDemo = document.getElementById('metric-demo');
-            const metric = new Dotbox.MetricItem({
+            const metric = new Dotbox.MetricItem('cpu-metric', {
                 label: 'CPU Usage',
                 value: '75%',
                 trend: 'up',
@@ -385,6 +389,20 @@ document.body.appendChild(toolButton.getElement());</code></pre>
                 onClick: () => alert('Tool button clicked!')
             });
             toolbuttonDemo.appendChild(toolButton.getElement());
+
+            // Menu demo
+            const menuDemo = document.getElementById('menu-demo');
+            const menu = new Dotbox.Menu({
+                items: [
+                    { id: 'home', label: 'Home' },
+                    { id: 'about', label: 'About' },
+                    { id: 'services', label: 'Services' },
+                    { id: 'contact', label: 'Contact' }
+                ],
+                selected: 'home',
+                onSelect: (id) => console.log('Selected:', id)
+            });
+            menuDemo.appendChild(menu.getElement());
         });
 
         function setTheme(theme) {

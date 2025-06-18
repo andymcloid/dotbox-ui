@@ -1,28 +1,46 @@
 .dotbox-menu {
   display: flex;
   flex-direction: column;
-  gap: 0.3em;
-  background: var(--color-bg-sidebar, #232733);
-  border-radius: var(--radius-lg, 22px);
-  padding: 1.2em 0.7em;
-  min-width: 180px;
+  background: var(--color-bg-sidebar, var(--color-bg-panel));
+  border-radius: var(--radius-lg);
+  padding: 0.5rem;
+  min-width: 200px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--color-shadow);
 }
+
 .dotbox-menu-item {
-  font-size: 1.08rem;
-  font-weight: 600;
-  color: var(--color-text-muted, #8b98b1);
-  border-radius: var(--radius, 12px);
-  padding: 0.7em 1.2em;
+  display: block;
+  padding: 0.875rem 1rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  margin-bottom: 1px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
   cursor: pointer;
-  transition: background 0.16s, color 0.16s;
-  margin-bottom: 0.1em;
   user-select: none;
+  position: relative;
+  border-left: 3px solid transparent;
 }
+
+.dotbox-menu-item:last-child {
+  margin-bottom: 0;
+}
+
 .dotbox-menu-item:hover {
-  background: var(--color-accent, #ffb020);
-  color: var(--color-text-inverse, #fff);
+  color: var(--color-text);
+  background: var(--color-bg-hover, var(--color-bg-card));
 }
+
 .dotbox-menu-item.selected {
-  background: var(--color-primary, #3b82f6);
-  color: var(--color-text-inverse, #fff);
+  background: rgba(255, 182, 5, 0.08);
+  color: var(--color-primary);
+  font-weight: 600;
+  border-left-color: var(--color-primary);
+}
+
+.dotbox-menu-item.selected:hover {
+  background: rgba(255, 182, 5, 0.12);
+  color: var(--color-primary);
 } 
