@@ -44,26 +44,9 @@
         }
         .component-demo {
             margin-bottom: 2rem;
-            padding: 1rem;
-            background: var(--color-bg-card);
-            border-radius: 4px;
         }
         .component-code {
-            background: var(--color-bg-card);
-            color: var(--color-text);
-            padding: 1rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--color-border);
-            overflow-x: auto;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        .component-code pre {
-            margin: 0;
-        }
-        .component-code code {
-            color: var(--color-text);
+            margin-bottom: 2rem;
         }
         .nav {
             position: fixed;
@@ -96,14 +79,6 @@
             background: var(--color-bg);
             min-height: 100vh;
         }
-        /* Customize menu for docs navigation */
-        #nav-menu .dotbox-menu {
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            padding: 0;
-            min-width: 100%;
-        }
     </style>
 </head>
 <body>
@@ -131,15 +106,7 @@
                 </div>
 
                 <div class="component-code">
-                    <pre><code>// Available variants: primary, secondary, danger, success
-const button = new Dotbox.Button({
-    text: 'Click Me',
-    variant: 'primary', // or 'secondary', 'danger', 'success'
-    size: 'medium',     // small, medium, large
-    onClick: () => console.log('Clicked!')
-});
-
-document.body.appendChild(button.getElement());</code></pre>
+                    <div id="button-code-demo"></div>
                 </div>
             </section>
 
@@ -152,20 +119,7 @@ document.body.appendChild(button.getElement());</code></pre>
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const modal = new Dotbox.ModalDialog('demo-modal', {
-    closeOnOverlayClick: true,
-    closeOnEsc: true
-});
-
-modal.setTitle('Demo Modal')
-    .setBody('<p>This is a demo modal dialog.</p>')
-    .addFooterButton('Close', 'action-btn', () => modal.close());
-
-const openModalBtn = new Dotbox.Button({
-    text: 'Open Modal',
-    onClick: () => modal.show()
-});
-document.getElementById('modal-demo').appendChild(openModalBtn.getElement());</code></pre>
+                    <div id="modal-code-demo"></div>
                 </div>
             </section>
 
@@ -178,14 +132,7 @@ document.getElementById('modal-demo').appendChild(openModalBtn.getElement());</c
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const tabView = new Dotbox.TabView({
-    tabs: [
-        { id: 'tab1', label: 'Tab 1', content: 'Content 1' },
-        { id: 'tab2', label: 'Tab 2', content: 'Content 2' }
-    ]
-});
-
-document.body.appendChild(tabView.getElement());</code></pre>
+                    <div id="tab-code-demo"></div>
                 </div>
             </section>
 
@@ -198,14 +145,7 @@ document.body.appendChild(tabView.getElement());</code></pre>
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const textBox = new Dotbox.TextBox({
-    label: 'Username',
-    placeholder: 'Enter your username',
-    helpText: 'This will be your display name',
-    onChange: (e) => console.log('Text changed:', e.target.value)
-});
-
-document.getElementById('textbox-demo').appendChild(textBox.getContainer());</code></pre>
+                    <div id="textbox-code-demo"></div>
                 </div>
             </section>
 
@@ -218,14 +158,7 @@ document.getElementById('textbox-demo').appendChild(textBox.getContainer());</co
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const metric = new Dotbox.MetricItem('cpu-metric', {
-    label: 'CPU Usage',
-    value: '75%',
-    trend: 'up',
-    icon: '📈'
-});
-
-document.body.appendChild(metric.getElement());</code></pre>
+                    <div id="metric-code-demo"></div>
                 </div>
             </section>
 
@@ -238,13 +171,20 @@ document.body.appendChild(metric.getElement());</code></pre>
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const toolButton = new Dotbox.ToolButton({
-    icon: '🔧',
-    tooltip: 'Settings',
-    onClick: () => console.log('Tool clicked!')
-});
+                    <div id="toolbutton-code-demo"></div>
+                </div>
+            </section>
 
-document.body.appendChild(toolButton.getElement());</code></pre>
+            <section id="codeblock" class="component-section">
+                <h2 class="component-title">Code Block</h2>
+                <p class="component-description">Syntax-highlighted code display component with multiple language support.</p>
+                
+                <div class="component-demo">
+                    <div id="codeblock-demo"></div>
+                </div>
+
+                <div class="component-code">
+                    <div id="codeblock-code-demo"></div>
                 </div>
             </section>
 
@@ -257,18 +197,7 @@ document.body.appendChild(toolButton.getElement());</code></pre>
                 </div>
 
                 <div class="component-code">
-                    <pre><code>const menu = new Dotbox.Menu({
-    items: [
-        { id: 'home', label: 'Home' },
-        { id: 'about', label: 'About' },
-        { id: 'services', label: 'Services' },
-        { id: 'contact', label: 'Contact' }
-    ],
-    selected: 'home',
-    onSelect: (id) => console.log('Selected:', id)
-});
-
-document.body.appendChild(menu.getElement());</code></pre>
+                    <div id="menu-code-demo"></div>
                 </div>
             </section>
         </div>
@@ -287,9 +216,11 @@ document.body.appendChild(menu.getElement());</code></pre>
                     { id: 'textbox', label: 'Text Boxes' },
                     { id: 'metrics', label: 'Metric Items' },
                     { id: 'toolbuttons', label: 'Tool Buttons' },
+                    { id: 'codeblock', label: 'Code Block' },
                     { id: 'menu', label: 'Menu' }
                 ],
                 selected: 'buttons',
+                bordered: false,
                 onSelect: (id) => {
                     const element = document.getElementById(id);
                     if (element) {
@@ -390,6 +321,18 @@ document.body.appendChild(menu.getElement());</code></pre>
             });
             toolbuttonDemo.appendChild(toolButton.getElement());
 
+            // CodeBlock demo
+            const codeblockDemo = document.getElementById('codeblock-demo');
+            const codeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `function greet(name) {
+    return \`Hello, \${name}!\`;
+}
+
+console.log(greet('World'));`
+            });
+            codeblockDemo.appendChild(codeBlock.getElement());
+
             // Menu demo
             const menuDemo = document.getElementById('menu-demo');
             const menu = new Dotbox.Menu({
@@ -403,6 +346,131 @@ document.body.appendChild(menu.getElement());</code></pre>
                 onSelect: (id) => console.log('Selected:', id)
             });
             menuDemo.appendChild(menu.getElement());
+
+            // Create CodeBlock components for all code examples
+            // Button code example
+            const buttonCodeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `// Available variants: primary, secondary, danger, success
+const button = new Dotbox.Button({
+    text: 'Click Me',
+    variant: 'primary', // or 'secondary', 'danger', 'success'
+    size: 'medium',     // small, medium, large
+    onClick: () => console.log('Clicked!')
+});
+
+document.body.appendChild(button.getElement());`
+            });
+            document.getElementById('button-code-demo').appendChild(buttonCodeBlock.getElement());
+
+            // Modal code example
+            const modalCodeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `const modal = new Dotbox.ModalDialog('demo-modal', {
+    closeOnOverlayClick: true,
+    closeOnEsc: true
+});
+
+modal.setTitle('Demo Modal')
+    .setBody('<p>This is a demo modal dialog.</p>')
+    .addFooterButton('Close', 'action-btn', () => modal.close());
+
+const openModalBtn = new Dotbox.Button({
+    text: 'Open Modal',
+    onClick: () => modal.show()
+});
+document.getElementById('modal-demo').appendChild(openModalBtn.getElement());`
+            });
+            document.getElementById('modal-code-demo').appendChild(modalCodeBlock.getElement());
+
+            // Tab code example
+            const tabCodeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `const tabView = new Dotbox.TabView({
+    tabs: [
+        { id: 'tab1', label: 'Tab 1', content: 'Content 1' },
+        { id: 'tab2', label: 'Tab 2', content: 'Content 2' }
+    ]
+});
+
+document.body.appendChild(tabView.getElement());`
+            });
+            document.getElementById('tab-code-demo').appendChild(tabCodeBlock.getElement());
+
+            // TextBox code example
+            const textboxCodeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `const textBox = new Dotbox.TextBox({
+    label: 'Username',
+    placeholder: 'Enter your username',
+    helpText: 'This will be your display name',
+    onChange: (e) => console.log('Text changed:', e.target.value)
+});
+
+document.getElementById('textbox-demo').appendChild(textBox.getContainer());`
+            });
+            document.getElementById('textbox-code-demo').appendChild(textboxCodeBlock.getElement());
+
+            // Metric code example
+            const metricCodeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `const metric = new Dotbox.MetricItem('cpu-metric', {
+    label: 'CPU Usage',
+    value: '75%',
+    trend: 'up',
+    icon: '📈'
+});
+
+document.body.appendChild(metric.getElement());`
+            });
+            document.getElementById('metric-code-demo').appendChild(metricCodeBlock.getElement());
+
+            // ToolButton code example
+            const toolbuttonCodeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `const toolButton = new Dotbox.ToolButton({
+    icon: '🔧',
+    tooltip: 'Settings',
+    onClick: () => console.log('Tool clicked!')
+});
+
+document.body.appendChild(toolButton.getElement());`
+            });
+            document.getElementById('toolbutton-code-demo').appendChild(toolbuttonCodeBlock.getElement());
+
+            // CodeBlock code example
+            const codeblockCodeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `const codeBlock = new Dotbox.CodeBlock({
+    language: 'javascript',
+    code: \`function greet(name) {
+    return \\\`Hello, \\\${name}!\\\`;
+}
+
+console.log(greet('World'));\`
+});
+
+document.body.appendChild(codeBlock.getElement());`
+            });
+            document.getElementById('codeblock-code-demo').appendChild(codeblockCodeBlock.getElement());
+
+            // Menu code example
+            const menuCodeBlock = new Dotbox.CodeBlock({
+                language: 'javascript',
+                code: `const menu = new Dotbox.Menu({
+    items: [
+        { id: 'home', label: 'Home' },
+        { id: 'about', label: 'About' },
+        { id: 'services', label: 'Services' },
+        { id: 'contact', label: 'Contact' }
+    ],
+    selected: 'home',
+    onSelect: (id) => console.log('Selected:', id)
+});
+
+document.body.appendChild(menu.getElement());`
+            });
+            document.getElementById('menu-code-demo').appendChild(menuCodeBlock.getElement());
         });
 
         function setTheme(theme) {

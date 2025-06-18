@@ -1,14 +1,16 @@
 .dotbox-codeblock {
-  background: #232733;
-  color: #f3f4f6;
-  border-radius: var(--radius-lg, 22px);
-  font-size: 1.08rem;
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-  padding: 1.3em 1.7em;
-  margin: 1.2em 0;
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0;
   overflow-x: auto;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.13);
-  border: 1px solid var(--color-border, #2d3340);
+  box-shadow: var(--color-shadow);
+  border: 1px solid var(--color-border);
+  position: relative;
+  line-height: 1.5;
 }
 .dotbox-codeblock code {
   background: none;
@@ -18,10 +20,60 @@
   padding: 0;
 }
 .dotbox-codeblock::-webkit-scrollbar {
-  height: 10px;
-  background: #232733;
+  height: 8px;
+  background: transparent;
 }
 .dotbox-codeblock::-webkit-scrollbar-thumb {
-  background: #2d3340;
-  border-radius: 8px;
+  background: var(--color-border);
+  border-radius: var(--radius);
+}
+.dotbox-codeblock::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-light);
+}
+
+/* Custom syntax highlighting overrides */
+.dotbox-codeblock .token.comment,
+.dotbox-codeblock .token.prolog,
+.dotbox-codeblock .token.doctype,
+.dotbox-codeblock .token.cdata {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.dotbox-codeblock .token.property,
+.dotbox-codeblock .token.tag,
+.dotbox-codeblock .token.boolean,
+.dotbox-codeblock .token.number,
+.dotbox-codeblock .token.constant,
+.dotbox-codeblock .token.symbol,
+.dotbox-codeblock .token.deleted {
+  color: var(--color-primary);
+}
+
+.dotbox-codeblock .token.selector,
+.dotbox-codeblock .token.attr-name,
+.dotbox-codeblock .token.string,
+.dotbox-codeblock .token.char,
+.dotbox-codeblock .token.builtin,
+.dotbox-codeblock .token.inserted {
+  color: #22c55e;
+}
+
+.dotbox-codeblock .token.operator,
+.dotbox-codeblock .token.entity,
+.dotbox-codeblock .token.url,
+.dotbox-codeblock .language-css .token.string,
+.dotbox-codeblock .style .token.string {
+  color: #3b82f6;
+}
+
+.dotbox-codeblock .token.atrule,
+.dotbox-codeblock .token.attr-value,
+.dotbox-codeblock .token.keyword {
+  color: #8b5cf6;
+}
+
+.dotbox-codeblock .token.function,
+.dotbox-codeblock .token.class-name {
+  color: #f59e0b;
 } 

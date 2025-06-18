@@ -4,12 +4,13 @@ class Menu {
     this.items = options.items || [];
     this.selected = options.selected || null;
     this.onSelect = options.onSelect || (() => {});
+    this.bordered = options.bordered !== false; // Default to true
     this.element = this._render();
   }
 
   _render() {
     const menu = document.createElement('nav');
-    menu.className = 'dotbox-menu';
+    menu.className = `dotbox-menu ${this.bordered ? 'dotbox-menu-bordered' : 'dotbox-menu-borderless'}`;
     menu.id = this.id;
     this.items.forEach(item => {
       const el = document.createElement('div');

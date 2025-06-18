@@ -1,0 +1,87 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [16, 18, 20]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build project
+      run: npm run build
+      
+    - name: Verify build output
+      run: |
+        echo "Checking build artifacts..."
+        ls -la dist/
+        
+        # Check that all required files exist
+        echo "Verifying required files..."
+        test -f dist/bundle.js && echo "✅ bundle.js exists" || (echo "❌ bundle.js missing" && exit 1)
+        test -f dist/index.css && echo "✅ index.css exists" || (echo "❌ index.css missing" && exit 1)
+        test -f dist/theme.css && echo "✅ theme.css exists" || (echo "❌ theme.css missing" && exit 1)
+        
+        # Check file sizes (basic sanity check)
+        echo "Checking file sizes..."
+        bundle_size=$(stat -c%s dist/bundle.js)
+        css_size=$(stat -c%s dist/index.css)
+        
+        if [ $bundle_size -lt 1000 ]; then
+          echo "❌ bundle.js seems too small ($bundle_size bytes)"
+          exit 1
+        else
+          echo "✅ bundle.js size: $bundle_size bytes"
+        fi
+        
+        if [ $css_size -lt 500 ]; then
+          echo "❌ index.css seems too small ($css_size bytes)"
+          exit 1
+        else
+          echo "✅ index.css size: $css_size bytes"
+        fi
+        
+        echo "🎉 All build checks passed!"
+        
+    - name: Test documentation build
+      run: |
+        echo "Testing documentation server..."
+        timeout 10s npm run docs &
+        sleep 5
+        
+        # Simple check that server is responding
+        if curl -f http://localhost:3000/ >/dev/null 2>&1; then
+          echo "✅ Documentation server is responding"
+        else
+          echo "❌ Documentation server is not responding"
+          exit 1
+        fi
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: matrix.node-version == '18'
+      with:
+        name: build-artifacts-${{ github.sha }}
+        path: |
+          dist/
+          docs/
+        retention-days: 7

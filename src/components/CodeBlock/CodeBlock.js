@@ -10,6 +10,14 @@ class CodeBlock {
 
   _loadPrism(cb) {
     if (window.Prism) return cb();
+    
+    // Load Prism CSS
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css';
+    document.head.appendChild(css);
+    
+    // Load Prism JS
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js';
     script.onload = cb;

@@ -1,12 +1,21 @@
 .dotbox-menu {
   display: flex;
   flex-direction: column;
+  min-width: 200px;
+}
+
+.dotbox-menu-bordered {
   background: var(--color-bg-sidebar, var(--color-bg-panel));
   border-radius: var(--radius-lg);
   padding: 0.5rem;
-  min-width: 200px;
   border: 1px solid var(--color-border);
   box-shadow: var(--color-shadow);
+}
+
+.dotbox-menu-borderless {
+  background: transparent;
+  padding: 0;
+  min-width: 100%;
 }
 
 .dotbox-menu-item {

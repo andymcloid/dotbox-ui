@@ -24,7 +24,9 @@ class TextBox {
         
         this.container = null;
         this.label = null;
+        this.inputWrapper = null;
         this.input = null;
+        this.inputBorder = null;
         this.helpElement = null;
         this.errorElement = null;
         
@@ -50,6 +52,10 @@ class TextBox {
             this.container.appendChild(this.label);
         }
         
+        // Create input wrapper for the animated border effect
+        this.inputWrapper = document.createElement('div');
+        this.inputWrapper.className = 'textbox-input-wrapper';
+        
         // Create input
         this.input = document.createElement('input');
         this.input.type = this.options.type;
@@ -66,7 +72,13 @@ class TextBox {
         if (this.options.step !== null) this.input.step = this.options.step;
         if (this.options.pattern) this.input.pattern = this.options.pattern;
         
-        this.container.appendChild(this.input);
+        // Create animated border
+        this.inputBorder = document.createElement('span');
+        this.inputBorder.className = 'textbox-input-border';
+        
+        this.inputWrapper.appendChild(this.input);
+        this.inputWrapper.appendChild(this.inputBorder);
+        this.container.appendChild(this.inputWrapper);
         
         // Create help text if provided
         if (this.options.helpText) {
@@ -209,7 +221,9 @@ class TextBox {
         }
         this.container = null;
         this.label = null;
+        this.inputWrapper = null;
         this.input = null;
+        this.inputBorder = null;
         this.helpElement = null;
         this.errorElement = null;
     }
