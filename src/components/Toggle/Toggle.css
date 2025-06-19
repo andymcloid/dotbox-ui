@@ -250,16 +250,4 @@
   outline-offset: 2px;
 }
 
-/* Dark theme specific adjustments */
-.theme-dark .dotbox-toggle-circle {
-  background: var(--color-bg-card);
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.theme-dark .dotbox-toggle input:checked + .dotbox-toggle-slider .dotbox-toggle-circle {
-  box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.theme-dark .dotbox-toggle-slider::before {
-  background: var(--color-bg-card);
-}
+/* Toggle works the same in both light and dark themes */

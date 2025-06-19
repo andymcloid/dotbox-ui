@@ -12,4 +12,6 @@
 @import './components/Checkbox/Checkbox.css';
 @import './components/Section/Section.css';
 @import './components/Form/Form.css';
-@import './components/Toggle/Toggle.css'; 
+@import './components/Toggle/Toggle.css';
+@import './components/Notification/Notification.css';
+@import './components/MessageBox/MessageBox.css'; 

@@ -13,6 +13,8 @@ const Checkbox = require('./components/Checkbox/Checkbox.js');
 const Section = require('./components/Section/Section.js');
 const Form = require('./components/Form/Form.js');
 const Toggle = require('./components/Toggle/Toggle.js');
+const Notification = require('./components/Notification/Notification.js');
+const MessageBox = require('./components/MessageBox/MessageBox.js');
 
 // Import all styles (except theming)
 require('./index.css');
@@ -32,7 +34,9 @@ const Dotbox = {
     Checkbox,
     Section,
     Form,
-    Toggle
+    Toggle,
+    Notification,
+    MessageBox
 };
 if (typeof window !== 'undefined') {
     window.Dotbox = Dotbox;

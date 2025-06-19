@@ -154,6 +154,8 @@
   --color-primary-hover: #E5A304;
   --color-accent: #FFB605;
   --color-accent-hover: #E5A304;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
   --color-border: #e5e7eb;
   --color-border-light: #d1d5db;
   --color-shadow: 0 6px 32px rgba(0,0,0,0.10);
@@ -194,6 +196,8 @@
   --color-primary-hover: #E5A304;
   --color-accent: #FFB605;
   --color-accent-hover: #E5A304;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
   --color-border: #232b3e;
   --color-border-light: #2d3340;
   --color-shadow: 0 6px 32px rgba(0,0,0,0.22);
