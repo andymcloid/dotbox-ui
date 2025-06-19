@@ -84,23 +84,27 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
-        # Store current files before switching branch
+        # Store only the essential files
         mkdir -p /tmp/release-files
-        cp -r dist/* /tmp/release-files/
-        cp package.json /tmp/release-files/
-        cp README.md /tmp/release-files/
+        cp dist/bundle.js /tmp/release-files/
+        cp dist/index.css /tmp/release-files/
+        cp dist/theme.css /tmp/release-files/
         
         # Create or checkout release branch
         git fetch origin
         if git rev-parse --verify origin/release >/dev/null 2>&1; then
           git checkout -b release origin/release
+          # Remove all existing files to start clean
+          git rm -rf . || true
         else
           git checkout --orphan release
-          git rm -rf .
+          git rm -rf . || true
         fi
         
-        # Copy the stored files to release branch
-        cp -r /tmp/release-files/* .
+        # Copy only the essential files to release branch
+        cp /tmp/release-files/bundle.js .
+        cp /tmp/release-files/index.css .
+        cp /tmp/release-files/theme.css .
         
         # Create a simple index.html for the release branch
         cat > index.html << 'EOF'
