@@ -6,7 +6,6 @@
     --bg-tertiary: #363b41;
     --background-light: #363b41;
     
-    --text-primary: #eee;
     --text-secondary: #ccc;
     --text-muted: #606468;
     
@@ -64,22 +63,9 @@
     padding: 0;
 }
 
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    font-size: 14px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+/* Base body styles are handled by main.css with theme-aware variables */
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-    color: var(--text-primary);
-    font-weight: 600;
-    line-height: 1.2;
-}
+/* Typography - using consistent --color-text variable */
 
 /* Scrollbars */
 ::-webkit-scrollbar {

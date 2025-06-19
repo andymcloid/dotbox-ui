@@ -30,6 +30,17 @@ body {
   min-height: 100vh;
   transition: background 0.2s, color 0.2s;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
 h1 {
   font-size: var(--h1-size);
   font-weight: 800;
@@ -39,13 +50,10 @@ h1 {
 h2 {
   font-size: var(--h2-size);
   font-weight: 700;
-  margin-bottom: 0.5em;
   letter-spacing: -0.7px;
 }
 h3 {
   font-size: var(--h3-size);
-  font-weight: 600;
-  margin-bottom: 0.5em;
 }
 a {
   color: var(--color-primary);
@@ -423,7 +431,7 @@ a:hover {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--border-color);
   background-color: var(--bg-secondary);
-  color: var(--text-primary);
+  color: var(--color-text);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -954,7 +962,7 @@ a:hover {
   box-shadow: var(--shadow-md);
 }
 .tool-btn.active {
-  color: var(--text-primary);
+  color: var(--color-text);
   background-color: var(--bg-secondary);
   border-color: var(--accent-blue);
 }
@@ -976,7 +984,7 @@ a:hover {
   font-size: 1rem;
 }
 .tool-btn-primary {
-  color: var(--text-primary);
+  color: var(--color-text);
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
@@ -985,7 +993,7 @@ a:hover {
   border-color: var(--primary-dark);
 }
 .tool-btn-danger {
-  color: var(--text-primary);
+  color: var(--color-text);
   background-color: var(--accent-red);
   border-color: var(--accent-red);
 }
@@ -1024,7 +1032,7 @@ a:hover {
   left: 50%;
   transform: translateX(-50%);
   background: var(--background-dark);
-  color: var(--text-primary);
+  color: var(--color-text);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-size: 0.75rem;

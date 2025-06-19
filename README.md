@@ -24,17 +24,15 @@ Use Dotbox UI directly from jsDelivr CDN. Files are automatically updated on eve
 <script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js"></script>
 ```
 
-### Alternative: GitHub Releases
-Download specific versions from GitHub releases:
+### Alternative: Local Development
+Clone the repository for local development:
 
-```html
-<!-- Specific version -->
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/index.css">
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/theme.css">
-<script src="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/bundle.js"></script>
+```bash
+git clone https://github.com/andymcloid/dotbox-ui.git
+cd dotbox-ui
+npm install
+npm run build
 ```
-
-Or download the complete package: [GitHub Releases](https://github.com/andymcloid/dotbox-ui/releases)
 
 ## 🚀 Quick Start
 
@@ -387,12 +385,11 @@ This project uses GitHub Actions for automated builds, testing, and releases:
 - **Build verification**: Ensures all distribution files are generated correctly
 - **Documentation testing**: Verifies the docs server starts successfully
 
-### Automated Releases
-- **On release creation**: Automatically builds and creates release assets
+### Automated Distribution
 - **GitHub Pages**: Documentation is automatically deployed
-- **Release assets**: Distribution files are attached to each GitHub release
+- **Release branch**: Built files are automatically pushed to `release` branch for CDN access
 
-### Using Stable Releases
+### Using the CDN
 
 #### Option 1: CDN (Recommended)
 ```html
@@ -400,28 +397,20 @@ This project uses GitHub Actions for automated builds, testing, and releases:
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css">
 <script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js"></script>
-
-<!-- Specific version from GitHub releases -->
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/index.css">
-<script src="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/bundle.js"></script>
 ```
 
-#### Option 2: Download from Releases
-1. Go to [GitHub Releases](https://github.com/andymcloid/dotbox-ui/releases)
-2. Download the `dotbox-ui-[version].tar.gz` file
-3. Extract and use the `dist/` files in your project
-
-#### Option 3: Git Submodule
+#### Option 2: Git Submodule
 ```bash
 git submodule add https://github.com/andymcloid/dotbox-ui.git vendor/dotbox-ui
 git submodule update --init --recursive
 ```
 
-### Creating Releases
-To create a new release:
-1. Create and push a git tag: `git tag v1.0.0 && git push origin v1.0.0`
-2. Create a GitHub release from the tag
-3. GitHub Actions will automatically build and publish the release
+### Automatic CDN Updates
+The CDN is automatically updated on every push to master:
+1. Push changes to master branch
+2. GitHub Actions builds the project 
+3. Updates the `release` branch with built files
+4. jsDelivr CDN serves the latest build automatically
 
 ## 📄 License
 
