@@ -1,0 +1,38 @@
+<dotbox-menu 
+    data-items='[{"id":"home","label":"Home"},{"id":"about","label":"About"},{"id":"services","label":"Services"},{"id":"contact","label":"Contact"}]'
+    selected="home"
+    bordered="true">
+</dotbox-menu>
+
+<dotbox-menu 
+    data-items='[{"id":"dashboard","label":"Dashboard"},{"id":"analytics","label":"Analytics"},{"id":"settings","label":"Settings"}]'
+    selected="dashboard"
+    routing-mode>
+</dotbox-menu>
+
+<dotbox-menu 
+    data-items='[{"id":"file","label":"File"},{"id":"edit","label":"Edit"},{"id":"view","label":"View"},{"id":"tools","label":"Tools"}]'
+    compact
+    bordered="false">
+</dotbox-menu>
+
+<dotbox-menu 
+    data-items='[{"id":"new","label":"New File","group":"file","groupHeader":"File Operations"},{"id":"open","label":"Open","group":"file","groupHeader":"File Operations"},{"id":"save","label":"Save","group":"file","groupHeader":"File Operations"},{"id":"copy","label":"Copy","group":"edit","groupHeader":"Edit"},{"id":"paste","label":"Paste","group":"edit","groupHeader":"Edit"},{"id":"find","label":"Find","group":"edit","groupHeader":"Edit"}]'
+    collapsible-headers
+    compact
+    bordered="false">
+</dotbox-menu>
+
+<dotbox-menu 
+    data-items='[{"id":"overview","label":"Overview","group":"docs","groupHeader":"Documentation"},{"id":"getting-started","label":"Getting Started","group":"docs","groupHeader":"Documentation"},{"id":"installation","label":"Installation","group":"docs","groupHeader":"Documentation"},{"id":"basic-usage","label":"Basic Usage","group":"examples","groupHeader":"Examples"},{"id":"advanced","label":"Advanced","group":"examples","groupHeader":"Examples"}]'
+    collapsible-headers
+    header-arrow-position="left"
+    compact
+    bordered="false">
+</dotbox-menu>
+
+<script>
+document.querySelector('dotbox-menu').addEventListener('dotbox-select', (e) => {
+    console.log('Selected menu item:', e.detail.selectedId);
+});
+</script>

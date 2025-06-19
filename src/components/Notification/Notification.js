@@ -251,14 +251,15 @@ class DotboxNotification extends HTMLElement {
     }
 
     connectedCallback() {
+        const mode = this.getAttribute('mode') || 'static';
         const options = {
             message: this.getAttribute('message') || this.textContent || 'Notification',
             variant: this.getAttribute('variant') || 'success',
-            mode: this.getAttribute('mode') || 'static',
+            mode: mode,
             position: this.getAttribute('position') || 'bottom-right',
             autoClose: this.getAttribute('auto-close') !== 'false',
             timeout: parseInt(this.getAttribute('timeout')) || 3000,
-            showCloseButton: this.getAttribute('show-close-button') !== null ? this.getAttribute('show-close-button') !== 'false' : (options.mode === 'popup'),
+            showCloseButton: this.getAttribute('show-close-button') !== null ? this.getAttribute('show-close-button') !== 'false' : (mode === 'popup'),
             icon: this.getAttribute('icon') || null
         };
 

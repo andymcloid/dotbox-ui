@@ -37,6 +37,8 @@
     <script>
         // Global components data
         let componentsData = [];
+        // Store loaded component code for JSFiddle
+        let loadedComponentsCode = {};
 
         // Load components configuration
         async function loadComponentsData() {
@@ -52,9 +54,9 @@
             }
         }
 
-        function initializeDocumentation() {
+        async function initializeDocumentation() {
             createNavigationMenu();
-            createComponentSections();
+            await createComponentSections();
             setupThemeDropdown();
             setupTypeDropdown();
             setInitialTheme();
@@ -123,10 +125,10 @@
             }
         }
 
-        function createComponentSections() {
+        async function createComponentSections() {
             const dynamicSections = document.getElementById('dynamic-sections');
 
-            componentsData.forEach(component => {
+            for (const component of componentsData) {
                 // Create section using Dotbox Section component
                 const sectionElement = document.createElement('dotbox-section');
                 sectionElement.id = component.id;
@@ -162,15 +164,45 @@
 
                 dynamicSections.appendChild(sectionElement);
 
+                // Load example code if referencing external files
+                let wcCode = component.codeWC;
+                let jsCode = component.codeJS;
+
+                if (component.codeWC && component.codeWC.startsWith('examples/')) {
+                    try {
+                        const response = await fetch(component.codeWC);
+                        wcCode = await response.text();
+                    } catch (error) {
+                        console.error(`Failed to load ${component.codeWC}:`, error);
+                        wcCode = '<!-- Example file not found -->';
+                    }
+                }
+
+                if (component.codeJS && component.codeJS.startsWith('examples/')) {
+                    try {
+                        const response = await fetch(component.codeJS);
+                        jsCode = await response.text();
+                    } catch (error) {
+                        console.error(`Failed to load ${component.codeJS}:`, error);
+                        jsCode = '// Example file not found';
+                    }
+                }
+
+                // Store loaded code for JSFiddle and other uses
+                loadedComponentsCode[component.id] = {
+                    codeWC: wcCode,
+                    codeJS: jsCode
+                };
+
                 // Create live Web Component demos (parse and execute the HTML)
-                createLiveDemo(component.id + '-wc-demo', component.codeWC);
+                createLiveDemo(component.id + '-wc-demo', wcCode);
 
                 // Create JavaScript API demos (execute only JavaScript parts)
-                createJSDemo(component.id + '-js-demo', component);
+                createJSDemo(component.id + '-js-demo', { ...component, codeJS: jsCode });
 
                 // Create code examples
-                createCodeExample(component.id + '-code-demo', component);
-            });
+                createCodeExample(component.id + '-code-demo', { ...component, codeWC: wcCode, codeJS: jsCode });
+            }
         }
 
         function createLiveDemo(containerId, wcCode) {
@@ -205,8 +237,31 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            // Use JSON data for JS demos too - execute the script parts
-            executeScriptFromCode(component.codeJS, container);
+            // Check if this is an external file (no script tags) or inline code (with script tags)
+            if (component.codeJS.includes('<script>')) {
+                // Legacy inline code with script tags
+                executeScriptFromCode(component.codeJS, container);
+            } else {
+                // External file - pure JavaScript
+                executeJavaScript(component.codeJS, container);
+            }
+        }
+
+        function executeJavaScript(jsCode, container) {
+            try {
+                // Replace document.body.appendChild with container.appendChild for demos
+                const modifiedScript = jsCode.replace(
+                    /document\.body\.appendChild/g, 
+                    `arguments[0].appendChild`
+                );
+                
+                // Create a function and execute it with container as argument
+                const scriptFunction = new Function('container', modifiedScript);
+                scriptFunction.call(null, container);
+            } catch (error) {
+                console.error('Error executing JavaScript demo:', error);
+                console.error('Script content that failed:', jsCode);
+            }
         }
 
         function executeScriptFromCode(code, container) {
@@ -239,12 +294,20 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
+            // The component object now contains the loaded content, not file paths
+            let wcCode = component.codeWC || '';
+            let jsCode = component.codeJS || '';
+
+            // Clean up any literal \n sequences that might exist
+            wcCode = wcCode.replace(/\\n/g, '\n');
+            jsCode = jsCode.replace(/\\n/g, '\n');
+
             // Combine both Web Components and JavaScript examples
-            const combinedCode = component.codeWC + '\n\n' + component.codeJS;
+            const combinedCode = wcCode + '\n\n' + jsCode;
 
             const codeBlock = new Dotbox.CodeBlock({
                 language: 'html',
-                code: combinedCode.replace(/\\n/g, '\n')
+                code: combinedCode
             });
 
             container.appendChild(codeBlock.getElement());
@@ -325,19 +388,22 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
+            // Get the loaded code content (fallback to original if not loaded)
+            const loadedCode = loadedComponentsCode[component.id] || component;
+
             // Clear existing code block
             container.innerHTML = '';
 
             let codeToShow = '';
             switch (currentCodeType) {
                 case 'webcomponents':
-                    codeToShow = component.codeWC;
+                    codeToShow = loadedCode.codeWC;
                     break;
                 case 'javascript':
-                    codeToShow = component.codeJS;
+                    codeToShow = loadedCode.codeJS;
                     break;
                 default:
-                    codeToShow = component.codeWC;
+                    codeToShow = loadedCode.codeWC;
                     break;
             }
 
@@ -391,17 +457,20 @@
             const component = componentsData.find(c => c.id === componentId);
             if (!component) return;
             
+            // Get the loaded code content (fallback to original if not loaded)
+            const loadedCode = loadedComponentsCode[componentId] || component;
+            
             // Get the current code type being displayed
             let codeToUse = '';
             switch (currentCodeType) {
                 case 'webcomponents':
-                    codeToUse = component.codeWC;
+                    codeToUse = loadedCode.codeWC;
                     break;
                 case 'javascript':
-                    codeToUse = component.codeJS;
+                    codeToUse = loadedCode.codeJS;
                     break;
                 default:
-                    codeToUse = component.codeWC;
+                    codeToUse = loadedCode.codeWC;
                     break;
             }
             

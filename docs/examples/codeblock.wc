@@ -1,0 +1,23 @@
+<dotbox-code-block language="javascript">
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+console.log(greet('World'));
+</dotbox-code-block>
+
+<dotbox-code-block language="html">
+&lt;div class='container'&gt;
+    &lt;h1&gt;Welcome&lt;/h1&gt;
+    &lt;p&gt;Hello World!&lt;/p&gt;
+&lt;/div&gt;
+</dotbox-code-block>
+
+<dotbox-code-block language="css">
+.btn {
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    background: var(--color-primary);
+    color: white;
+}
+</dotbox-code-block>
