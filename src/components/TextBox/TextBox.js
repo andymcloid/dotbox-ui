@@ -229,6 +229,130 @@ class TextBox {
     }
 }
 
+// Web Component for HTML usage
+class DotboxTextboxElement extends HTMLElement {
+    constructor() {
+        super();
+        this.textboxInstance = null;
+    }
+
+    connectedCallback() {
+        this.render();
+    }
+
+    static get observedAttributes() {
+        return ['label', 'placeholder', 'type', 'value', 'required', 'disabled', 'readonly', 'help-text', 'error-text'];
+    }
+
+    attributeChangedCallback() {
+        if (this.textboxInstance) {
+            this.render();
+        }
+    }
+
+    render() {
+        const label = this.getAttribute('label') || '';
+        const placeholder = this.getAttribute('placeholder') || '';
+        const type = this.getAttribute('type') || 'text';
+        const value = this.getAttribute('value') || '';
+        const required = this.hasAttribute('required');
+        const disabled = this.hasAttribute('disabled');
+        const readonly = this.hasAttribute('readonly');
+        const helpText = this.getAttribute('help-text') || '';
+        const errorText = this.getAttribute('error-text') || '';
+
+        // Clean up previous instance
+        if (this.textboxInstance) {
+            this.innerHTML = '';
+        }
+
+        // Create new textbox instance
+        this.textboxInstance = new TextBox({
+            label: label,
+            placeholder: placeholder,
+            type: type,
+            value: value,
+            required: required,
+            disabled: disabled,
+            readonly: readonly,
+            helpText: helpText,
+            errorText: errorText,
+            onChange: (e) => {
+                // Update value attribute
+                this.setAttribute('value', e.target.value);
+                // Dispatch custom event
+                this.dispatchEvent(new CustomEvent('dotbox-change', {
+                    detail: { value: e.target.value },
+                    bubbles: true
+                }));
+            },
+            onInput: (e) => {
+                this.dispatchEvent(new CustomEvent('dotbox-input', {
+                    detail: { value: e.target.value },
+                    bubbles: true
+                }));
+            },
+            onFocus: (e) => {
+                this.dispatchEvent(new CustomEvent('dotbox-focus', {
+                    detail: { value: e.target.value },
+                    bubbles: true
+                }));
+            },
+            onBlur: (e) => {
+                this.dispatchEvent(new CustomEvent('dotbox-blur', {
+                    detail: { value: e.target.value },
+                    bubbles: true
+                }));
+            }
+        });
+
+        // Clear content and append textbox
+        this.innerHTML = '';
+        this.appendChild(this.textboxInstance.getContainer());
+    }
+
+    // Expose textbox methods
+    getValue() {
+        return this.textboxInstance ? this.textboxInstance.getValue() : '';
+    }
+
+    setValue(value) {
+        this.setAttribute('value', value);
+        return this;
+    }
+
+    setDisabled(disabled) {
+        if (disabled) {
+            this.setAttribute('disabled', '');
+        } else {
+            this.removeAttribute('disabled');
+        }
+        return this;
+    }
+
+    showError(message) {
+        this.setAttribute('error-text', message);
+        return this;
+    }
+
+    hideError() {
+        this.removeAttribute('error-text');
+        return this;
+    }
+
+    focus() {
+        if (this.textboxInstance) {
+            this.textboxInstance.focus();
+        }
+        return this;
+    }
+}
+
+// Register custom element
+if (typeof customElements !== 'undefined') {
+    customElements.define('dotbox-textbox', DotboxTextboxElement);
+}
+
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = TextBox;

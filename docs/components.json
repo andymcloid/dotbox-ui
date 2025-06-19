@@ -1,0 +1,65 @@
+[
+  {
+    "id": "buttons",
+    "name": "Buttons",
+    "description": "Flexible button component with multiple variants and states.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-button variant=\"primary\">Primary</dotbox-button>\n<dotbox-button variant=\"secondary\">Secondary</dotbox-button>\n<dotbox-button variant=\"danger\">Danger</dotbox-button>\n<dotbox-button variant=\"success\">Success</dotbox-button>\n\n<!-- With attributes -->\n<dotbox-button variant=\"primary\" size=\"large\" icon=\"🚀\">Launch</dotbox-button>\n<dotbox-button variant=\"danger\" disabled>Disabled</dotbox-button>\n\n<!-- Event handling -->\n<script>\ndocument.querySelectorAll('dotbox-button').forEach(button => {\n    button.addEventListener('dotbox-click', (e) => {\n        console.log('Button clicked:', e.detail);\n    });\n});\n</script>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\nconst button = new Dotbox.Button({\n    text: 'Click Me',\n    variant: 'primary',\n    size: 'medium',\n    onClick: () => console.log('Clicked!')\n});\ndocument.body.appendChild(button.getElement());\n</script>"
+  },
+  {
+    "id": "modals",
+    "name": "Modal Dialogs",
+    "description": "Modal dialogs for displaying content in an overlay.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-modal-dialog id=\"my-modal\" title=\"Example Modal\">\n    <p>Modal content goes here</p>\n    <p>Automatically handles ESC key and overlay clicks</p>\n</dotbox-modal-dialog>\n\n<dotbox-button onclick=\"document.getElementById('my-modal').show()\">\n    Open Modal\n</dotbox-button>\n\n<!-- Event handling -->\n<script>\ndocument.getElementById('my-modal').addEventListener('dotbox-open', (e) => {\n    console.log('Modal opened:', e.detail.id);\n});\n</script>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\nconst modal = new Dotbox.ModalDialog('demo-modal', {\n    closeOnOverlayClick: true,\n    closeOnEsc: true\n});\n\nmodal.setTitle('Demo Modal')\n    .setBody('<p>This is a demo modal dialog.</p>')\n    .addFooterButton('Close', 'action-btn', () => modal.close());\n\nconst openModalBtn = new Dotbox.Button({\n    text: 'Open Modal',\n    onClick: () => modal.show()\n});\ndocument.body.appendChild(openModalBtn.getElement());\n</script>"
+  },
+  {
+    "id": "tabs",
+    "name": "Tab Views",
+    "description": "Tabbed interface for organizing content.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-tab-view active-tab=\"overview\">\n    <dotbox-tab-panel id=\"overview\" label=\"Overview\" icon=\"📊\">\n        <h3>Overview Content</h3>\n        <p>This is the overview tab content.</p>\n    </dotbox-tab-panel>\n    <dotbox-tab-panel id=\"details\" label=\"Details\" icon=\"📋\">\n        <h3>Details Content</h3>\n        <p>This is the details tab content.</p>\n    </dotbox-tab-panel>\n</dotbox-tab-view>\n\n<!-- Event handling -->\n<script>\ndocument.querySelector('dotbox-tab-view').addEventListener('dotbox-tab-change', (e) => {\n    console.log('Active tab changed to:', e.detail.activeTab);\n});\n</script>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\nconst tabView = new Dotbox.TabView({\n    tabs: [\n        { id: 'tab1', label: 'Tab 1', content: 'Content 1' },\n        { id: 'tab2', label: 'Tab 2', content: 'Content 2' }\n    ]\n});\n\ndocument.body.appendChild(tabView.getElement());\n</script>"
+  },
+  {
+    "id": "textbox",
+    "name": "Text Boxes",
+    "description": "Input fields with various states and validations.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-textbox \n    label=\"Username\" \n    placeholder=\"Enter your username\"\n    help-text=\"This will be your display name\">\n</dotbox-textbox>\n\n<dotbox-textbox \n    label=\"Email\" \n    type=\"email\" \n    placeholder=\"user@example.com\"\n    help-text=\"We'll never share your email\">\n</dotbox-textbox>\n\n<!-- Event handling -->\n<script>\ndocument.querySelector('dotbox-textbox').addEventListener('dotbox-input', (e) => {\n    console.log('Input value:', e.detail.value);\n});\n</script>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\nconst textBox = new Dotbox.TextBox({\n    label: 'Username',\n    placeholder: 'Enter your username',\n    helpText: 'This will be your display name',\n    onChange: (e) => console.log('Text changed:', e.target.value)\n});\n\ndocument.body.appendChild(textBox.getContainer());\n</script>"
+  },
+  {
+    "id": "dropdown",
+    "name": "Dropdown",
+    "description": "Select dropdown component with TextBox-like styling and multiple options.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-dropdown \n    label=\"Country\" \n    placeholder=\"Select your country\"\n    help-text=\"Choose your country of residence\"\n    options='[{\"value\":\"us\",\"label\":\"United States\"},{\"value\":\"ca\",\"label\":\"Canada\"},{\"value\":\"uk\",\"label\":\"United Kingdom\"},{\"value\":\"de\",\"label\":\"Germany\"},{\"value\":\"fr\",\"label\":\"France\"}]'>\n</dotbox-dropdown>\n\n<dotbox-dropdown \n    label=\"Priority\" \n    placeholder=\"Select priority level\"\n    size=\"small\"\n    options='[{\"value\":\"low\",\"label\":\"Low\"},{\"value\":\"medium\",\"label\":\"Medium\"},{\"value\":\"high\",\"label\":\"High\"},{\"value\":\"urgent\",\"label\":\"Urgent\"}]'\n    value=\"medium\">\n</dotbox-dropdown>\n\n<!-- With validation states -->\n<dotbox-dropdown \n    label=\"Status\" \n    placeholder=\"Select status\"\n    error\n    help-text=\"Please select a valid status\"\n    options='[{\"value\":\"active\",\"label\":\"Active\"},{\"value\":\"inactive\",\"label\":\"Inactive\"},{\"value\":\"pending\",\"label\":\"Pending\"}]'>\n</dotbox-dropdown>\n\n<!-- Event handling -->\n<script>\ndocument.querySelector('dotbox-dropdown').addEventListener('dotbox-change', (e) => {\n    console.log('Selection changed:', e.detail.value, e.detail.selectedOption);\n});\n</script>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\nconst dropdown = new Dotbox.Dropdown({\n    label: 'Country',\n    placeholder: 'Select your country',\n    options: [\n        { value: 'us', label: 'United States' },\n        { value: 'ca', label: 'Canada' },\n        { value: 'uk', label: 'United Kingdom' },\n        { value: 'de', label: 'Germany' },\n        { value: 'fr', label: 'France' }\n    ],\n    helpText: 'Choose your country of residence',\n    onChange: (e) => console.log('Selected:', e.target.value)\n});\n\ndocument.body.appendChild(dropdown.getContainer());\n</script>"
+  },
+  {
+    "id": "metrics",
+    "name": "Metric Items",
+    "description": "Display metrics with trends and icons.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-metric label=\"CPU Usage\" value=\"75%\" icon=\"📈\" trend=\"up\"></dotbox-metric>\n<dotbox-metric label=\"Memory Usage\" value=\"64%\" icon=\"💾\" trend=\"down\"></dotbox-metric>\n<dotbox-metric label=\"Active Users\" value=\"1,234\" icon=\"👥\" trend=\"up\"></dotbox-metric>\n\n<!-- With custom styling -->\n<dotbox-metric \n    label=\"Revenue\" \n    value=\"$12,345\" \n    icon=\"💰\" \n    trend=\"up\"\n    style=\"--metric-bg: #e8f5e8; --metric-border: #4caf50;\">\n</dotbox-metric>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\nconst metric = new Dotbox.MetricItem('cpu-metric', {\n    label: 'CPU Usage',\n    value: '75%',\n    trend: 'up',\n    icon: '📈'\n});\n\ndocument.body.appendChild(metric.getElement());\n</script>"
+  },
+  {
+    "id": "toolbuttons",
+    "name": "Tool Buttons",
+    "description": "Specialized buttons for tools and actions.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-tool-button icon=\"🔧\" tooltip=\"Settings\" variant=\"default\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"📊\" tooltip=\"Analytics\" variant=\"primary\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"🗑️\" tooltip=\"Delete\" variant=\"danger\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"⭐\" text=\"Favorite\" tooltip=\"Add to favorites\"></dotbox-tool-button>\n\n<!-- With active state -->\n<dotbox-tool-button icon=\"🎨\" tooltip=\"Theme\" active></dotbox-tool-button>\n\n<!-- Event handling -->\n<script>\ndocument.querySelectorAll('dotbox-tool-button').forEach(button => {\n    button.addEventListener('dotbox-click', (e) => {\n        console.log('Tool button clicked:', e.detail);\n    });\n});\n</script>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\nconst toolButton = new Dotbox.ToolButton({\n    icon: '🔧',\n    tooltip: 'Settings',\n    onClick: () => console.log('Tool clicked!')\n});\n\ndocument.body.appendChild(toolButton.getElement());\n</script>"
+  },
+  {
+    "id": "codeblock",
+    "name": "Code Block",
+    "description": "Syntax-highlighted code display component with multiple language support.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-code-block language=\"javascript\">\nfunction greet(name) {\n    return `Hello, ${name}!`;\n}\n\nconsole.log(greet('World'));\n</dotbox-code-block>\n\n<!-- Multi-line code with HTML entities -->\n<dotbox-code-block language=\"html\">\n&lt;div class='container'&gt;\n    &lt;h1&gt;Welcome&lt;/h1&gt;\n    &lt;p&gt;Hello World!&lt;/p&gt;\n&lt;/div&gt;\n</dotbox-code-block>\n\n<!-- CSS example -->\n<dotbox-code-block language=\"css\">\n.btn {\n    padding: 0.75rem 1rem;\n    border-radius: 0.375rem;\n    background: var(--color-primary);\n    color: white;\n}\n</dotbox-code-block>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\nconst codeBlock = new Dotbox.CodeBlock({\n    language: 'javascript',\n    code: 'function greet(name) {\\\\n    return \\`Hello, \\${name}!\\`;\\\\n}\\\\n\\\\nconsole.log(greet(\\'World\\'));'\n});\n\ndocument.body.appendChild(codeBlock.getElement());\n</script>"
+  },
+  {
+    "id": "menu",
+    "name": "Menu",
+    "description": "Navigation menu component with selectable items.",
+    "codeWC": "<!-- Web Components (Primary) -->\n<dotbox-menu \n    data-items='[{\"id\":\"home\",\"label\":\"Home\"},{\"id\":\"about\",\"label\":\"About\"},{\"id\":\"services\",\"label\":\"Services\"},{\"id\":\"contact\",\"label\":\"Contact\"}]'\n    selected=\"home\"\n    bordered=\"true\">\n</dotbox-menu>\n\n<!-- With routing mode (hash navigation) -->\n<dotbox-menu \n    data-items='[{\"id\":\"dashboard\",\"label\":\"Dashboard\"},{\"id\":\"analytics\",\"label\":\"Analytics\"},{\"id\":\"settings\",\"label\":\"Settings\"}]'\n    selected=\"dashboard\"\n    routing-mode>\n</dotbox-menu>\n\n<!-- Event handling -->\n<script>\ndocument.querySelector('dotbox-menu').addEventListener('dotbox-select', (e) => {\n    console.log('Selected menu item:', e.detail.selectedId);\n});\n</script>",
+    "codeJS": "<!-- JavaScript API (Alternative) -->\n<script>\n// Standard menu\nconst menu = new Dotbox.Menu({\n    items: [\n        { id: 'home', label: 'Home' },\n        { id: 'about', label: 'About' },\n        { id: 'services', label: 'Services' },\n        { id: 'contact', label: 'Contact' }\n    ],\n    selected: 'home',\n    onSelect: (id) => console.log('Selected:', id)\n});\n\n// Menu with routing mode (hash navigation)\nconst routingMenu = new Dotbox.Menu({\n    items: [\n        { id: 'dashboard', label: 'Dashboard' },\n        { id: 'analytics', label: 'Analytics' },\n        { id: 'settings', label: 'Settings' }\n    ],\n    routingMode: true, // Enable hash-based routing\n    onSelect: (id) => console.log('Navigated to:', id)\n});\n\ndocument.body.appendChild(menu.getElement());\ndocument.body.appendChild(routingMenu.getElement());\n</script>"
+  }
+]

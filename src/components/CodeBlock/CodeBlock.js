@@ -42,6 +42,64 @@ class CodeBlock {
   }
 }
 
+// Web Component for HTML usage
+class DotboxCodeBlockElement extends HTMLElement {
+  constructor() {
+    super();
+    this.codeBlockInstance = null;
+  }
+
+  connectedCallback() {
+    this.render();
+  }
+
+  static get observedAttributes() {
+    return ['language', 'code'];
+  }
+
+  attributeChangedCallback() {
+    if (this.codeBlockInstance) {
+      this.render();
+    }
+  }
+
+  render() {
+    const language = this.getAttribute('language') || 'javascript';
+    const code = this.getAttribute('code') || this.textContent.trim() || '';
+
+    // Clean up previous instance
+    if (this.codeBlockInstance) {
+      this.innerHTML = '';
+    }
+
+    // Create new codeblock instance
+    this.codeBlockInstance = new CodeBlock({
+      language: language,
+      code: code
+    });
+
+    // Clear content and append codeblock
+    this.innerHTML = '';
+    this.appendChild(this.codeBlockInstance.getElement());
+  }
+
+  // Expose codeblock methods
+  setCode(code) {
+    this.setAttribute('code', code);
+    return this;
+  }
+
+  setLanguage(language) {
+    this.setAttribute('language', language);
+    return this;
+  }
+}
+
+// Register custom element
+if (typeof customElements !== 'undefined') {
+  customElements.define('dotbox-code-block', DotboxCodeBlockElement);
+}
+
 if (typeof window !== 'undefined') {
   window.DotBox = window.DotBox || {};
   window.DotBox.CodeBlock = CodeBlock;

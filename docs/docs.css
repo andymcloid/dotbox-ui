@@ -1,0 +1,94 @@
+/* Documentation-specific styling */
+
+@font-face {
+    font-family: 'SilomBol';
+    src: url('./assets/SilomBol.woff') format('woff');
+    font-weight: bold;
+    font-display: swap;
+}
+
+/* Documentation page layout */
+body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.component-section {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-bg-panel);
+}
+
+.component-title {
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.component-description {
+    margin-bottom: 2rem;
+    color: var(--color-text-muted);
+}
+
+/* Intro section specific styling */
+.component-section:first-of-type .component-description {
+    margin-bottom: 0; /* No margin for intro description */
+}
+
+.component-demo {
+    margin-bottom: 2rem;
+}
+
+.component-code {
+    margin-bottom: 2rem;
+}
+
+/* Documentation navigation */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background: var(--color-bg-sidebar);
+    border-right: 1px solid var(--color-border);
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    /* No gap - manual spacing for docs */
+}
+
+.nav .logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.nav .logo img {
+    width: 32px;
+    height: 32px;
+    margin-right: 0.75rem;
+}
+
+.nav .logo-text {
+    font-family: 'SilomBol', sans-serif;
+    font-size: 1.4rem;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+/* Documentation content area */
+.content {
+    margin-left: 250px;
+    background: var(--color-bg);
+    min-height: 100vh;
+}

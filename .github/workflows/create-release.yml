@@ -1,0 +1,134 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build project
+      run: npm run build
+      
+    - name: Verify build
+      run: |
+        echo "Checking build artifacts..."
+        ls -la dist/
+        test -f dist/bundle.js || exit 1
+        test -f dist/index.css || exit 1
+        test -f dist/theme.css || exit 1
+        echo "✅ All required build files present"
+        
+    - name: Create release archive
+      run: |
+        # Create a release archive with dist files
+        mkdir -p release
+        cp -r dist/ release/
+        cp package.json release/
+        cp README.md release/
+        cp CONTRIBUTING.md release/
+        cd release
+        tar -czf ../dotbox-ui-${{ github.event.inputs.version }}.tar.gz .
+        cd ..
+        
+    - name: Create Git tag
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag -a ${{ github.event.inputs.version }} -m "Release ${{ github.event.inputs.version }}"
+        git push origin ${{ github.event.inputs.version }}
+        
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+        release_name: Dotbox UI ${{ github.event.inputs.version }}
+        body: |
+          ## Dotbox UI ${{ github.event.inputs.version }}
+          
+          ### 📦 Installation
+          
+          **CDN (Recommended):**
+          ```html
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@${{ github.event.inputs.version }}/dist/index.css">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@${{ github.event.inputs.version }}/dist/theme.css">
+          <script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@${{ github.event.inputs.version }}/dist/bundle.js"></script>
+          ```
+          
+          **Download:**
+          - Extract the `dotbox-ui-${{ github.event.inputs.version }}.tar.gz` file
+          - Use the files in the `dist/` directory
+          
+          ### 🚀 Usage
+          
+          **HTML Web Components (Primary):**
+          ```html
+          <dotbox-button variant="primary">Click me!</dotbox-button>
+          <dotbox-textbox label="Username" placeholder="Enter username"></dotbox-textbox>
+          ```
+          
+          **JavaScript API (Alternative):**
+          ```javascript
+          const button = new Dotbox.Button({ text: 'Click me!' });
+          document.body.appendChild(button.getElement());
+          ```
+          
+          ### 📚 Documentation
+          
+          Visit [https://andymcloid.github.io/dotbox-ui](https://andymcloid.github.io/dotbox-ui) for complete documentation and examples.
+        draft: false
+        prerelease: false
+        
+    - name: Upload release archive
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dotbox-ui-${{ github.event.inputs.version }}.tar.gz
+        asset_name: dotbox-ui-${{ github.event.inputs.version }}.tar.gz
+        asset_content_type: application/gzip
+        
+    - name: Upload individual dist files
+      run: |
+        # Upload individual dist files as release assets
+        upload_url="${{ steps.create_release.outputs.upload_url }}"
+        base_url="${upload_url%\{*}"
+        
+        for file in dist/*; do
+          if [ -f "$file" ]; then
+            filename=$(basename "$file")
+            echo "Uploading $filename..."
+            curl \
+              -X POST \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/octet-stream" \
+              --data-binary @"$file" \
+              "${base_url}?name=$filename&label=$filename"
+          fi
+        done

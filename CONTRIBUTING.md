@@ -14,7 +14,16 @@ Thank you for your interest in contributing to Dotbox UI! This document outlines
 - **All CSS must be component-scoped** (class prefixes, no global selectors)
 - **No hardcoded styling in components** - Always use CSS variables
 
-### 2. Styling & Themes
+### 2. Web Components & Dual API
+
+- **Web Components First** - All components must implement both Web Components and JavaScript APIs
+- **HTML Custom Elements** - Register components as `<dotbox-component-name>` custom elements
+- **Attribute Observation** - Web Components must observe relevant attributes and update accordingly
+- **Custom Events** - Emit `dotbox-*` events (e.g., `dotbox-click`, `dotbox-change`, `dotbox-input`)
+- **Backwards Compatibility** - JavaScript API must continue to work alongside Web Components
+- **Event Delegation** - Web Components should dispatch custom events that bubble up
+
+### 3. Styling & Themes
 
 - **All core variables** (colors, spacing, radius, etc.) defined in theme file (`src/styles/theme.css`)
 - **theme.css contains both light and dark themes**, scoped to `:root.theme-light` and `:root.theme-dark`
@@ -23,7 +32,7 @@ Thank you for your interest in contributing to Dotbox UI! This document outlines
 - **Want spacing?** Define `--spacing-xs`, `--spacing-sm`, `--spacing-md`, `--spacing-lg` in theme.css
 - **No hardcoded padding, margin, border-radius, colors, etc. in component CSS**
 
-### 3. Build & Distribution
+### 4. Build & Distribution
 
 - **All source code and CSS in `src/`**
 - **`npm run build` builds and copies EVERYTHING to `dist/`**:
@@ -32,7 +41,7 @@ Thank you for your interest in contributing to Dotbox UI! This document outlines
   - `theme.css` copied to `dist/theme.css`
 - **No CSS or JS in `docs/`** - docs is just a consumer
 
-### 4. Consumption & Documentation
+### 5. Consumption & Documentation
 
 - **Docs (and all consumers) load ONLY CSS/JS from `dist/`**:
   - `<link rel="stylesheet" href="/dist/index.css">`
@@ -77,7 +86,43 @@ src/components/NewComponent/
 └── NewComponent.css
 ```
 
-### Component Template
+### CRITICAL: Build Integration Steps
+
+After creating your component files, you **MUST** integrate it into the build system:
+
+#### 1. Add to Main Index Files
+**In `src/index.js`:**
+```javascript
+// Add import
+const NewComponent = require('./components/NewComponent/NewComponent.js');
+
+// Add to Dotbox export object
+const Dotbox = {
+    Button,
+    ModalDialog,
+    // ... other components ...
+    NewComponent,  // <- Add here
+    // ... rest of components ...
+};
+```
+
+**In `src/index.css`:**
+```css
+@import './styles/main.css';
+@import './components/Button/Button.css';
+/* ... other imports ... */
+@import './components/NewComponent/NewComponent.css';  /* <- Add here */
+/* ... rest of imports ... */
+```
+
+#### 2. Run Build Process
+```bash
+npm run build
+```
+
+**⚠️ IMPORTANT:** Without these steps, your component will NOT be available in the documentation or for users. The build will fail silently and `Dotbox.NewComponent` will be undefined, causing "not a constructor" errors.
+
+### Component Template (Web Components + JavaScript API)
 ```javascript
 // NewComponent.js
 class NewComponent {
@@ -87,6 +132,7 @@ class NewComponent {
       ...options
     };
     this.element = this._render();
+    this.bindEvents();
   }
 
   _render() {
@@ -96,9 +142,74 @@ class NewComponent {
     return element;
   }
 
+  bindEvents() {
+    // Event handling logic
+  }
+
   getElement() {
     return this.element;
   }
+}
+
+// Web Component for HTML usage
+class DotboxNewComponentElement extends HTMLElement {
+  constructor() {
+    super();
+    this.componentInstance = null;
+  }
+
+  connectedCallback() {
+    this.render();
+  }
+
+  static get observedAttributes() {
+    return ['attribute1', 'attribute2']; // List attributes to observe
+  }
+
+  attributeChangedCallback() {
+    if (this.componentInstance) {
+      this.render();
+    }
+  }
+
+  render() {
+    // Get attributes and create component instance
+    const options = {
+      // Parse attributes to options
+    };
+
+    // Clean up previous instance
+    if (this.componentInstance) {
+      this.innerHTML = '';
+    }
+
+    // Create new component instance
+    this.componentInstance = new NewComponent({
+      ...options,
+      onClick: () => {
+        // Dispatch custom event
+        this.dispatchEvent(new CustomEvent('dotbox-click', {
+          detail: options,
+          bubbles: true
+        }));
+      }
+    });
+
+    // Clear content and append component
+    this.innerHTML = '';
+    this.appendChild(this.componentInstance.getElement());
+  }
+
+  // Expose component methods
+  methodName() {
+    this.setAttribute('attribute', 'value');
+    return this;
+  }
+}
+
+// Register custom element
+if (typeof customElements !== 'undefined') {
+  customElements.define('dotbox-new-component', DotboxNewComponentElement);
 }
 
 // Export for global and module usage
@@ -178,15 +289,56 @@ See `src/styles/theme.css` for the complete list. Common variables include:
 
 ### Component Integration
 Add your component to the documentation by:
-1. Adding it to the navigation menu
-2. Creating a demo section
-3. Including usage examples
+
+#### 3. Add JavaScript Demo Function (if needed)
+**In `docs/index.html`:**
+If your component needs a JavaScript API demo, add it to the `createJSDemo` switch statement:
+```javascript
+case 'newcomponent':
+    createNewComponentJSDemo(container);
+    break;
+```
+
+And implement the demo function:
+```javascript
+function createNewComponentJSDemo(container) {
+    const newComponent = new Dotbox.NewComponent({
+        // Demo options
+    });
+    container.appendChild(newComponent.getContainer());
+}
+```
+
+#### 4. Add to JSON Config
+Update `/docs/components.json` with your component:
+```json
+{
+  "id": "newcomponent",
+  "name": "New Component", 
+  "description": "Description of your component.",
+  "codeWC": "<!-- Web Components HTML examples -->",
+  "codeJS": "<!-- JavaScript API examples -->"
+}
+```
+
+#### 5. Update README
+Add component to Available Components list in `README.md`
+
+#### 6. Test Everything
+```bash
+npm run build
+npm run docs
+```
+Verify your component appears and works in the documentation
 
 ## 📋 Best Practices
 
 ### Component Design
 - **Self-contained**: Each component should work independently
-- **Configurable**: Use options objects for customization
+- **Dual API**: Implement both Web Components and JavaScript API
+- **Web Components First**: Primary usage should be HTML syntax like `<dotbox-component>`
+- **Custom Events**: Emit `dotbox-*` events for consistency
+- **Attribute Driven**: Web Components should be configurable via HTML attributes
 - **Theme-aware**: Always use CSS variables
 - **Accessible**: Consider keyboard navigation and screen readers
 - **Responsive**: Components should work on all screen sizes
@@ -196,6 +348,7 @@ Add your component to the documentation by:
 - **No hardcoded styling in JS**: Always use CSS variables
 - **Pipeline-safe**: Everything reproducible via `npm run build`
 - **Documentation-ready**: Docs should be a "real" consumer
+- **Event Consistency**: All custom events follow `dotbox-*` naming pattern
 
 ### Configuration Options
 For components that need multiple display modes (like Menu with/without borders):
@@ -214,17 +367,20 @@ const menu = new Dotbox.Menu({
 ### Pull Request Process
 1. Create a feature branch: `git checkout -b feature-amazing-component`
 2. Make your changes following these guidelines
-3. Test thoroughly:
+3. **CRITICAL: Complete ALL integration steps above** (index.js, index.css, JSON config, etc.)
+4. Test thoroughly:
    ```bash
    npm run build
    npm run docs
    ```
-4. Commit with clear, descriptive messages
-5. Push to your fork
-6. Create a Pull Request with:
+5. Verify your component appears in documentation and works correctly
+6. Commit with clear, descriptive messages
+7. Push to your fork
+8. Create a Pull Request with:
    - Clear description of changes
    - Screenshots/GIFs if visual changes
    - Testing instructions
+   - Confirmation that all integration steps were completed
 
 ### Commit Message Format
 ```
@@ -257,7 +413,9 @@ When reporting bugs or requesting features:
 ## 📚 Additional Resources
 
 - [Component Architecture](README.md#-component-architecture)
+- [Web Components Usage](README.md#-web-component-examples-primary-usage)
 - [Theme System](README.md#-theme-system)
+- [JSON Documentation System](README.md#-documentation)
 - [Live Documentation](https://andymcloid.github.io/dotbox-ui)
 
 ## 📞 Getting Help

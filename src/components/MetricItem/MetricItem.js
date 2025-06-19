@@ -108,6 +108,80 @@ class MetricItem {
     }
 }
 
+// Web Component for HTML usage
+class DotboxMetricElement extends HTMLElement {
+    constructor() {
+        super();
+        this.metricInstance = null;
+    }
+
+    connectedCallback() {
+        this.render();
+    }
+
+    static get observedAttributes() {
+        return ['label', 'value', 'unit', 'trend', 'icon', 'threshold', 'warning-threshold'];
+    }
+
+    attributeChangedCallback() {
+        if (this.metricInstance) {
+            this.render();
+        }
+    }
+
+    render() {
+        const id = this.getAttribute('id') || `metric-${Math.random().toString(36).substr(2, 9)}`;
+        const label = this.getAttribute('label') || 'Metric';
+        const value = this.getAttribute('value') || '0';
+        const unit = this.getAttribute('unit') || '';
+        const trend = this.getAttribute('trend') || null;
+        const icon = this.getAttribute('icon') || null;
+        const threshold = this.getAttribute('threshold') ? parseFloat(this.getAttribute('threshold')) : null;
+        const warningThreshold = this.getAttribute('warning-threshold') ? parseFloat(this.getAttribute('warning-threshold')) : null;
+
+        // Clean up previous instance
+        if (this.metricInstance) {
+            this.innerHTML = '';
+        }
+
+        // Create new metric instance
+        this.metricInstance = new MetricItem(id, {
+            label: label,
+            value: value,
+            unit: unit,
+            trend: trend,
+            icon: icon,
+            threshold: threshold,
+            warningThreshold: warningThreshold
+        });
+
+        // Clear content and append metric
+        this.innerHTML = '';
+        this.appendChild(this.metricInstance.getElement());
+    }
+
+    // Expose metric methods
+    updateValue(value) {
+        this.setAttribute('value', value);
+        return this;
+    }
+
+    setThreshold(threshold) {
+        this.setAttribute('threshold', threshold);
+        return this;
+    }
+
+    setTrend(trend) {
+        this.setAttribute('trend', trend);
+        return this;
+    }
+}
+
+// Register custom element
+if (typeof customElements !== 'undefined') {
+    customElements.define('dotbox-metric', DotboxMetricElement);
+}
+
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = MetricItem;

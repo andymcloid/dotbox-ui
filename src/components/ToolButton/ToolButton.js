@@ -132,6 +132,109 @@ class ToolButton {
     }
 }
 
+// Web Component for HTML usage
+class DotboxToolButtonElement extends HTMLElement {
+    constructor() {
+        super();
+        this.buttonInstance = null;
+    }
+
+    connectedCallback() {
+        this.render();
+    }
+
+    static get observedAttributes() {
+        return ['icon', 'text', 'tooltip', 'variant', 'size', 'disabled', 'active'];
+    }
+
+    attributeChangedCallback() {
+        if (this.buttonInstance) {
+            this.render();
+        }
+    }
+
+    render() {
+        const icon = this.getAttribute('icon') || '⚙️';
+        const text = this.getAttribute('text') || '';
+        const tooltip = this.getAttribute('tooltip') || '';
+        const variant = this.getAttribute('variant') || 'default';
+        const size = this.getAttribute('size') || 'medium';
+        const disabled = this.hasAttribute('disabled');
+        const active = this.hasAttribute('active');
+
+        // Clean up previous instance
+        if (this.buttonInstance) {
+            this.innerHTML = '';
+        }
+
+        // Create new tool button instance
+        this.buttonInstance = new ToolButton({
+            icon: icon,
+            text: text,
+            tooltip: tooltip,
+            variant: variant,
+            size: size,
+            disabled: disabled,
+            active: active,
+            onClick: () => {
+                // Dispatch custom event
+                this.dispatchEvent(new CustomEvent('dotbox-click', {
+                    detail: { icon, text, tooltip, variant, size, disabled, active },
+                    bubbles: true
+                }));
+            }
+        });
+
+        // Clear content and append button
+        this.innerHTML = '';
+        this.appendChild(this.buttonInstance.getElement());
+    }
+
+    // Expose button methods
+    setIcon(icon) {
+        this.setAttribute('icon', icon);
+        return this;
+    }
+
+    setText(text) {
+        this.setAttribute('text', text);
+        return this;
+    }
+
+    setTooltip(tooltip) {
+        this.setAttribute('tooltip', tooltip);
+        return this;
+    }
+
+    setVariant(variant) {
+        this.setAttribute('variant', variant);
+        return this;
+    }
+
+    setActive(active) {
+        if (active) {
+            this.setAttribute('active', '');
+        } else {
+            this.removeAttribute('active');
+        }
+        return this;
+    }
+
+    setDisabled(disabled) {
+        if (disabled) {
+            this.setAttribute('disabled', '');
+        } else {
+            this.removeAttribute('disabled');
+        }
+        return this;
+    }
+}
+
+// Register custom element
+if (typeof customElements !== 'undefined') {
+    customElements.define('dotbox-tool-button', DotboxToolButtonElement);
+}
+
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = ToolButton;

@@ -3,6 +3,7 @@ const Button = require('./components/Button/Button.js');
 const ModalDialog = require('./components/ModalDialog/ModalDialog.js');
 const TabView = require('./components/TabView/TabView.js');
 const TextBox = require('./components/TextBox/TextBox.js');
+const Dropdown = require('./components/Dropdown/Dropdown.js');
 const MetricItem = require('./components/MetricItem/MetricItem.js');
 const ToolButton = require('./components/ToolButton/ToolButton.js');
 const Menu = require('./components/Menu/Menu.js');
@@ -17,6 +18,7 @@ const Dotbox = {
     ModalDialog,
     TabView,
     TextBox,
+    Dropdown,
     MetricItem,
     ToolButton,
     Menu,

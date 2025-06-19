@@ -3,6 +3,7 @@
 @import './components/ModalDialog/ModalDialog.css';
 @import './components/TabView/TabView.css';
 @import './components/TextBox/TextBox.css';
+@import './components/Dropdown/Dropdown.css';
 @import './components/MetricItem/MetricItem.css';
 @import './components/ToolButton/ToolButton.css';
 @import './components/Menu/Menu.css';

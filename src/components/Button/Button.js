@@ -130,6 +130,106 @@ class Button {
     }
 }
 
+// Web Component for HTML usage
+class DotboxButtonElement extends HTMLElement {
+    constructor() {
+        super();
+        this.buttonInstance = null;
+    }
+
+    connectedCallback() {
+        this.render();
+    }
+
+    static get observedAttributes() {
+        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading'];
+    }
+
+    attributeChangedCallback() {
+        if (this.buttonInstance) {
+            this.render();
+        }
+    }
+
+    render() {
+        const variant = this.getAttribute('variant') || 'primary';
+        const size = this.getAttribute('size') || 'medium';
+        const disabled = this.hasAttribute('disabled');
+        const loading = this.hasAttribute('loading');
+        const icon = this.getAttribute('icon') || null;
+        const text = this.getAttribute('text') || this.textContent.trim() || 'Button';
+
+        // Clean up previous instance
+        if (this.buttonInstance) {
+            this.innerHTML = '';
+        }
+
+        // Create new button instance
+        this.buttonInstance = new Button({
+            text: text,
+            variant: variant,
+            size: size,
+            disabled: disabled,
+            loading: loading,
+            icon: icon,
+            onClick: () => {
+                // Dispatch custom event
+                this.dispatchEvent(new CustomEvent('dotbox-click', {
+                    detail: { variant, size, text, disabled, loading, icon },
+                    bubbles: true
+                }));
+            }
+        });
+
+        // Clear content and append button
+        this.innerHTML = '';
+        this.appendChild(this.buttonInstance.getElement());
+    }
+
+    // Expose button methods
+    setDisabled(disabled) {
+        if (disabled) {
+            this.setAttribute('disabled', '');
+        } else {
+            this.removeAttribute('disabled');
+        }
+        return this;
+    }
+
+    setText(text) {
+        this.setAttribute('text', text);
+        return this;
+    }
+
+    setVariant(variant) {
+        this.setAttribute('variant', variant);
+        return this;
+    }
+
+    setLoading(loading) {
+        if (loading) {
+            this.setAttribute('loading', '');
+        } else {
+            this.removeAttribute('loading');
+        }
+        return this;
+    }
+
+    setIcon(icon) {
+        if (icon) {
+            this.setAttribute('icon', icon);
+        } else {
+            this.removeAttribute('icon');
+        }
+        return this;
+    }
+}
+
+// Register custom element
+if (typeof customElements !== 'undefined') {
+    customElements.define('dotbox-button', DotboxButtonElement);
+}
+
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = Button;

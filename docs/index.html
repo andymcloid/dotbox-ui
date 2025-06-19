@@ -7,79 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="./assets/dotbox_logo_only.svg">
     <link rel="stylesheet" href="/dist/index.css">
     <link rel="stylesheet" href="/dist/theme.css">
-    <style>
-        @font-face {
-            font-family: 'SilomBol';
-            src: url('./assets/SilomBol.woff') format('woff');
-            font-weight: bold;
-            font-display: swap;
-        }
-    </style>
-    <style>
-        body {
-            background: var(--color-bg);
-            color: var(--color-text);
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .component-section {
-            margin-bottom: 3rem;
-            padding: 2rem;
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            background: var(--color-bg-panel);
-        }
-        .component-title {
-            margin-bottom: 1rem;
-            color: var(--color-text);
-        }
-        .component-description {
-            margin-bottom: 2rem;
-            color: var(--color-text-muted);
-        }
-        .component-demo {
-            margin-bottom: 2rem;
-        }
-        .component-code {
-            margin-bottom: 2rem;
-        }
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            height: 100vh;
-            background: var(--color-bg-sidebar);
-            border-right: 1px solid var(--color-border);
-            padding: 1rem 0.75rem;
-        }
-        .nav .logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .nav .logo img {
-            width: 32px;
-            height: 32px;
-            margin-right: 0.75rem;
-        }
-        .nav .logo-text {
-            font-family: 'SilomBol', sans-serif;
-            font-size: 1.4rem;
-            color: var(--color-primary);
-            font-weight: bold;
-        }
-        .content {
-            margin-left: 250px;
-            background: var(--color-bg);
-            min-height: 100vh;
-        }
-    </style>
+    <link rel="stylesheet" href="./docs.css">
 </head>
 <body>
     <nav class="nav">
@@ -87,140 +15,65 @@
             <img src="./assets/dotbox_logo_only.svg" alt="Dotbox Logo">
             <span class="logo-text">Dotbox <span style="color: var(--color-text);">UI</span></span>
         </div>
-        <div id="theme-toggle-container" style="margin-bottom: 0.75rem;"></div>
+        <div id="theme-dropdown-container" style="margin-bottom: 0.75rem;"></div>
+        <div id="type-dropdown-container" style="margin-bottom: 0.75rem;"></div>
+        <hr style="border: none; border-top: 1px solid var(--color-border); margin: 1rem 0;">
         <div id="nav-menu"></div>
     </nav>
 
     <div class="content">
         <div class="container">
+            <!-- Intro Section -->
             <section class="component-section">
                 <h2 class="component-title" style="font-family: 'SilomBol', sans-serif;">Dotbox UI Components</h2>
                 <p class="component-description">A modern, lightweight UI component library for building beautiful web applications.</p>
             </section>
-            <section id="buttons" class="component-section">
-                <h2 class="component-title">Buttons</h2>
-                <p class="component-description">Flexible button component with multiple variants and states.</p>
-                
-                <div class="component-demo">
-                    <div id="button-demo" style="display: flex; gap: 1rem; flex-wrap: wrap;"></div>
-                </div>
 
-                <div class="component-code">
-                    <div id="button-code-demo"></div>
-                </div>
-            </section>
-
-            <section id="modals" class="component-section">
-                <h2 class="component-title">Modal Dialogs</h2>
-                <p class="component-description">Modal dialogs for displaying content in an overlay.</p>
-                
-                <div class="component-demo">
-                    <div id="modal-demo"></div>
-                </div>
-
-                <div class="component-code">
-                    <div id="modal-code-demo"></div>
-                </div>
-            </section>
-
-            <section id="tabs" class="component-section">
-                <h2 class="component-title">Tab Views</h2>
-                <p class="component-description">Tabbed interface for organizing content.</p>
-                
-                <div class="component-demo">
-                    <div id="tab-demo"></div>
-                </div>
-
-                <div class="component-code">
-                    <div id="tab-code-demo"></div>
-                </div>
-            </section>
-
-            <section id="textbox" class="component-section">
-                <h2 class="component-title">Text Boxes</h2>
-                <p class="component-description">Input fields with various states and validations.</p>
-                
-                <div class="component-demo">
-                    <div id="textbox-demo"></div>
-                </div>
-
-                <div class="component-code">
-                    <div id="textbox-code-demo"></div>
-                </div>
-            </section>
-
-            <section id="metrics" class="component-section">
-                <h2 class="component-title">Metric Items</h2>
-                <p class="component-description">Display metrics with trends and icons.</p>
-                
-                <div class="component-demo">
-                    <div id="metric-demo"></div>
-                </div>
-
-                <div class="component-code">
-                    <div id="metric-code-demo"></div>
-                </div>
-            </section>
-
-            <section id="toolbuttons" class="component-section">
-                <h2 class="component-title">Tool Buttons</h2>
-                <p class="component-description">Specialized buttons for tools and actions.</p>
-                
-                <div class="component-demo">
-                    <div id="toolbutton-demo"></div>
-                </div>
-
-                <div class="component-code">
-                    <div id="toolbutton-code-demo"></div>
-                </div>
-            </section>
-
-            <section id="codeblock" class="component-section">
-                <h2 class="component-title">Code Block</h2>
-                <p class="component-description">Syntax-highlighted code display component with multiple language support.</p>
-                
-                <div class="component-demo">
-                    <div id="codeblock-demo"></div>
-                </div>
-
-                <div class="component-code">
-                    <div id="codeblock-code-demo"></div>
-                </div>
-            </section>
-
-            <section id="menu" class="component-section">
-                <h2 class="component-title">Menu</h2>
-                <p class="component-description">Navigation menu component with selectable items.</p>
-                
-                <div class="component-demo">
-                    <div id="menu-demo"></div>
-                </div>
-
-                <div class="component-code">
-                    <div id="menu-code-demo"></div>
-                </div>
-            </section>
+            <!-- Dynamic component sections will be inserted here -->
+            <div id="dynamic-sections"></div>
         </div>
     </div>
 
     <script src="/dist/bundle.js"></script>
     <script>
-        // Initialize demo components
-        document.addEventListener('DOMContentLoaded', () => {
-            // Navigation menu
+        // Global components data
+        let componentsData = [];
+
+        // Load components configuration
+        async function loadComponentsData() {
+            try {
+                const response = await fetch('./components.json');
+                componentsData = await response.json();
+                initializeDocumentation();
+            } catch (error) {
+                console.error('Failed to load components data:', error);
+                // Fallback to empty array
+                componentsData = [];
+                initializeDocumentation();
+            }
+        }
+
+        function initializeDocumentation() {
+            createNavigationMenu();
+            createComponentSections();
+            setupThemeDropdown();
+            setupTypeDropdown();
+            setInitialTheme();
+            // Apply initial filter (Web Components only)
+            updateCodeExampleVisibility();
+        }
+
+        function createNavigationMenu() {
+            const navItems = componentsData.map(comp => ({
+                id: comp.id,
+                label: comp.name
+            }));
+
             const navMenu = new Dotbox.Menu({
-                items: [
-                    { id: 'buttons', label: 'Buttons' },
-                    { id: 'modals', label: 'Modal Dialogs' },
-                    { id: 'tabs', label: 'Tab Views' },
-                    { id: 'textbox', label: 'Text Boxes' },
-                    { id: 'metrics', label: 'Metric Items' },
-                    { id: 'toolbuttons', label: 'Tool Buttons' },
-                    { id: 'codeblock', label: 'Code Block' },
-                    { id: 'menu', label: 'Menu' }
-                ],
-                selected: 'buttons',
+                items: navItems,
+                selected: navItems[0]?.id || '',
                 bordered: false,
+                routingMode: true,
                 onSelect: (id) => {
                     const element = document.getElementById(id);
                     if (element) {
@@ -228,270 +81,240 @@
                     }
                 }
             });
+
             document.getElementById('nav-menu').appendChild(navMenu.getElement());
+        }
 
-            // Button demo
-            const buttonDemo = document.getElementById('button-demo');
-            
-            const primaryBtn = new Dotbox.Button({
-                text: 'Primary',
-                variant: 'primary',
-                size: 'medium',
-                onClick: () => alert('Primary clicked!')
-            });
-            buttonDemo.appendChild(primaryBtn.getElement());
-            
-            const secondaryBtn = new Dotbox.Button({
-                text: 'Secondary',
-                variant: 'secondary',
-                size: 'medium',
-                onClick: () => alert('Secondary clicked!')
-            });
-            buttonDemo.appendChild(secondaryBtn.getElement());
-            
-            const dangerBtn = new Dotbox.Button({
-                text: 'Danger',
-                variant: 'danger',
-                size: 'medium',
-                onClick: () => alert('Danger clicked!')
-            });
-            buttonDemo.appendChild(dangerBtn.getElement());
-            
-            const successBtn = new Dotbox.Button({
-                text: 'Success',
-                variant: 'success',
-                size: 'medium',
-                onClick: () => alert('Success clicked!')
-            });
-            buttonDemo.appendChild(successBtn.getElement());
+        function createComponentSections() {
+            const dynamicSections = document.getElementById('dynamic-sections');
 
-            // Modal demo
-            const modalDemo = document.getElementById('modal-demo');
-            const modal = new Dotbox.ModalDialog('demo-modal', {
-                closeOnOverlayClick: true,
-                closeOnEsc: true
-            });
-            
-            modal.setTitle('Demo Modal')
-                .setBody('<p>This is a demo modal dialog.</p>')
-                .addFooterButton('Close', 'action-btn', () => modal.close());
-            
-            const openModalBtn = new Dotbox.Button({
-                text: 'Open Modal',
-                onClick: () => modal.show()
-            });
-            modalDemo.appendChild(openModalBtn.getElement());
+            componentsData.forEach(component => {
+                // Create section
+                const section = document.createElement('section');
+                section.id = component.id;
+                section.className = 'component-section';
 
-            // Tab demo
-            const tabDemo = document.getElementById('tab-demo');
-            const tabView = new Dotbox.TabView({
-                tabs: [
-                    { id: 'tab1', label: 'Tab 1', content: 'Content for Tab 1' },
-                    { id: 'tab2', label: 'Tab 2', content: 'Content for Tab 2' }
-                ]
-            });
-            tabDemo.appendChild(tabView.getElement());
+                // Create title and description
+                section.innerHTML = `
+                    <h2 class="component-title">${component.name}</h2>
+                    <p class="component-description">${component.description}</p>
+                    
+                    <div class="component-demo">
+                        <div id="${component.id}-wc-section" style="margin-bottom: 2rem;">
+                            <div id="${component.id}-wc-demo"></div>
+                        </div>
+                        
+                        <div id="${component.id}-js-section">
+                            <div id="${component.id}-js-demo"></div>
+                        </div>
+                    </div>
 
-            // TextBox demo
-            const textboxDemo = document.getElementById('textbox-demo');
-            const textBox = new Dotbox.TextBox({
-                label: 'Username',
-                placeholder: 'Enter your username',
-                helpText: 'This will be your display name',
-                onChange: (e) => console.log('Text changed:', e.target.value)
-            });
-            textboxDemo.appendChild(textBox.getContainer());
+                    <div class="component-code">
+                        <div id="${component.id}-code-demo"></div>
+                    </div>
+                `;
 
-            // Metric demo
-            const metricDemo = document.getElementById('metric-demo');
-            const metric = new Dotbox.MetricItem('cpu-metric', {
-                label: 'CPU Usage',
-                value: '75%',
-                trend: 'up',
-                icon: '📈'
-            });
-            metricDemo.appendChild(metric.getElement());
+                dynamicSections.appendChild(section);
 
-            // ToolButton demo
-            const toolbuttonDemo = document.getElementById('toolbutton-demo');
-            const toolButton = new Dotbox.ToolButton({
-                icon: '🔧',
-                tooltip: 'Settings',
-                onClick: () => alert('Tool button clicked!')
-            });
-            toolbuttonDemo.appendChild(toolButton.getElement());
+                // Create live Web Component demos (parse and execute the HTML)
+                createLiveDemo(component.id + '-wc-demo', component.codeWC);
 
-            // CodeBlock demo
-            const codeblockDemo = document.getElementById('codeblock-demo');
+                // Create JavaScript API demos (execute only JavaScript parts)
+                createJSDemo(component.id + '-js-demo', component);
+
+                // Create code examples
+                createCodeExample(component.id + '-code-demo', component);
+            });
+        }
+
+        function createLiveDemo(containerId, wcCode) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Extract HTML parts (not script tags) and insert them
+            const htmlParts = wcCode.replace(/<script[\s\S]*?<\/script>/gi, '');
+            container.innerHTML = htmlParts;
+
+            // Extract and execute script parts
+            const scriptMatches = wcCode.match(/<script[\s\S]*?<\/script>/gi);
+            if (scriptMatches) {
+                scriptMatches.forEach(scriptTag => {
+                    // Extract just the JavaScript code (remove script tags)
+                    const scriptContent = scriptTag.replace(/<\/?script[^>]*>/gi, '');
+                    try {
+                        // Create a new script element and execute it
+                        const scriptElement = document.createElement('script');
+                        scriptElement.textContent = scriptContent;
+                        document.head.appendChild(scriptElement);
+                        // Remove it immediately after execution to avoid duplicates
+                        document.head.removeChild(scriptElement);
+                    } catch (error) {
+                        console.error('Error executing Web Component demo script:', error);
+                    }
+                });
+            }
+        }
+
+        function createJSDemo(containerId, component) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Use JSON data for JS demos too - execute the script parts
+            executeScriptFromCode(component.codeJS, container);
+        }
+
+        function executeScriptFromCode(code, container) {
+            // Extract and execute script parts from JSON code
+            const scriptMatches = code.match(/<script[\s\S]*?<\/script>/gi);
+            if (scriptMatches) {
+                scriptMatches.forEach(scriptTag => {
+                    // Extract just the JavaScript code (remove script tags)
+                    const scriptContent = scriptTag.replace(/<\/?script[^>]*>/gi, '');
+                    try {
+                        // Replace document.body.appendChild with container.appendChild for demos
+                        const modifiedScript = scriptContent.replace(
+                            /document\.body\.appendChild/g, 
+                            `arguments[0].appendChild`
+                        );
+                        
+                        // Create a function and execute it with container as argument
+                        const scriptFunction = new Function(modifiedScript);
+                        scriptFunction.call(null, container);
+                    } catch (error) {
+                        console.error('Error executing JS demo script:', error);
+                    }
+                });
+            }
+        }
+
+
+        function createCodeExample(containerId, component) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Combine both Web Components and JavaScript examples
+            const combinedCode = component.codeWC + '\n\n' + component.codeJS;
+
             const codeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `function greet(name) {
-    return \`Hello, \${name}!\`;
-}
-
-console.log(greet('World'));`
+                language: 'html',
+                code: combinedCode.replace(/\\n/g, '\n')
             });
-            codeblockDemo.appendChild(codeBlock.getElement());
 
-            // Menu demo
-            const menuDemo = document.getElementById('menu-demo');
-            const menu = new Dotbox.Menu({
-                items: [
-                    { id: 'home', label: 'Home' },
-                    { id: 'about', label: 'About' },
-                    { id: 'services', label: 'Services' },
-                    { id: 'contact', label: 'Contact' }
+            container.appendChild(codeBlock.getElement());
+        }
+
+
+        // Global filter state
+        let currentCodeType = 'webcomponents'; // 'webcomponents', 'javascript'
+
+        function setupThemeDropdown() {
+            const themeDropdown = new Dotbox.Dropdown({
+                label: 'Theme',
+                allowNull: false, // No placeholder/null option
+                options: [
+                    { value: 'light', label: 'Light' },
+                    { value: 'dark', label: 'Dark' }
                 ],
-                selected: 'home',
-                onSelect: (id) => console.log('Selected:', id)
+                value: localStorage.getItem('dotbox-theme') || 'light',
+                size: 'small',
+                onChange: (e) => {
+                    setTheme(e.target.value);
+                }
             });
-            menuDemo.appendChild(menu.getElement());
+            document.getElementById('theme-dropdown-container').appendChild(themeDropdown.getContainer());
+        }
 
-            // Create CodeBlock components for all code examples
-            // Button code example
-            const buttonCodeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `// Available variants: primary, secondary, danger, success
-const button = new Dotbox.Button({
-    text: 'Click Me',
-    variant: 'primary', // or 'secondary', 'danger', 'success'
-    size: 'medium',     // small, medium, large
-    onClick: () => console.log('Clicked!')
-});
-
-document.body.appendChild(button.getElement());`
+        function setupTypeDropdown() {
+            const typeDropdown = new Dotbox.Dropdown({
+                label: 'Code Examples',
+                allowNull: false, // No placeholder/null option
+                options: [
+                    { value: 'webcomponents', label: 'Web Components' },
+                    { value: 'javascript', label: 'JavaScript API' }
+                ],
+                value: 'webcomponents', // Default to Web Components
+                size: 'small',
+                onChange: (e) => {
+                    currentCodeType = e.target.value;
+                    updateCodeExampleVisibility();
+                }
             });
-            document.getElementById('button-code-demo').appendChild(buttonCodeBlock.getElement());
+            document.getElementById('type-dropdown-container').appendChild(typeDropdown.getContainer());
+        }
 
-            // Modal code example
-            const modalCodeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `const modal = new Dotbox.ModalDialog('demo-modal', {
-    closeOnOverlayClick: true,
-    closeOnEsc: true
-});
+        function updateCodeExampleVisibility() {
+            // Update all component sections based on filter
+            componentsData.forEach(component => {
+                const wcSection = document.getElementById(`${component.id}-wc-section`);
+                const jsSection = document.getElementById(`${component.id}-js-section`);
+                const codeDemo = document.getElementById(`${component.id}-code-demo`);
 
-modal.setTitle('Demo Modal')
-    .setBody('<p>This is a demo modal dialog.</p>')
-    .addFooterButton('Close', 'action-btn', () => modal.close());
+                if (wcSection && jsSection) {
+                    // Show/hide demo sections
+                    switch (currentCodeType) {
+                        case 'webcomponents':
+                            wcSection.style.display = 'block';
+                            jsSection.style.display = 'none';
+                            break;
+                        case 'javascript':
+                            wcSection.style.display = 'none';
+                            jsSection.style.display = 'block';
+                            break;
+                        default:
+                            wcSection.style.display = 'block';
+                            jsSection.style.display = 'none';
+                            break;
+                    }
+                }
 
-const openModalBtn = new Dotbox.Button({
-    text: 'Open Modal',
-    onClick: () => modal.show()
-});
-document.getElementById('modal-demo').appendChild(openModalBtn.getElement());`
+                // Update code examples
+                if (codeDemo) {
+                    updateCodeExample(component.id + '-code-demo', component);
+                }
             });
-            document.getElementById('modal-code-demo').appendChild(modalCodeBlock.getElement());
+        }
 
-            // Tab code example
-            const tabCodeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `const tabView = new Dotbox.TabView({
-    tabs: [
-        { id: 'tab1', label: 'Tab 1', content: 'Content 1' },
-        { id: 'tab2', label: 'Tab 2', content: 'Content 2' }
-    ]
-});
+        function updateCodeExample(containerId, component) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
 
-document.body.appendChild(tabView.getElement());`
+            // Clear existing code block
+            container.innerHTML = '';
+
+            let codeToShow = '';
+            switch (currentCodeType) {
+                case 'webcomponents':
+                    codeToShow = component.codeWC;
+                    break;
+                case 'javascript':
+                    codeToShow = component.codeJS;
+                    break;
+                default:
+                    codeToShow = component.codeWC;
+                    break;
+            }
+
+            const codeBlock = new Dotbox.CodeBlock({
+                language: 'html',
+                code: codeToShow.replace(/\\n/g, '\n')
             });
-            document.getElementById('tab-code-demo').appendChild(tabCodeBlock.getElement());
 
-            // TextBox code example
-            const textboxCodeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `const textBox = new Dotbox.TextBox({
-    label: 'Username',
-    placeholder: 'Enter your username',
-    helpText: 'This will be your display name',
-    onChange: (e) => console.log('Text changed:', e.target.value)
-});
-
-document.getElementById('textbox-demo').appendChild(textBox.getContainer());`
-            });
-            document.getElementById('textbox-code-demo').appendChild(textboxCodeBlock.getElement());
-
-            // Metric code example
-            const metricCodeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `const metric = new Dotbox.MetricItem('cpu-metric', {
-    label: 'CPU Usage',
-    value: '75%',
-    trend: 'up',
-    icon: '📈'
-});
-
-document.body.appendChild(metric.getElement());`
-            });
-            document.getElementById('metric-code-demo').appendChild(metricCodeBlock.getElement());
-
-            // ToolButton code example
-            const toolbuttonCodeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `const toolButton = new Dotbox.ToolButton({
-    icon: '🔧',
-    tooltip: 'Settings',
-    onClick: () => console.log('Tool clicked!')
-});
-
-document.body.appendChild(toolButton.getElement());`
-            });
-            document.getElementById('toolbutton-code-demo').appendChild(toolbuttonCodeBlock.getElement());
-
-            // CodeBlock code example
-            const codeblockCodeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `const codeBlock = new Dotbox.CodeBlock({
-    language: 'javascript',
-    code: \`function greet(name) {
-    return \\\`Hello, \\\${name}!\\\`;
-}
-
-console.log(greet('World'));\`
-});
-
-document.body.appendChild(codeBlock.getElement());`
-            });
-            document.getElementById('codeblock-code-demo').appendChild(codeblockCodeBlock.getElement());
-
-            // Menu code example
-            const menuCodeBlock = new Dotbox.CodeBlock({
-                language: 'javascript',
-                code: `const menu = new Dotbox.Menu({
-    items: [
-        { id: 'home', label: 'Home' },
-        { id: 'about', label: 'About' },
-        { id: 'services', label: 'Services' },
-        { id: 'contact', label: 'Contact' }
-    ],
-    selected: 'home',
-    onSelect: (id) => console.log('Selected:', id)
-});
-
-document.body.appendChild(menu.getElement());`
-            });
-            document.getElementById('menu-code-demo').appendChild(menuCodeBlock.getElement());
-        });
+            container.appendChild(codeBlock.getElement());
+        }
 
         function setTheme(theme) {
             document.documentElement.classList.remove('theme-light', 'theme-dark');
             document.documentElement.classList.add('theme-' + theme);
             localStorage.setItem('dotbox-theme', theme);
         }
-        // Create theme toggle button using Dotbox Button component
-        const themeToggleBtn = new Dotbox.Button({
-            text: 'Toggle Theme',
-            variant: 'secondary',
-            size: 'small',
-            onClick: () => {
-                const isLight = document.documentElement.classList.contains('theme-light');
-                setTheme(isLight ? 'dark' : 'light');
-            }
-        });
-        document.getElementById('theme-toggle-container').appendChild(themeToggleBtn.getElement());
-        // On load, set theme from localStorage or default to light
-        const saved = localStorage.getItem('dotbox-theme') || 'light';
-        setTheme(saved);
+
+        function setInitialTheme() {
+            const saved = localStorage.getItem('dotbox-theme') || 'light';
+            setTheme(saved);
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', loadComponentsData);
     </script>
 </body>
-</html> 
+</html>

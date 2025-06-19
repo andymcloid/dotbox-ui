@@ -4,12 +4,13 @@ A modern, lightweight, and themeable UI component library for building beautiful
 
 ## 🌟 Features
 
-- **Modern Design**: Clean, professional components with smooth animations
-- **Theme System**: Built-in light/dark themes with full customization support  
-- **Self-Contained**: Each component manages its own styling and dependencies
-- **TypeScript Ready**: Full type definitions included
-- **Framework Agnostic**: Works with vanilla JS, React, Vue, or any framework
-- **No Dependencies**: Lightweight with no external runtime dependencies
+- **🎯 Web Components**: Use components directly in HTML with intuitive syntax like `<dotbox-button variant="primary">Click me!</dotbox-button>`
+- **🔄 Dual API**: Web Components (primary) + JavaScript API (alternative) for maximum flexibility
+- **🎨 Modern Design**: Clean, professional components with smooth animations
+- **🌙 Theme System**: Built-in light/dark themes with full customization support  
+- **📦 Self-Contained**: Each component manages its own styling and dependencies
+- **🏗️ Framework Agnostic**: Works with vanilla JS, React, Vue, or any framework
+- **⚡ No Dependencies**: Lightweight with no external runtime dependencies
 
 ## 📦 Installation
 
@@ -29,7 +30,40 @@ Or download specific releases from: [GitHub Releases](https://github.com/andymcl
 
 ## 🚀 Quick Start
 
-### Basic Setup
+### 🎯 Web Components (Primary Usage)
+
+```html
+<!DOCTYPE html>
+<html class="theme-light">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/theme.css">
+</head>
+<body>
+    <!-- Use components directly in HTML! -->
+    <dotbox-button variant="primary" onclick="alert('Hello Dotbox UI!')">Click me!</dotbox-button>
+    
+    <dotbox-textbox label="Username" placeholder="Enter your username" help-text="This will be your display name"></dotbox-textbox>
+    
+    <dotbox-metric label="CPU Usage" value="75%" icon="📈" trend="up"></dotbox-metric>
+    
+    <script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/bundle.js"></script>
+    
+    <script>
+        // Event handling with Web Components
+        document.querySelector('dotbox-button').addEventListener('dotbox-click', (e) => {
+            console.log('Button clicked!', e.detail);
+        });
+        
+        document.querySelector('dotbox-textbox').addEventListener('dotbox-input', (e) => {
+            console.log('Input value:', e.detail.value);
+        });
+    </script>
+</body>
+</html>
+```
+
+### 🔄 JavaScript API (Alternative)
 
 ```html
 <!DOCTYPE html>
@@ -43,7 +77,7 @@ Or download specific releases from: [GitHub Releases](https://github.com/andymcl
     
     <script src="/dist/bundle.js"></script>
     <script>
-        // Create a button
+        // Create components programmatically
         const button = new Dotbox.Button({
             text: 'Click me!',
             variant: 'primary',
@@ -62,12 +96,138 @@ Or download specific releases from: [GitHub Releases](https://github.com/andymcl
 - **ModalDialog**: Modal overlays for displaying content
 - **TabView**: Tabbed interfaces for organizing content
 - **TextBox**: Input fields with validation and styling
+- **Dropdown**: Select dropdown with TextBox-like styling and multiple options
 - **MetricItem**: Display metrics with trends and icons
 - **ToolButton**: Specialized buttons for tools and actions
 - **CodeBlock**: Syntax-highlighted code display
 - **Menu**: Navigation menus with selection states
 
-### Component Usage Examples
+### 🎯 Web Component Examples (Primary Usage)
+
+#### Button
+```html
+<!-- Basic buttons -->
+<dotbox-button variant="primary">Primary</dotbox-button>
+<dotbox-button variant="secondary">Secondary</dotbox-button>
+<dotbox-button variant="danger">Danger</dotbox-button>
+<dotbox-button variant="success">Success</dotbox-button>
+
+<!-- With attributes -->
+<dotbox-button variant="primary" size="large" icon="🚀">Launch</dotbox-button>
+<dotbox-button variant="danger" disabled>Disabled</dotbox-button>
+<dotbox-button variant="primary" loading>Loading</dotbox-button>
+
+<!-- Event handling -->
+<script>
+document.querySelector('dotbox-button').addEventListener('dotbox-click', (e) => {
+    console.log('Button clicked:', e.detail);
+});
+</script>
+```
+
+#### Modal Dialog
+```html
+<!-- Simple modal -->
+<dotbox-modal-dialog id="my-modal" title="Example Modal">
+    <p>Modal content goes here</p>
+    <p>Automatically handles ESC key and overlay clicks</p>
+</dotbox-modal-dialog>
+
+<dotbox-button onclick="document.getElementById('my-modal').show()">
+    Open Modal
+</dotbox-button>
+
+<!-- Event handling -->
+<script>
+document.getElementById('my-modal').addEventListener('dotbox-open', (e) => {
+    console.log('Modal opened:', e.detail.id);
+});
+</script>
+```
+
+#### TextBox with Animation
+```html
+<!-- Various text inputs -->
+<dotbox-textbox label="Username" placeholder="Enter your username" help-text="This will be your display name"></dotbox-textbox>
+<dotbox-textbox label="Email" type="email" placeholder="user@example.com" help-text="We'll never share your email"></dotbox-textbox>
+<dotbox-textbox label="Password" type="password" placeholder="Enter a secure password"></dotbox-textbox>
+
+<!-- Event handling -->
+<script>
+document.querySelector('dotbox-textbox').addEventListener('dotbox-input', (e) => {
+    console.log('Input value:', e.detail.value);
+});
+</script>
+```
+
+#### Dropdown
+```html
+<!-- Select dropdowns -->
+<dotbox-dropdown 
+    label="Country" 
+    placeholder="Select your country"
+    help-text="Choose your country of residence"
+    options='[{"value":"us","label":"United States"},{"value":"ca","label":"Canada"},{"value":"uk","label":"United Kingdom"}]'>
+</dotbox-dropdown>
+
+<dotbox-dropdown 
+    label="Priority" 
+    size="small"
+    options='[{"value":"low","label":"Low"},{"value":"medium","label":"Medium"},{"value":"high","label":"High"}]'
+    value="medium">
+</dotbox-dropdown>
+
+<!-- Event handling -->
+<script>
+document.querySelector('dotbox-dropdown').addEventListener('dotbox-change', (e) => {
+    console.log('Selection changed:', e.detail.value, e.detail.selectedOption);
+});
+</script>
+```
+
+#### Metrics
+```html
+<!-- Display various metrics -->
+<dotbox-metric label="CPU Usage" value="75%" icon="📈" trend="up"></dotbox-metric>
+<dotbox-metric label="Memory Usage" value="64%" icon="💾" trend="down"></dotbox-metric>
+<dotbox-metric label="Active Users" value="1,234" icon="👥" trend="up"></dotbox-metric>
+```
+
+#### Tab Views
+```html
+<!-- Declarative tab interface -->
+<dotbox-tab-view active-tab="overview">
+    <dotbox-tab-panel id="overview" label="Overview" icon="📊">
+        <h3>Overview Content</h3>
+        <p>This is the overview tab content.</p>
+    </dotbox-tab-panel>
+    <dotbox-tab-panel id="details" label="Details" icon="📋">
+        <h3>Details Content</h3>
+        <p>This is the details tab content.</p>
+    </dotbox-tab-panel>
+</dotbox-tab-view>
+```
+
+#### Menu
+```html
+<!-- Navigation menu -->
+<dotbox-menu 
+    data-items='[{"id":"home","label":"Home"},{"id":"about","label":"About"},{"id":"contact","label":"Contact"}]'
+    selected="home"
+    bordered="true">
+</dotbox-menu>
+
+<!-- Borderless menu for sidebars -->
+<dotbox-menu 
+    data-items='[{"id":"dashboard","label":"Dashboard"},{"id":"analytics","label":"Analytics"}]'
+    selected="dashboard">
+</dotbox-menu>
+```
+
+### 🔄 JavaScript API Examples (Alternative)
+
+<details>
+<summary>Click to expand JavaScript API examples</summary>
 
 #### Button
 ```javascript
@@ -120,6 +280,8 @@ const sidebarMenu = new Dotbox.Menu({
     bordered: false // Clean, minimal style without borders/background
 });
 ```
+
+</details>
 
 ## 🎨 Theme System
 
@@ -199,10 +361,14 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 
 ## 📋 Component Architecture
 
-- **Self-contained**: Each component manages its own CSS and dependencies
-- **Theme-aware**: All styling uses CSS variables from the theme system
-- **No global pollution**: Component-scoped CSS classes
-- **Framework agnostic**: Pure JavaScript with no framework dependencies
+- **🎯 Web Components First**: Primary usage through custom HTML elements with intuitive attribute-based configuration
+- **🔄 Dual API Design**: Web Components for declarative HTML usage + JavaScript classes for programmatic control
+- **📦 Self-contained**: Each component manages its own CSS and dependencies
+- **🎨 Theme-aware**: All styling uses CSS variables from the theme system
+- **🚫 No global pollution**: Component-scoped CSS classes
+- **⚡ Framework agnostic**: Pure JavaScript with no framework dependencies
+- **📡 Custom Events**: Web Components emit custom events (e.g., `dotbox-click`, `dotbox-input`) for easy event handling
+- **🔧 Backwards Compatible**: Existing JavaScript API continues to work alongside new Web Components
 
 ## 🚀 GitHub Actions & Releases
 

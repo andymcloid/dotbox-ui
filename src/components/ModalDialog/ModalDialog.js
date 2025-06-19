@@ -239,6 +239,169 @@ class ModalDialog {
     }
 }
 
+// Web Component for HTML usage
+class DotboxModalDialogElement extends HTMLElement {
+    constructor() {
+        super();
+        this.modalInstance = null;
+        this.uniqueId = `modal-${Math.random().toString(36).substr(2, 9)}`;
+    }
+
+    connectedCallback() {
+        // Hide the original content initially
+        this.style.display = 'none';
+        this.render();
+    }
+
+    static get observedAttributes() {
+        return ['title', 'destroy-on-close', 'close-on-overlay-click', 'close-on-esc', 'show'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (this.modalInstance) {
+            if (name === 'show') {
+                if (this.hasAttribute('show')) {
+                    this.modalInstance.show();
+                } else {
+                    this.modalInstance.close();
+                }
+            } else {
+                // For other attributes, we need to recreate the modal
+                this.render();
+            }
+        }
+    }
+
+    render() {
+        const title = this.getAttribute('title') || '';
+        const destroyOnClose = this.hasAttribute('destroy-on-close');
+        const closeOnOverlayClick = this.hasAttribute('close-on-overlay-click') || !this.hasAttribute('close-on-overlay-click');
+        const closeOnEsc = this.hasAttribute('close-on-esc') || !this.hasAttribute('close-on-esc');
+
+        // Clean up previous instance
+        if (this.modalInstance) {
+            this.modalInstance.destroy();
+        }
+
+        // Create new modal instance
+        this.modalInstance = new ModalDialog(this.uniqueId, {
+            destroyOnClose: destroyOnClose,
+            closeOnOverlayClick: closeOnOverlayClick,
+            closeOnEsc: closeOnEsc
+        });
+
+        // Set up event callbacks
+        this.modalInstance.onOpenCallback(() => {
+            this.dispatchEvent(new CustomEvent('dotbox-open', {
+                detail: { id: this.uniqueId },
+                bubbles: true
+            }));
+        });
+
+        this.modalInstance.onCloseCallback(() => {
+            this.removeAttribute('show');
+            this.dispatchEvent(new CustomEvent('dotbox-close', {
+                detail: { id: this.uniqueId },
+                bubbles: true
+            }));
+        });
+
+        this.modalInstance.onDestroyCallback(() => {
+            this.dispatchEvent(new CustomEvent('dotbox-destroy', {
+                detail: { id: this.uniqueId },
+                bubbles: true
+            }));
+        });
+
+        // Set title if provided
+        if (title) {
+            this.modalInstance.setTitle(title);
+        }
+
+        // Set body content from slot or innerHTML
+        const bodyContent = this.innerHTML.trim();
+        if (bodyContent) {
+            this.modalInstance.setBody(bodyContent);
+        }
+
+        // Show if show attribute is present
+        if (this.hasAttribute('show')) {
+            this.modalInstance.show();
+        }
+    }
+
+    // Expose modal methods
+    show() {
+        this.setAttribute('show', '');
+        return this;
+    }
+
+    close() {
+        this.removeAttribute('show');
+        return this;
+    }
+
+    setTitle(title) {
+        this.setAttribute('title', title);
+        return this;
+    }
+
+    setBody(content) {
+        if (this.modalInstance) {
+            this.modalInstance.setBody(content);
+        }
+        return this;
+    }
+
+    setFooter(content) {
+        if (this.modalInstance) {
+            this.modalInstance.setFooter(content);
+        }
+        return this;
+    }
+
+    addFooterButton(text, className = 'action-btn', onclick = null) {
+        if (this.modalInstance) {
+            return this.modalInstance.addFooterButton(text, className, onclick);
+        }
+        return null;
+    }
+
+    destroy() {
+        if (this.modalInstance) {
+            this.modalInstance.destroy();
+            this.modalInstance = null;
+        }
+        return this;
+    }
+
+    setPadding(padding) {
+        if (this.modalInstance) {
+            this.modalInstance.setPadding(padding);
+        }
+        return this;
+    }
+
+    setBodyContainerMode(isContainer = true) {
+        if (this.modalInstance) {
+            this.modalInstance.setBodyContainerMode(isContainer);
+        }
+        return this;
+    }
+
+    disconnectedCallback() {
+        if (this.modalInstance) {
+            this.modalInstance.destroy();
+            this.modalInstance = null;
+        }
+    }
+}
+
+// Register custom element
+if (typeof customElements !== 'undefined') {
+    customElements.define('dotbox-modal-dialog', DotboxModalDialogElement);
+}
+
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModalDialog;
