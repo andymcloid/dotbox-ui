@@ -5,7 +5,11 @@ class Menu {
     this.selected = options.selected || null;
     this.onSelect = options.onSelect || (() => {});
     this.bordered = options.bordered !== false; // Default to true
+    this.compact = options.compact || false; // Compact mode for tighter spacing
     this.routingMode = options.routingMode || false; // Enable hash-based routing
+    this.collapsibleHeaders = options.collapsibleHeaders || false; // Enable collapsible headers
+    this.headerArrowPosition = options.headerArrowPosition || 'right'; // Arrow position: 'left' or 'right'
+    this.collapsedGroups = new Set(); // Track collapsed groups
     
     this.element = this._render();
     
@@ -17,8 +21,27 @@ class Menu {
 
   _render() {
     const menu = document.createElement('nav');
-    menu.className = `dotbox-menu ${this.bordered ? 'dotbox-menu-bordered' : 'dotbox-menu-borderless'}`;
+    let classes = ['dotbox-menu'];
+    classes.push(this.bordered ? 'dotbox-menu-bordered' : 'dotbox-menu-borderless');
+    if (this.compact) {
+      classes.push('dotbox-menu-compact');
+    }
+    if (this.collapsibleHeaders) {
+      classes.push('dotbox-menu-collapsible');
+    }
+    menu.className = classes.join(' ');
     menu.id = this.id;
+    
+    if (this.collapsibleHeaders) {
+      this._renderWithHeaders(menu);
+    } else {
+      this._renderFlat(menu);
+    }
+    
+    return menu;
+  }
+  
+  _renderFlat(menu) {
     this.items.forEach(item => {
       const el = document.createElement('div');
       el.className = 'dotbox-menu-item' + (item.id === this.selected ? ' selected' : '');
@@ -32,14 +55,102 @@ class Menu {
       };
       menu.appendChild(el);
     });
-    return menu;
+  }
+  
+  _renderWithHeaders(menu) {
+    // Group items by header
+    const groups = {};
+    this.items.forEach(item => {
+      const group = item.group || 'default';
+      if (!groups[group]) {
+        groups[group] = {
+          header: item.groupHeader || group,
+          items: []
+        };
+      }
+      groups[group].items.push(item);
+    });
+    
+    // Render each group
+    Object.keys(groups).forEach(groupKey => {
+      const group = groups[groupKey];
+      const isCollapsed = this.collapsedGroups.has(groupKey);
+      
+      // Create header element
+      const headerEl = document.createElement('div');
+      headerEl.className = 'dotbox-menu-header' + (isCollapsed ? ' collapsed' : '');
+      const arrowIcon = `<span class="dotbox-menu-header-icon">${isCollapsed ? '▼' : '▼'}</span>`;
+      const headerText = `<span class="dotbox-menu-header-text">${group.header}</span>`;
+      
+      if (this.headerArrowPosition === 'left') {
+        headerEl.innerHTML = `${arrowIcon}${headerText}`;
+      } else {
+        headerEl.innerHTML = `${headerText}${arrowIcon}`;
+      }
+      
+      headerEl.classList.add(`dotbox-menu-header-arrow-${this.headerArrowPosition}`);
+      headerEl.onclick = () => this._toggleGroup(groupKey);
+      menu.appendChild(headerEl);
+      
+      // Create group container
+      const groupEl = document.createElement('div');
+      groupEl.className = 'dotbox-menu-group' + (isCollapsed ? ' collapsed' : '');
+      groupEl.setAttribute('data-group', groupKey);
+      
+      // Add items to group
+      group.items.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'dotbox-menu-item' + (item.id === this.selected ? ' selected' : '');
+        el.textContent = item.label;
+        el.onclick = () => {
+          this.select(item.id);
+          if (this.routingMode) {
+            window.location.hash = item.id;
+          }
+          this.onSelect(item.id);
+        };
+        groupEl.appendChild(el);
+      });
+      
+      menu.appendChild(groupEl);
+    });
+  }
+  
+  _toggleGroup(groupKey) {
+    const isCollapsed = this.collapsedGroups.has(groupKey);
+    
+    if (isCollapsed) {
+      this.collapsedGroups.delete(groupKey);
+    } else {
+      this.collapsedGroups.add(groupKey);
+    }
+    
+    // Re-render the menu
+    const newElement = this._render();
+    this.element.parentNode.replaceChild(newElement, this.element);
+    this.element = newElement;
   }
 
   select(id) {
     this.selected = id;
-    Array.from(this.element.children).forEach((el, i) => {
-      el.classList.toggle('selected', this.items[i].id === id);
-    });
+    
+    if (this.collapsibleHeaders) {
+      // For collapsible headers, find items within groups
+      const allItems = this.element.querySelectorAll('.dotbox-menu-item');
+      allItems.forEach(item => {
+        // Find the corresponding data item by matching text content
+        const itemText = item.textContent;
+        const dataItem = this.items.find(dataItem => dataItem.label === itemText && dataItem.id === id);
+        item.classList.toggle('selected', !!dataItem);
+      });
+    } else {
+      // For flat structure, use the original logic
+      Array.from(this.element.children).forEach((el, i) => {
+        if (el.classList.contains('dotbox-menu-item')) {
+          el.classList.toggle('selected', this.items[i].id === id);
+        }
+      });
+    }
   }
 
   getElement() {
@@ -80,7 +191,7 @@ class DotboxMenuElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['selected', 'bordered', 'items', 'data-items', 'routing-mode'];
+    return ['selected', 'bordered', 'compact', 'items', 'data-items', 'routing-mode', 'collapsible-headers', 'header-arrow-position'];
   }
 
   attributeChangedCallback(name) {
@@ -127,7 +238,10 @@ class DotboxMenuElement extends HTMLElement {
   render() {
     const selected = this.getAttribute('selected') || null;
     const bordered = this.getAttribute('bordered') !== 'false';
+    const compact = this.hasAttribute('compact');
     const routingMode = this.hasAttribute('routing-mode');
+    const collapsibleHeaders = this.hasAttribute('collapsible-headers');
+    const headerArrowPosition = this.getAttribute('header-arrow-position') || 'right';
 
     // Clean up previous instance
     if (this.menuInstance) {
@@ -139,7 +253,10 @@ class DotboxMenuElement extends HTMLElement {
       items: this.items,
       selected: selected,
       bordered: bordered,
+      compact: compact,
       routingMode: routingMode,
+      collapsibleHeaders: collapsibleHeaders,
+      headerArrowPosition: headerArrowPosition,
       onSelect: (id) => {
         this._isInternalUpdate = true;
         this.setAttribute('selected', id);
@@ -172,6 +289,34 @@ class DotboxMenuElement extends HTMLElement {
   removeItem(id) {
     this.items = this.items.filter(item => item.id !== id);
     this.render();
+    return this;
+  }
+  
+  toggleGroup(groupKey) {
+    if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
+      this.menuInstance._toggleGroup(groupKey);
+    }
+    return this;
+  }
+  
+  expandAllGroups() {
+    if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
+      this.menuInstance.collapsedGroups.clear();
+      this.render();
+    }
+    return this;
+  }
+  
+  collapseAllGroups() {
+    if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
+      const groups = new Set();
+      this.items.forEach(item => {
+        const group = item.group || 'default';
+        groups.add(group);
+      });
+      this.menuInstance.collapsedGroups = groups;
+      this.render();
+    }
     return this;
   }
 }

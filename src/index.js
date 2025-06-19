@@ -11,6 +11,7 @@ const CodeBlock = require('./components/CodeBlock/CodeBlock.js');
 const Loader = require('./components/Loader/Loader.js');
 const Checkbox = require('./components/Checkbox/Checkbox.js');
 const Section = require('./components/Section/Section.js');
+const Form = require('./components/Form/Form.js');
 
 // Import all styles (except theming)
 require('./index.css');
@@ -28,7 +29,8 @@ const Dotbox = {
     CodeBlock,
     Loader,
     Checkbox,
-    Section
+    Section,
+    Form
 };
 if (typeof window !== 'undefined') {
     window.Dotbox = Dotbox;

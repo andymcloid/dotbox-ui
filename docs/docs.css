@@ -46,6 +46,7 @@ body {
     padding: 1rem 0.75rem;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
     /* No gap - manual spacing for docs */
 }
 

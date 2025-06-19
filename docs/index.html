@@ -60,20 +60,49 @@
             setInitialTheme();
             // Apply initial filter (Web Components only)
             updateCodeExampleVisibility();
+            
+            // Set up intersection observer for active menu highlighting
+            setupActiveMenuObserver();
+            
+            // Set up hash change listener for direct navigation
+            window.addEventListener('hashchange', () => {
+                const hash = window.location.hash.substring(1);
+                if (hash) {
+                    setTimeout(() => updateActiveMenuItem(hash), 100);
+                }
+            });
+            
+            // Set initial active item if there's a hash
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash) {
+                setTimeout(() => updateActiveMenuItem(initialHash), 200);
+            }
         }
 
         function createNavigationMenu() {
-            const navItems = componentsData.map(comp => ({
+            const navContainer = document.getElementById('nav-menu');
+            
+            // Create items with group information for collapsible headers
+            const menuItems = componentsData.map(comp => ({
                 id: comp.id,
-                label: comp.name
+                label: comp.name,
+                group: comp.category || 'Other',
+                groupHeader: comp.category || 'Other'
             }));
 
-            const navMenu = new Dotbox.Menu({
-                items: navItems,
-                selected: navItems[0]?.id || '',
+            // Create single menu with collapsible headers
+            const navigationMenu = new Dotbox.Menu({
+                items: menuItems,
+                selected: '',
                 bordered: false,
+                compact: true,
                 routingMode: true,
+                collapsibleHeaders: true,
                 onSelect: (id) => {
+                    // Update selected state
+                    updateActiveMenuItem(id);
+                    
+                    // Scroll to element
                     const element = document.getElementById(id);
                     if (element) {
                         element.scrollIntoView({ behavior: 'smooth' });
@@ -81,7 +110,17 @@
                 }
             });
 
-            document.getElementById('nav-menu').appendChild(navMenu.getElement());
+            navContainer.appendChild(navigationMenu.getElement());
+            
+            // Store reference for later updates
+            window.navigationMenu = navigationMenu;
+        }
+        
+        function updateActiveMenuItem(selectedId) {
+            // Update the menu's selected state
+            if (window.navigationMenu && window.navigationMenu.menuInstance) {
+                window.navigationMenu.menuInstance.select(selectedId);
+            }
         }
 
         function createComponentSections() {
@@ -176,10 +215,11 @@
                         );
                         
                         // Create a function and execute it with container as argument
-                        const scriptFunction = new Function(modifiedScript);
+                        const scriptFunction = new Function('container', modifiedScript);
                         scriptFunction.call(null, container);
                     } catch (error) {
                         console.error('Error executing JS demo script:', error);
+                        console.error('Script content that failed:', scriptContent);
                     }
                 });
             }
@@ -309,6 +349,33 @@
         function setInitialTheme() {
             const saved = localStorage.getItem('dotbox-theme') || 'light';
             setTheme(saved);
+        }
+
+        function setupActiveMenuObserver() {
+            // Create intersection observer to highlight active menu items
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                        const sectionId = entry.target.id;
+                        if (sectionId && window.navigationMenu) {
+                            updateActiveMenuItem(sectionId);
+                        }
+                    }
+                });
+            }, {
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: [0, 0.25, 0.5, 0.75, 1]
+            });
+
+            // Observe all component sections
+            setTimeout(() => {
+                componentsData.forEach(component => {
+                    const element = document.getElementById(component.id);
+                    if (element) {
+                        observer.observe(element);
+                    }
+                });
+            }, 100);
         }
 
         // Initialize when DOM is loaded

@@ -10,4 +10,5 @@
 @import './components/CodeBlock/CodeBlock.css';
 @import './components/Loader/Loader.css';
 @import './components/Checkbox/Checkbox.css';
-@import './components/Section/Section.css'; 
+@import './components/Section/Section.css';
+@import './components/Form/Form.css'; 
