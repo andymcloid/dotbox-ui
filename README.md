@@ -14,19 +14,22 @@ A modern, lightweight, and themeable UI component library for building beautiful
 
 ## 📦 Installation
 
-### From GitHub Releases
-You can use Dotbox UI directly from our GitHub releases without installing:
+### From GitHub Releases (Recommended)
+Use Dotbox UI directly from GitHub release assets without installing. Each release automatically builds and uploads the distribution files:
 
 ```html
-<!-- CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/index.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/theme.css">
+<!-- Latest release via GitHub Releases API -->
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/index.css">
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/theme.css">
+<script src="https://github.com/andymcloid/dotbox-ui/releases/latest/download/bundle.js"></script>
 
-<!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/bundle.js"></script>
+<!-- Specific version -->
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/index.css">
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/theme.css">
+<script src="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/bundle.js"></script>
 ```
 
-Or download specific releases from: [GitHub Releases](https://github.com/andymcloid/dotbox-ui/releases)
+Or download the complete package: [GitHub Releases](https://github.com/andymcloid/dotbox-ui/releases)
 
 ## 🚀 Quick Start
 
@@ -36,8 +39,8 @@ Or download specific releases from: [GitHub Releases](https://github.com/andymcl
 <!DOCTYPE html>
 <html class="theme-light">
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/index.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/theme.css">
+    <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/index.css">
+    <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/theme.css">
 </head>
 <body>
     <!-- Use components directly in HTML! -->
@@ -47,7 +50,7 @@ Or download specific releases from: [GitHub Releases](https://github.com/andymcl
     
     <dotbox-metric label="CPU Usage" value="75%" icon="📈" trend="up"></dotbox-metric>
     
-    <script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/bundle.js"></script>
+    <script src="https://github.com/andymcloid/dotbox-ui/releases/latest/download/bundle.js"></script>
     
     <script>
         // Event handling with Web Components
@@ -386,16 +389,16 @@ This project uses GitHub Actions for automated builds, testing, and releases:
 
 ### Using Stable Releases
 
-#### Option 1: CDN (Recommended)
+#### Option 1: GitHub Releases (Recommended)
 ```html
 <!-- Latest stable release -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/index.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/theme.css">
-<script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@latest/dist/bundle.js"></script>
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/index.css">
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/theme.css">
+<script src="https://github.com/andymcloid/dotbox-ui/releases/latest/download/bundle.js"></script>
 
 <!-- Specific version -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@v1.0.0/dist/index.css">
-<script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@v1.0.0/dist/bundle.js"></script>
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/index.css">
+<script src="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/bundle.js"></script>
 ```
 
 #### Option 2: Download from Releases
