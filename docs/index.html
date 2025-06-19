@@ -148,6 +148,15 @@
 
                     <div class="component-code">
                         <div id="${component.id}-code-demo"></div>
+                        <div class="jsfiddle-link" style="margin-top: 1rem;">
+                            <dotbox-button 
+                                variant="secondary" 
+                                size="small" 
+                                id="${component.id}-jsfiddle-btn"
+                                onclick="openJSFiddle('${component.id}')">
+                                🚀 Try in JSFiddle
+                            </dotbox-button>
+                        </div>
                     </div>
                 `;
 
@@ -376,6 +385,133 @@
                     }
                 });
             }, 100);
+        }
+
+        function openJSFiddle(componentId) {
+            const component = componentsData.find(c => c.id === componentId);
+            if (!component) return;
+            
+            // Get the current code type being displayed
+            let codeToUse = '';
+            switch (currentCodeType) {
+                case 'webcomponents':
+                    codeToUse = component.codeWC;
+                    break;
+                case 'javascript':
+                    codeToUse = component.codeJS;
+                    break;
+                default:
+                    codeToUse = component.codeWC;
+                    break;
+            }
+            
+            // Clean up the code for JSFiddle
+            const cleanCode = codeToUse.replace(/\\n/g, '\n');
+            
+            // Prepare separated content for JSFiddle
+            const htmlContent = '<div class="theme-toggle">\n' +
+                '    <dotbox-button variant="secondary" size="small" onclick="toggleTheme()">\n' +
+                '        🌙 Toggle Theme\n' +
+                '    </dotbox-button>\n' +
+                '</div>\n\n' +
+                '<div class="demo-container">\n' +
+                '    <h1>' + component.name + ' Example</h1>\n' +
+                '    <p>' + component.description + '</p>\n\n' +
+                '    <div class="component-demo">\n' +
+                '        ' + cleanCode + '\n' +
+                '    </div>\n' +
+                '</div>';
+            
+            const cssContent = '/* Import Dotbox UI styles from jsDelivr CDN */\n' +
+                '@import url("https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css");\n' +
+                '@import url("https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css");\n\n' +
+                'html {\n' +
+                '    /* Set theme class on html element */\n' +
+                '}\n\n' +
+                'html.theme-light {\n' +
+                '    /* Light theme is default */\n' +
+                '}\n\n' +
+                'html.theme-dark {\n' +
+                '    /* Dark theme overrides */\n' +
+                '}\n\n' +
+                'body {\n' +
+                '    font-family: var(--font-family);\n' +
+                '    background: var(--color-bg);\n' +
+                '    color: var(--color-text);\n' +
+                '    padding: 2rem;\n' +
+                '    margin: 0;\n' +
+                '}\n\n' +
+                '.demo-container {\n' +
+                '    max-width: 800px;\n' +
+                '    margin: 0 auto;\n' +
+                '}\n\n' +
+                '.theme-toggle {\n' +
+                '    position: fixed;\n' +
+                '    top: 1rem;\n' +
+                '    right: 1rem;\n' +
+                '    z-index: 1000;\n' +
+                '}';
+            
+            const jsContent = '// Load Dotbox UI from jsDelivr CDN\n' +
+                '// Note: The CSS is loaded via @import in the CSS panel\n\n' +
+                '// Load the JavaScript bundle\n' +
+                'const script = document.createElement("script");\n' +
+                'script.src = "https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js";\n' +
+                'document.head.appendChild(script);\n\n' +
+                '// Set initial theme\n' +
+                'document.documentElement.className = "theme-light";\n\n' +
+                '// Theme toggle function\n' +
+                'function toggleTheme() {\n' +
+                '    const isLight = document.documentElement.classList.contains("theme-light");\n' +
+                '    document.documentElement.className = isLight ? "theme-dark" : "theme-light";\n' +
+                '}';
+            
+            // Create a form to submit to JSFiddle
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://jsfiddle.net/api/post/library/pure/';
+            form.target = '_blank';
+            
+            // Add the HTML content
+            const htmlInput = document.createElement('input');
+            htmlInput.type = 'hidden';
+            htmlInput.name = 'html';
+            htmlInput.value = htmlContent;
+            
+            // Add the CSS content
+            const cssInput = document.createElement('input');
+            cssInput.type = 'hidden';
+            cssInput.name = 'css';
+            cssInput.value = cssContent;
+            
+            // Add the JavaScript content
+            const jsInput = document.createElement('input');
+            jsInput.type = 'hidden';
+            jsInput.name = 'js';
+            jsInput.value = jsContent;
+            
+            // Add title
+            const titleInput = document.createElement('input');
+            titleInput.type = 'hidden';
+            titleInput.name = 'title';
+            titleInput.value = component.name + ' - Dotbox UI Example';
+            
+            // Add description
+            const descInput = document.createElement('input');
+            descInput.type = 'hidden';
+            descInput.name = 'description';
+            descInput.value = component.description + ' - Built with Dotbox UI';
+            
+            form.appendChild(htmlInput);
+            form.appendChild(cssInput);
+            form.appendChild(jsInput);
+            form.appendChild(titleInput);
+            form.appendChild(descInput);
+            
+            // Submit the form
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
         }
 
         // Initialize when DOM is loaded

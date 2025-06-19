@@ -14,19 +14,24 @@ A modern, lightweight, and themeable UI component library for building beautiful
 
 ## 📦 Installation
 
-### From GitHub Releases (Recommended)
-Use Dotbox UI directly from GitHub release assets without installing. Each release automatically builds and uploads the distribution files:
+### From CDN (Recommended)
+Use Dotbox UI directly from jsDelivr CDN. Files are automatically updated on every push to master:
 
 ```html
-<!-- Latest release via GitHub Releases API -->
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/index.css">
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/theme.css">
-<script src="https://github.com/andymcloid/dotbox-ui/releases/latest/download/bundle.js"></script>
+<!-- Latest build via jsDelivr CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css">
+<script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js"></script>
+```
 
+### Alternative: GitHub Releases
+Download specific versions from GitHub releases:
+
+```html
 <!-- Specific version -->
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/index.css">
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/theme.css">
-<script src="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/bundle.js"></script>
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/index.css">
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/theme.css">
+<script src="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/bundle.js"></script>
 ```
 
 Or download the complete package: [GitHub Releases](https://github.com/andymcloid/dotbox-ui/releases)
@@ -39,8 +44,8 @@ Or download the complete package: [GitHub Releases](https://github.com/andymcloi
 <!DOCTYPE html>
 <html class="theme-light">
 <head>
-    <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/index.css">
-    <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/theme.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css">
 </head>
 <body>
     <!-- Use components directly in HTML! -->
@@ -50,7 +55,7 @@ Or download the complete package: [GitHub Releases](https://github.com/andymcloi
     
     <dotbox-metric label="CPU Usage" value="75%" icon="📈" trend="up"></dotbox-metric>
     
-    <script src="https://github.com/andymcloid/dotbox-ui/releases/latest/download/bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js"></script>
     
     <script>
         // Event handling with Web Components
@@ -389,16 +394,16 @@ This project uses GitHub Actions for automated builds, testing, and releases:
 
 ### Using Stable Releases
 
-#### Option 1: GitHub Releases (Recommended)
+#### Option 1: CDN (Recommended)
 ```html
-<!-- Latest stable release -->
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/index.css">
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/theme.css">
-<script src="https://github.com/andymcloid/dotbox-ui/releases/latest/download/bundle.js"></script>
+<!-- Latest build from jsDelivr CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css">
+<script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js"></script>
 
-<!-- Specific version -->
-<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/index.css">
-<script src="https://github.com/andymcloid/dotbox-ui/releases/download/v1.0.0/bundle.js"></script>
+<!-- Specific version from GitHub releases -->
+<link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/index.css">
+<script src="https://github.com/andymcloid/dotbox-ui/releases/download/release-20250619-1/bundle.js"></script>
 ```
 
 #### Option 2: Download from Releases

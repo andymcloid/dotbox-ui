@@ -110,6 +110,74 @@ jobs:
         cp CONTRIBUTING.md release/
         tar -czf dotbox-ui-${{ steps.version.outputs.version }}.tar.gz -C release .
         
+    - name: Update release branch
+      run: |
+        # Configure git
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # Create or checkout release branch
+        git fetch origin
+        if git rev-parse --verify origin/release >/dev/null 2>&1; then
+          git checkout -b release origin/release
+        else
+          git checkout --orphan release
+          git rm -rf .
+        fi
+        
+        # Copy only the dist files and essential files
+        cp -r dist/* .
+        cp package.json .
+        cp README.md .
+        
+        # Create a simple index.html for the release branch
+        cat > index.html << 'EOF'
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Dotbox UI - Release Branch</title>
+            <meta charset="utf-8">
+            <style>
+                body { font-family: system-ui; padding: 2rem; max-width: 800px; margin: 0 auto; }
+                pre { background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+                code { background: #f5f5f5; padding: 0.25rem; border-radius: 2px; }
+            </style>
+        </head>
+        <body>
+            <h1>🎯 Dotbox UI - Release Branch</h1>
+            <p>This branch contains only the built distribution files for CDN usage.</p>
+            
+            <h2>📦 CDN Usage</h2>
+            <pre><code>&lt;!-- CSS --&gt;
+        &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css"&gt;
+        &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css"&gt;
+
+        &lt;!-- JavaScript --&gt;
+        &lt;script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js"&gt;&lt;/script&gt;</code></pre>
+            
+            <h2>📋 Available Files</h2>
+            <ul>
+                <li><code>bundle.js</code> - All components bundled</li>
+                <li><code>index.css</code> - All component styles</li>
+                <li><code>theme.css</code> - Theme variables</li>
+            </ul>
+            
+            <p><a href="https://github.com/andymcloid/dotbox-ui">← Back to main repository</a></p>
+            <p><a href="https://andymcloid.github.io/dotbox-ui">📖 View Documentation</a></p>
+        </body>
+        </html>
+        EOF
+        
+        # Add and commit all files
+        git add .
+        git commit -m "Release ${{ steps.version.outputs.version }} - Built from ${{ github.sha }}" || echo "No changes to commit"
+        
+        # Push to release branch
+        git push origin release --force
+        
+        # Switch back to original branch
+        git checkout -
+        
     - name: Create automatic release
       uses: softprops/action-gh-release@v1
       with:
@@ -124,21 +192,21 @@ jobs:
           - Commit: ${{ github.sha }}
           - Build timestamp: $(date -u)
           
-          **Usage:**
+          **CDN Usage (Recommended):**
           ```html
           <!-- CSS -->
-          <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/index.css">
-          <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/theme.css">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css">
           
           <!-- JavaScript -->
-          <script src="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/bundle.js"></script>
+          <script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js"></script>
           ```
           
-          Or use the latest release:
+          **Download files:**
           ```html
-          <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/index.css">
-          <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/latest/download/theme.css">
-          <script src="https://github.com/andymcloid/dotbox-ui/releases/latest/download/bundle.js"></script>
+          <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/index.css">
+          <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/theme.css">
+          <script src="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/bundle.js"></script>
           ```
         files: |
           dotbox-ui-${{ steps.version.outputs.version }}.tar.gz
