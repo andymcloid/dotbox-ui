@@ -80,10 +80,25 @@ jobs:
     - name: Generate version tag
       id: version
       run: |
-        # Generate version based on timestamp and short commit hash
-        VERSION="auto-$(date +%Y%m%d-%H%M%S)-$(git rev-parse --short HEAD)"
+        # Generate version with date and sequence number
+        DATE=$(date +%Y%m%d)
+        
+        # Get existing releases for today and find the highest sequence number
+        EXISTING_RELEASES=$(gh release list --limit 100 --json tagName | jq -r '.[] | select(.tagName | test("^release-'$DATE'-[0-9]+$")) | .tagName' | sort -V)
+        
+        if [ -z "$EXISTING_RELEASES" ]; then
+          SEQUENCE=1
+        else
+          LAST_RELEASE=$(echo "$EXISTING_RELEASES" | tail -1)
+          LAST_SEQUENCE=$(echo "$LAST_RELEASE" | sed "s/release-$DATE-//")
+          SEQUENCE=$((LAST_SEQUENCE + 1))
+        fi
+        
+        VERSION="release-$DATE-$SEQUENCE"
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Generated version: $VERSION"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Create release archive
       run: |
@@ -99,7 +114,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ steps.version.outputs.version }}
-        name: "Auto Release ${{ steps.version.outputs.version }}"
+        name: "Release ${{ steps.version.outputs.version }}"
         body: |
           🤖 **Automatic Release**
           
