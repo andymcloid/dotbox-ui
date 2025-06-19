@@ -23,7 +23,7 @@
 }
 
 .tool-btn.active {
-    color: var(--text-primary);
+    color: var(--color-text);
     background-color: var(--bg-secondary);
     border-color: var(--accent-blue);
 }
@@ -52,7 +52,7 @@
 
 /* Color variants */
 .tool-btn-primary {
-    color: var(--text-primary);
+    color: var(--color-text);
     background-color: var(--primary-color);
     border-color: var(--primary-color);
 }
@@ -63,7 +63,7 @@
 }
 
 .tool-btn-danger {
-    color: var(--text-primary);
+    color: var(--color-text);
     background-color: var(--accent-red);
     border-color: var(--accent-red);
 }
@@ -115,7 +115,7 @@
     left: 50%;
     transform: translateX(-50%);
     background: var(--background-dark);
-    color: var(--text-primary);
+    color: var(--color-text);
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     font-size: 0.75rem;

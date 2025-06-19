@@ -37,6 +37,13 @@ body {
     transition: background 0.2s, color 0.2s;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.5em;
+}
+
 h1 {
     font-size: var(--h1-size);
     font-weight: 800;
@@ -46,13 +53,10 @@ h1 {
 h2 {
     font-size: var(--h2-size);
     font-weight: 700;
-    margin-bottom: 0.5em;
     letter-spacing: -0.7px;
 }
 h3 {
     font-size: var(--h3-size);
-    font-weight: 600;
-    margin-bottom: 0.5em;
 }
 
 a {
