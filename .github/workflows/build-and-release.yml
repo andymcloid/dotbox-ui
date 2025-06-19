@@ -77,38 +77,6 @@ jobs:
       id: deployment
       uses: actions/deploy-pages@v4
         
-    - name: Generate version tag
-      id: version
-      run: |
-        # Generate version with date and sequence number
-        DATE=$(date +%Y%m%d)
-        
-        # Get existing releases for today and find the highest sequence number
-        EXISTING_RELEASES=$(gh release list --limit 100 --json tagName | jq -r '.[] | select(.tagName | test("^release-'$DATE'-[0-9]+$")) | .tagName' | sort -V)
-        
-        if [ -z "$EXISTING_RELEASES" ]; then
-          SEQUENCE=1
-        else
-          LAST_RELEASE=$(echo "$EXISTING_RELEASES" | tail -1)
-          LAST_SEQUENCE=$(echo "$LAST_RELEASE" | sed "s/release-$DATE-//")
-          SEQUENCE=$((LAST_SEQUENCE + 1))
-        fi
-        
-        VERSION="release-$DATE-$SEQUENCE"
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-        echo "Generated version: $VERSION"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Create release archive
-      run: |
-        # Create a release archive with dist files
-        mkdir -p release
-        cp -r dist/ release/
-        cp package.json release/
-        cp README.md release/
-        cp CONTRIBUTING.md release/
-        tar -czf dotbox-ui-${{ steps.version.outputs.version }}.tar.gz -C release .
         
     - name: Update release branch
       run: |
@@ -174,51 +142,11 @@ jobs:
         
         # Add and commit all files
         git add .
-        git commit -m "Release ${{ steps.version.outputs.version }} - Built from ${{ github.sha }}" || echo "No changes to commit"
+        git commit -m "Update release branch - Built from ${{ github.sha }}" || echo "No changes to commit"
         
         # Push to release branch
         git push origin release --force
         
         # Switch back to original branch
         git checkout -
-        
-    - name: Create automatic release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: ${{ steps.version.outputs.version }}
-        name: "Release ${{ steps.version.outputs.version }}"
-        body: |
-          🤖 **Automatic Release**
-          
-          This release was automatically generated from the latest master branch.
-          
-          **Changes in this release:**
-          - Commit: ${{ github.sha }}
-          - Build timestamp: $(date -u)
-          
-          **CDN Usage (Recommended):**
-          ```html
-          <!-- CSS -->
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css">
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css">
-          
-          <!-- JavaScript -->
-          <script src="https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js"></script>
-          ```
-          
-          **Download files:**
-          ```html
-          <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/index.css">
-          <link rel="stylesheet" href="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/theme.css">
-          <script src="https://github.com/andymcloid/dotbox-ui/releases/download/${{ steps.version.outputs.version }}/bundle.js"></script>
-          ```
-        files: |
-          dotbox-ui-${{ steps.version.outputs.version }}.tar.gz
-          dist/bundle.js
-          dist/index.css
-          dist/theme.css
-        prerelease: false
-        make_latest: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
