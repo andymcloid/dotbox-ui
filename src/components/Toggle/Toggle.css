@@ -1,0 +1,265 @@
+/* Toggle Component - Animated toggle switch with icons */
+.dotbox-toggle-container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: var(--font-family);
+  color: var(--color-text);
+}
+
+.dotbox-toggle {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dotbox-toggle input[type="checkbox"] {
+  display: none;
+  visibility: hidden;
+}
+
+.dotbox-toggle-label-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+  user-select: none;
+}
+
+/* Toggle slider */
+.dotbox-toggle-slider {
+  box-sizing: border-box;
+  background: var(--color-border);
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.27, 0.2, 0.25, 1.51);
+  cursor: pointer;
+}
+
+/* Toggle circle */
+.dotbox-toggle-circle {
+  background: var(--color-bg-panel);
+  border-radius: inherit;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.27, 0.2, 0.25, 1.51);
+  z-index: 1;
+  position: absolute;
+}
+
+/* Toggle icons */
+.dotbox-toggle-icon {
+  position: absolute;
+  transition: all 0.2s cubic-bezier(0.27, 0.2, 0.25, 1.51);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dotbox-toggle-icon svg {
+  transition: inherit;
+  height: auto;
+  fill: currentColor;
+}
+
+.dotbox-toggle-cross {
+  color: var(--color-border);
+  transform: scale(1);
+}
+
+.dotbox-toggle-checkmark {
+  color: var(--color-primary);
+  transform: scale(0);
+}
+
+/* Effect line */
+.dotbox-toggle-slider::before {
+  content: "";
+  position: absolute;
+  background: var(--color-bg-panel);
+  border-radius: 1px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Size variants */
+.dotbox-toggle-small .dotbox-toggle-slider {
+  width: 38px;
+  height: 20px;
+}
+
+.dotbox-toggle-small .dotbox-toggle-circle {
+  width: 14px;
+  height: 14px;
+  left: 3px;
+}
+
+.dotbox-toggle-small .dotbox-toggle-icon svg {
+  width: 5px;
+  height: 5px;
+}
+
+.dotbox-toggle-small .dotbox-toggle-slider::before {
+  width: 7px;
+  height: 2px;
+  left: 6.5px;
+}
+
+.dotbox-toggle-medium .dotbox-toggle-slider {
+  width: 46px;
+  height: 24px;
+}
+
+.dotbox-toggle-medium .dotbox-toggle-circle {
+  width: 18px;
+  height: 18px;
+  left: 3px;
+}
+
+.dotbox-toggle-medium .dotbox-toggle-icon svg {
+  width: 6px;
+  height: 6px;
+}
+
+.dotbox-toggle-medium .dotbox-toggle-checkmark svg {
+  width: 10px;
+  height: 10px;
+}
+
+.dotbox-toggle-medium .dotbox-toggle-slider::before {
+  width: 9px;
+  height: 3px;
+  left: 7.5px;
+}
+
+.dotbox-toggle-large .dotbox-toggle-slider {
+  width: 54px;
+  height: 28px;
+}
+
+.dotbox-toggle-large .dotbox-toggle-circle {
+  width: 22px;
+  height: 22px;
+  left: 3px;
+}
+
+.dotbox-toggle-large .dotbox-toggle-icon svg {
+  width: 7px;
+  height: 7px;
+}
+
+.dotbox-toggle-large .dotbox-toggle-checkmark svg {
+  width: 12px;
+  height: 12px;
+}
+
+.dotbox-toggle-large .dotbox-toggle-slider::before {
+  width: 11px;
+  height: 4px;
+  left: 8.5px;
+}
+
+/* Variant colors */
+.dotbox-toggle-primary input:checked + .dotbox-toggle-slider {
+  background: var(--color-primary);
+}
+
+.dotbox-toggle-success input:checked + .dotbox-toggle-slider {
+  background: var(--color-success);
+}
+
+.dotbox-toggle-success .dotbox-toggle-checkmark {
+  color: var(--color-success);
+}
+
+.dotbox-toggle-danger input:checked + .dotbox-toggle-slider {
+  background: var(--color-danger);
+}
+
+.dotbox-toggle-danger .dotbox-toggle-checkmark {
+  color: var(--color-danger);
+}
+
+/* Checked state animations */
+.dotbox-toggle input:checked + .dotbox-toggle-slider .dotbox-toggle-checkmark {
+  transform: scale(1);
+}
+
+.dotbox-toggle input:checked + .dotbox-toggle-slider .dotbox-toggle-cross {
+  transform: scale(0);
+}
+
+/* Checked state positioning - Small */
+.dotbox-toggle-small input:checked + .dotbox-toggle-slider::before {
+  left: calc(100% - 7px - 3.5px - 3px);
+}
+
+.dotbox-toggle-small input:checked + .dotbox-toggle-slider .dotbox-toggle-circle {
+  left: calc(100% - 14px - 3px);
+  box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Checked state positioning - Medium */
+.dotbox-toggle-medium input:checked + .dotbox-toggle-slider::before {
+  left: calc(100% - 9px - 4.5px - 3px);
+}
+
+.dotbox-toggle-medium input:checked + .dotbox-toggle-slider .dotbox-toggle-circle {
+  left: calc(100% - 18px - 3px);
+  box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Checked state positioning - Large */
+.dotbox-toggle-large input:checked + .dotbox-toggle-slider::before {
+  left: calc(100% - 11px - 5.5px - 3px);
+}
+
+.dotbox-toggle-large input:checked + .dotbox-toggle-slider .dotbox-toggle-circle {
+  left: calc(100% - 22px - 3px);
+  box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Disabled state */
+.dotbox-toggle-container.dotbox-toggle-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dotbox-toggle-disabled .dotbox-toggle {
+  cursor: not-allowed;
+}
+
+.dotbox-toggle-disabled .dotbox-toggle-slider {
+  cursor: not-allowed;
+}
+
+/* Hover effects */
+.dotbox-toggle:hover .dotbox-toggle-slider {
+  transform: scale(1.02);
+}
+
+.dotbox-toggle-disabled:hover .dotbox-toggle-slider {
+  transform: none;
+}
+
+/* Focus styles for accessibility */
+.dotbox-toggle input:focus + .dotbox-toggle-slider {
+  outline: 2px solid var(--color-primary-alpha-20, rgba(255, 182, 5, 0.2));
+  outline-offset: 2px;
+}
+
+/* Dark theme specific adjustments */
+.theme-dark .dotbox-toggle-circle {
+  background: var(--color-bg-card);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .dotbox-toggle input:checked + .dotbox-toggle-slider .dotbox-toggle-circle {
+  box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .dotbox-toggle-slider::before {
+  background: var(--color-bg-card);
+}
