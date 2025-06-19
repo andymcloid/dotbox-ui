@@ -116,6 +116,12 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
+        # Store current files before switching branch
+        mkdir -p /tmp/release-files
+        cp -r dist/* /tmp/release-files/
+        cp package.json /tmp/release-files/
+        cp README.md /tmp/release-files/
+        
         # Create or checkout release branch
         git fetch origin
         if git rev-parse --verify origin/release >/dev/null 2>&1; then
@@ -125,10 +131,8 @@ jobs:
           git rm -rf .
         fi
         
-        # Copy only the dist files and essential files
-        cp -r dist/* .
-        cp package.json .
-        cp README.md .
+        # Copy the stored files to release branch
+        cp -r /tmp/release-files/* .
         
         # Create a simple index.html for the release branch
         cat > index.html << 'EOF'
