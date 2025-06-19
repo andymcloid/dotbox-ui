@@ -24,10 +24,9 @@
     <div class="content">
         <div class="container">
             <!-- Intro Section -->
-            <section class="component-section">
-                <h2 class="component-title" style="font-family: 'SilomBol', sans-serif;">Dotbox UI Components</h2>
+            <dotbox-section title="Dotbox UI Components">
                 <p class="component-description">A modern, lightweight UI component library for building beautiful web applications.</p>
-            </section>
+            </dotbox-section>
 
             <!-- Dynamic component sections will be inserted here -->
             <div id="dynamic-sections"></div>
@@ -89,14 +88,13 @@
             const dynamicSections = document.getElementById('dynamic-sections');
 
             componentsData.forEach(component => {
-                // Create section
-                const section = document.createElement('section');
-                section.id = component.id;
-                section.className = 'component-section';
+                // Create section using Dotbox Section component
+                const sectionElement = document.createElement('dotbox-section');
+                sectionElement.id = component.id;
+                sectionElement.setAttribute('title', component.name);
 
-                // Create title and description
-                section.innerHTML = `
-                    <h2 class="component-title">${component.name}</h2>
+                // Create content with description and demo areas
+                sectionElement.innerHTML = `
                     <p class="component-description">${component.description}</p>
                     
                     <div class="component-demo">
@@ -114,7 +112,7 @@
                     </div>
                 `;
 
-                dynamicSections.appendChild(section);
+                dynamicSections.appendChild(sectionElement);
 
                 // Create live Web Component demos (parse and execute the HTML)
                 createLiveDemo(component.id + '-wc-demo', component.codeWC);

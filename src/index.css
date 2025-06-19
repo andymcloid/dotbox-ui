@@ -7,4 +7,7 @@
 @import './components/MetricItem/MetricItem.css';
 @import './components/ToolButton/ToolButton.css';
 @import './components/Menu/Menu.css';
-@import './components/CodeBlock/CodeBlock.css'; 
+@import './components/CodeBlock/CodeBlock.css';
+@import './components/Loader/Loader.css';
+@import './components/Checkbox/Checkbox.css';
+@import './components/Section/Section.css'; 

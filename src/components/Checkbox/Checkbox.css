@@ -1,0 +1,191 @@
+/* Checkbox Component - Animated checkbox with SVG checkmark */
+.dotbox-checkbox-container {
+    display: inline-block;
+    font-family: var(--font-family);
+    color: var(--color-text);
+}
+
+.dotbox-checkbox-container input[type="checkbox"] {
+    display: none;
+    visibility: hidden;
+}
+
+.dotbox-checkbox-label {
+    margin: auto;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.dotbox-checkbox-label span {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translate3d(0, 0, 0);
+}
+
+.dotbox-checkbox-box {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-sm);
+    transform: scale(1);
+    vertical-align: middle;
+    border: 2px solid var(--color-border);
+    transition: all 0.2s ease;
+    background: var(--color-bg-panel);
+}
+
+.dotbox-checkbox-box svg {
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    fill: none;
+    stroke: var(--color-text-inverse);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transition-delay: 0.1s;
+    transform: translate3d(0, 0, 0);
+}
+
+.dotbox-checkbox-box:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: var(--color-primary);
+    display: block;
+    transform: scale(0);
+    opacity: 1;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.dotbox-checkbox-text {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Hover state */
+.dotbox-checkbox-label:hover .dotbox-checkbox-box {
+    border-color: var(--color-primary);
+}
+
+/* Checked state */
+.dotbox-checkbox-container input[type="checkbox"]:checked + .dotbox-checkbox-label .dotbox-checkbox-box {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    animation: dotbox-checkbox-wave 0.4s ease;
+}
+
+.dotbox-checkbox-container input[type="checkbox"]:checked + .dotbox-checkbox-label .dotbox-checkbox-box svg {
+    stroke-dashoffset: 0;
+}
+
+.dotbox-checkbox-container input[type="checkbox"]:checked + .dotbox-checkbox-label .dotbox-checkbox-box:before {
+    transform: scale(3.5);
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+/* Disabled state */
+.dotbox-checkbox-container input[type="checkbox"]:disabled + .dotbox-checkbox-label {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dotbox-checkbox-container input[type="checkbox"]:disabled + .dotbox-checkbox-label .dotbox-checkbox-box {
+    border-color: var(--color-border-light);
+    background: var(--color-bg-card);
+}
+
+/* Focus state for accessibility */
+.dotbox-checkbox-container input[type="checkbox"]:focus + .dotbox-checkbox-label .dotbox-checkbox-box {
+    box-shadow: 0 0 0 3px var(--color-primary-alpha-20, rgba(255, 182, 5, 0.2));
+}
+
+@keyframes dotbox-checkbox-wave {
+    50% {
+        transform: scale(0.9);
+    }
+}
+
+/* Size variants */
+.dotbox-checkbox-container.small .dotbox-checkbox-box {
+    width: 14px;
+    height: 14px;
+}
+
+.dotbox-checkbox-container.small .dotbox-checkbox-box svg {
+    top: 0px;
+    left: 0px;
+    stroke-width: 1.5;
+}
+
+.dotbox-checkbox-container.small .dotbox-checkbox-text {
+    font-size: 0.875rem;
+}
+
+.dotbox-checkbox-container.medium .dotbox-checkbox-box {
+    width: 18px;
+    height: 18px;
+}
+
+.dotbox-checkbox-container.medium .dotbox-checkbox-box svg {
+    top: 2px;
+    left: 1px;
+    stroke-width: 2;
+}
+
+.dotbox-checkbox-container.medium .dotbox-checkbox-text {
+    font-size: 1rem;
+}
+
+.dotbox-checkbox-container.large .dotbox-checkbox-box {
+    width: 22px;
+    height: 22px;
+}
+
+.dotbox-checkbox-container.large .dotbox-checkbox-box svg {
+    top: 4px;
+    left: 3px;
+    stroke-width: 2.5;
+}
+
+.dotbox-checkbox-container.large .dotbox-checkbox-text {
+    font-size: 1.125rem;
+}
+
+/* Color variants */
+.dotbox-checkbox-container.success input[type="checkbox"]:checked + .dotbox-checkbox-label .dotbox-checkbox-box {
+    background: #22c55e;
+    border-color: #22c55e;
+}
+
+.dotbox-checkbox-container.success .dotbox-checkbox-label:hover .dotbox-checkbox-box {
+    border-color: #22c55e;
+}
+
+.dotbox-checkbox-container.success input[type="checkbox"]:checked + .dotbox-checkbox-label .dotbox-checkbox-box:before {
+    background: #22c55e;
+}
+
+.dotbox-checkbox-container.danger input[type="checkbox"]:checked + .dotbox-checkbox-label .dotbox-checkbox-box {
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+.dotbox-checkbox-container.danger .dotbox-checkbox-label:hover .dotbox-checkbox-box {
+    border-color: #ef4444;
+}
+
+.dotbox-checkbox-container.danger input[type="checkbox"]:checked + .dotbox-checkbox-label .dotbox-checkbox-box:before {
+    background: #ef4444;
+}
