@@ -309,22 +309,57 @@ function createNewComponentJSDemo(container) {
 }
 ```
 
-#### 4. Add to JSON Config
+#### 4. Create Example Files
+Create example files in the `docs/examples/` directory:
+
+**Create `docs/examples/newcomponent.wc`:**
+```html
+<dotbox-newcomponent attribute="value">Basic usage</dotbox-newcomponent>
+<dotbox-newcomponent variant="primary" size="large">With attributes</dotbox-newcomponent>
+
+<script>
+document.querySelectorAll('dotbox-newcomponent').forEach(component => {
+    component.addEventListener('dotbox-event', (e) => {
+        console.log('Event:', e.detail);
+    });
+});
+</script>
+```
+
+**Create `docs/examples/newcomponent.js`:**
+```javascript
+const component = new Dotbox.NewComponent({
+    variant: 'primary',
+    size: 'large',
+    onEvent: (data) => console.log('Event:', data)
+});
+
+const basicComponent = new Dotbox.NewComponent({
+    text: 'Basic component'
+});
+
+// Add components to the page
+document.body.appendChild(component.getElement());
+document.body.appendChild(basicComponent.getElement());
+```
+
+#### 5. Add to JSON Config
 Update `/docs/components.json` with your component:
 ```json
 {
   "id": "newcomponent",
-  "name": "New Component", 
+  "name": "New Component",
+  "category": "Appropriate Category",
   "description": "Description of your component.",
-  "codeWC": "<!-- Web Components HTML examples -->",
-  "codeJS": "<!-- JavaScript API examples -->"
+  "codeWC": "examples/newcomponent.wc",
+  "codeJS": "examples/newcomponent.js"
 }
 ```
 
-#### 5. Update README
+#### 6. Update README
 Add component to Available Components list in `README.md`
 
-#### 6. Test Everything
+#### 7. Test Everything
 ```bash
 npm run build
 npm run docs

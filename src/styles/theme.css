@@ -158,6 +158,9 @@
   --color-danger: #ef4444;
   --color-border: #e5e7eb;
   --color-border-light: #d1d5db;
+  --color-toggle-bg: #e5e7eb;
+  --color-toggle-circle: #ffffff;
+  --color-toggle-border: #d1d5db;
   --color-shadow: 0 6px 32px rgba(0,0,0,0.10);
   --font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   --h1-size: 2.4rem;
@@ -200,6 +203,9 @@
   --color-danger: #ef4444;
   --color-border: #232b3e;
   --color-border-light: #2d3340;
+  --color-toggle-bg: #2d3340;
+  --color-toggle-circle: #ffffff;
+  --color-toggle-border: #d1d5db;
   --color-shadow: 0 6px 32px rgba(0,0,0,0.22);
   --font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   --h1-size: 2.4rem;

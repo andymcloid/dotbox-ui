@@ -348,11 +348,31 @@ src/
 │   ├── main.css        # Base styles
 │   └── theme.css       # Theme variables
 └── index.js            # Main entry point
+
+docs/
+├── examples/           # Component examples (avoiding JSON escaping)
+│   ├── button.wc       # Web Components example
+│   ├── button.js       # JavaScript API example
+│   ├── textbox.wc      # Web Components example
+│   ├── textbox.js      # JavaScript API example
+│   └── ...             # All components have both .wc and .js files
+├── components.json     # Component configuration (references examples/ files)
+└── index.html         # Documentation page
 ```
 
 ## 📖 Documentation
 
 Visit our [live documentation](https://andymcloid.github.io/dotbox-ui) to see all components in action with interactive examples.
+
+### Documentation Structure
+
+All component examples are stored as external files in the `docs/examples/` directory to avoid JSON escaping issues:
+
+- **Web Components examples**: `docs/examples/componentname.wc` - Contains HTML usage examples with `<dotbox-component>` syntax
+- **JavaScript API examples**: `docs/examples/componentname.js` - Contains programmatic usage with `new Dotbox.Component()` syntax
+- **Component configuration**: `docs/components.json` - References external example files instead of inline code
+
+This structure ensures clean, maintainable examples that work properly with the documentation system.
 
 ## 🤝 Contributing
 

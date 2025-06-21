@@ -23,3 +23,17 @@ const iconOnlyBtn = new Dotbox.Button({ text: '', icon: '📁' });
 // States
 const loadingBtn = new Dotbox.Button({ text: 'Loading', loading: true });
 const disabledBtn = new Dotbox.Button({ text: 'Disabled', disabled: true });
+
+// Add all buttons to the page
+document.body.appendChild(button.getElement());
+document.body.appendChild(primaryBtn.getElement());
+document.body.appendChild(secondaryBtn.getElement());
+document.body.appendChild(successBtn.getElement());
+document.body.appendChild(dangerBtn.getElement());
+document.body.appendChild(smallBtn.getElement());
+document.body.appendChild(mediumBtn.getElement());
+document.body.appendChild(largeBtn.getElement());
+document.body.appendChild(iconBtn.getElement());
+document.body.appendChild(iconOnlyBtn.getElement());
+document.body.appendChild(loadingBtn.getElement());
+document.body.appendChild(disabledBtn.getElement());
