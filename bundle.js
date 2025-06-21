@@ -3287,14 +3287,15 @@
           this.notification = null;
         }
         connectedCallback() {
+          const mode = this.getAttribute("mode") || "static";
           const options = {
             message: this.getAttribute("message") || this.textContent || "Notification",
             variant: this.getAttribute("variant") || "success",
-            mode: this.getAttribute("mode") || "static",
+            mode,
             position: this.getAttribute("position") || "bottom-right",
             autoClose: this.getAttribute("auto-close") !== "false",
             timeout: parseInt(this.getAttribute("timeout")) || 3e3,
-            showCloseButton: this.getAttribute("show-close-button") !== null ? this.getAttribute("show-close-button") !== "false" : options.mode === "popup",
+            showCloseButton: this.getAttribute("show-close-button") !== null ? this.getAttribute("show-close-button") !== "false" : mode === "popup",
             icon: this.getAttribute("icon") || null
           };
           this.notification = new Notification(options);
