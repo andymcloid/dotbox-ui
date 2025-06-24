@@ -120,7 +120,13 @@ const Dotbox = {
 npm run build
 ```
 
-**⚠️ IMPORTANT:** Without these steps, your component will NOT be available in the documentation or for users. The build will fail silently and `Dotbox.NewComponent` will be undefined, causing "not a constructor" errors.
+**⚠️ CRITICAL:** Without these steps, your component will NOT work:
+- Web Components won't render (will display as empty custom elements in DOM)
+- JavaScript API will be undefined (`Dotbox.NewComponent` doesn't exist)
+- No styling will be applied (CSS not included in build)
+- Build may fail silently or throw "not a constructor" errors
+
+**Real Example:** ButtonV2 was created but didn't render because it was missing from both `index.js` and `index.css`. The `<dotbox-button-v2>` element appeared in DOM but had no styling or functionality.
 
 ### Component Template (Web Components + JavaScript API)
 ```javascript
@@ -310,38 +316,64 @@ function createNewComponentJSDemo(container) {
 ```
 
 #### 4. Create Example Files
-Create example files in the `docs/examples/` directory:
+Create example files in the `docs/examples/` directory. **CRITICAL:** Examples must be extremely simple, following existing patterns:
 
 **Create `docs/examples/newcomponent.wc`:**
 ```html
-<dotbox-newcomponent attribute="value">Basic usage</dotbox-newcomponent>
-<dotbox-newcomponent variant="primary" size="large">With attributes</dotbox-newcomponent>
+<dotbox-newcomponent>Default Component</dotbox-newcomponent>
 
-<script>
-document.querySelectorAll('dotbox-newcomponent').forEach(component => {
-    component.addEventListener('dotbox-event', (e) => {
-        console.log('Event:', e.detail);
-    });
-});
-</script>
+<dotbox-newcomponent variant="primary">Primary</dotbox-newcomponent>
+<dotbox-newcomponent variant="secondary">Secondary</dotbox-newcomponent>
+<dotbox-newcomponent variant="success">Success</dotbox-newcomponent>
+
+<dotbox-newcomponent size="small">Small</dotbox-newcomponent>
+<dotbox-newcomponent size="medium">Medium</dotbox-newcomponent>
+<dotbox-newcomponent size="large">Large</dotbox-newcomponent>
+
+<dotbox-newcomponent attribute="value">With Attribute</dotbox-newcomponent>
+<dotbox-newcomponent disabled="true">Disabled</dotbox-newcomponent>
 ```
 
 **Create `docs/examples/newcomponent.js`:**
 ```javascript
+// Basic component
 const component = new Dotbox.NewComponent({
+    text: 'Click me',
     variant: 'primary',
-    size: 'large',
-    onEvent: (data) => console.log('Event:', data)
+    onClick: () => alert('Component clicked!')
 });
 
-const basicComponent = new Dotbox.NewComponent({
-    text: 'Basic component'
-});
+// Different variants
+const primaryComponent = new Dotbox.NewComponent({ text: 'Primary', variant: 'primary' });
+const secondaryComponent = new Dotbox.NewComponent({ text: 'Secondary', variant: 'secondary' });
+const successComponent = new Dotbox.NewComponent({ text: 'Success', variant: 'success' });
 
-// Add components to the page
+// Different sizes
+const smallComponent = new Dotbox.NewComponent({ text: 'Small', size: 'small' });
+const mediumComponent = new Dotbox.NewComponent({ text: 'Medium', size: 'medium' });
+const largeComponent = new Dotbox.NewComponent({ text: 'Large', size: 'large' });
+
+// States
+const disabledComponent = new Dotbox.NewComponent({ text: 'Disabled', disabled: true });
+
+// Add all components to the page
 document.body.appendChild(component.getElement());
-document.body.appendChild(basicComponent.getElement());
+document.body.appendChild(primaryComponent.getElement());
+document.body.appendChild(secondaryComponent.getElement());
+document.body.appendChild(successComponent.getElement());
+document.body.appendChild(smallComponent.getElement());
+document.body.appendChild(mediumComponent.getElement());
+document.body.appendChild(largeComponent.getElement());
+document.body.appendChild(disabledComponent.getElement());
 ```
+
+**IMPORTANT EXAMPLE RULES:**
+- Keep examples extremely simple - just basic usage patterns
+- Follow existing examples exactly (see `button.wc` and `button.js`)
+- No complex layouts, styling, or explanatory text
+- No custom CSS or HTML structure
+- Just show component variants, sizes, and states
+- Web component examples: Simple tags with attributes only
 
 #### 5. Add to JSON Config
 Update `/docs/components.json` with your component:
@@ -458,6 +490,38 @@ When reporting bugs or requesting features:
 - 💬 [GitHub Discussions](https://github.com/andymcloid/dotbox-ui/discussions)
 - 🐛 [Issue Tracker](https://github.com/andymcloid/dotbox-ui/issues)
 - 📖 [Documentation](https://andymcloid.github.io/dotbox-ui)
+
+## 🔄 For AI Assistants: Project Knowledge Persistence
+
+When working with this project after a restart, always:
+
+1. **Read CONTRIBUTING.md first** - Contains all architecture rules and examples
+2. **Study existing examples** - Look at `docs/examples/button.wc` and `docs/examples/button.js` for proper formatting
+3. **Check components.json** - Shows how components are indexed
+4. **Key files to understand project structure:**
+   - `CONTRIBUTING.md` (this file) - Complete project rules
+   - `src/index.js` - Component exports and build integration  
+   - `src/index.css` - CSS imports for build system
+   - `docs/components.json` - Documentation index
+   - `docs/examples/button.*` - Example formatting patterns
+
+**Critical Rules to Remember:**
+- Examples must be extremely simple (follow button.wc/button.js exactly)
+- No complex HTML, CSS, or explanatory content in examples
+- All components need dual API (Web Components + JavaScript)
+- Use CSS variables only, never hardcoded values
+- **MANDATORY:** Components must be added to index.js, index.css, and components.json
+- **ALWAYS run `npm run build` after integration** to verify components work
+- **Test both Web Component and JavaScript API** in documentation
+
+**Integration Checklist (Use This Every Time):**
+- [ ] Component files created in `src/components/ComponentName/`
+- [ ] Import added to `src/index.js`
+- [ ] Export added to `src/index.js` Dotbox object
+- [ ] CSS import added to `src/index.css`
+- [ ] `npm run build` runs successfully
+- [ ] Component appears and functions in documentation
+- [ ] Both `<dotbox-component>` and `new Dotbox.Component()` work
 
 ---
 

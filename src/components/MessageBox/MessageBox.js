@@ -251,31 +251,71 @@ class MessageBox {
     }
 
     static confirm(title, message, onConfirm, onCancel) {
-        return new MessageBox({
+        return new Promise((resolve, reject) => {
+            const messageBox = new MessageBox({
+                title,
+                message,
+                variant: 'primary',
+                buttons: [
+                    {
+                        id: 'cancel',
+                        text: 'Cancel',
+                        variant: 'secondary',
+                        onClick: (messageBox) => {
+                            if (onCancel) onCancel();
+                            messageBox.close();
+                            resolve(false);
+                        }
+                    },
+                    {
+                        id: 'confirm',
+                        text: 'Confirm',
+                        variant: 'primary',
+                        onClick: (messageBox) => {
+                            if (onConfirm) onConfirm();
+                            messageBox.close();
+                            resolve(true);
+                        }
+                    }
+                ]
+            });
+            
+            // Add to body and show
+            document.body.appendChild(messageBox.getElement());
+            messageBox.show();
+        });
+    }
+
+    static error(title, message, buttons = []) {
+        const defaultButtons = buttons.length > 0 ? buttons : [
+            {
+                id: 'ok',
+                text: 'OK',
+                variant: 'danger',
+                onClick: (messageBox) => messageBox.close()
+            }
+        ];
+        
+        const messageBox = new MessageBox({
             title,
             message,
-            variant: 'primary',
-            buttons: [
-                {
-                    id: 'cancel',
-                    text: 'Cancel',
-                    variant: 'secondary',
-                    onClick: (messageBox) => {
-                        if (onCancel) onCancel();
-                        messageBox.close();
-                    }
-                },
-                {
-                    id: 'confirm',
-                    text: 'Confirm',
-                    variant: 'primary',
-                    onClick: (messageBox) => {
-                        if (onConfirm) onConfirm();
-                        messageBox.close();
-                    }
-                }
-            ]
+            variant: 'danger',
+            buttons: defaultButtons
         });
+        
+        // Add to body and show
+        document.body.appendChild(messageBox.getElement());
+        messageBox.show();
+        return messageBox;
+    }
+
+    static show(options = {}) {
+        const messageBox = new MessageBox(options);
+        
+        // Add to body and show
+        document.body.appendChild(messageBox.getElement());
+        messageBox.show();
+        return messageBox;
     }
 }
 
