@@ -196,6 +196,2283 @@
     }
   });
 
+  // src/components/Checkbox/Checkbox.js
+  var require_Checkbox = __commonJS({
+    "src/components/Checkbox/Checkbox.js"(exports, module) {
+      var Checkbox = class {
+        constructor(options = {}) {
+          this.options = {
+            label: "Checkbox",
+            checked: false,
+            disabled: false,
+            size: "medium",
+            // small, medium, large
+            variant: "primary",
+            // primary, success, danger
+            name: "",
+            value: "",
+            id: "",
+            className: "",
+            onChange: null,
+            ...options
+          };
+          this.element = null;
+          this.input = null;
+          this.uniqueId = this.options.id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
+          this.createElement();
+          this.bindEvents();
+        }
+        createElement() {
+          this.element = document.createElement("div");
+          this.element.className = this.getClasses();
+          this.input = document.createElement("input");
+          this.input.type = "checkbox";
+          this.input.id = this.uniqueId;
+          this.input.checked = this.options.checked;
+          this.input.disabled = this.options.disabled;
+          if (this.options.name) {
+            this.input.name = this.options.name;
+          }
+          if (this.options.value) {
+            this.input.value = this.options.value;
+          }
+          const label = document.createElement("label");
+          label.htmlFor = this.uniqueId;
+          label.className = "dotbox-checkbox-label";
+          const checkboxBox = document.createElement("span");
+          checkboxBox.className = "dotbox-checkbox-box";
+          checkboxBox.innerHTML = `
+            <svg viewBox="0 0 12 10" height="10px" width="12px">
+                <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+            </svg>
+        `;
+          const textSpan = document.createElement("span");
+          textSpan.className = "dotbox-checkbox-text";
+          textSpan.textContent = this.options.label;
+          label.appendChild(checkboxBox);
+          label.appendChild(textSpan);
+          this.element.appendChild(this.input);
+          this.element.appendChild(label);
+          return this.element;
+        }
+        getClasses() {
+          let classes = ["dotbox-checkbox-container"];
+          classes.push(this.options.size);
+          classes.push(this.options.variant);
+          if (this.options.className) {
+            classes.push(this.options.className);
+          }
+          return classes.join(" ");
+        }
+        bindEvents() {
+          if (this.options.onChange) {
+            this.input.addEventListener("change", (e) => {
+              this.options.checked = e.target.checked;
+              this.options.onChange(e);
+            });
+          }
+        }
+        // Public methods
+        setChecked(checked) {
+          this.options.checked = checked;
+          this.input.checked = checked;
+          return this;
+        }
+        getChecked() {
+          return this.input.checked;
+        }
+        setDisabled(disabled) {
+          this.options.disabled = disabled;
+          this.input.disabled = disabled;
+          this.element.className = this.getClasses();
+          return this;
+        }
+        setLabel(label) {
+          this.options.label = label;
+          const textSpan = this.element.querySelector(".dotbox-checkbox-text");
+          if (textSpan) {
+            textSpan.textContent = label;
+          }
+          return this;
+        }
+        setSize(size) {
+          this.options.size = size;
+          this.element.className = this.getClasses();
+          return this;
+        }
+        setVariant(variant) {
+          this.options.variant = variant;
+          this.element.className = this.getClasses();
+          return this;
+        }
+        focus() {
+          this.input.focus();
+          return this;
+        }
+        // Get the DOM elements
+        getElement() {
+          return this.element;
+        }
+        getInput() {
+          return this.input;
+        }
+        // Destroy checkbox
+        destroy() {
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          this.element = null;
+          this.input = null;
+        }
+      };
+      var DotboxCheckboxElement = class extends HTMLElement {
+        constructor() {
+          super();
+          this.checkboxInstance = null;
+        }
+        connectedCallback() {
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["label", "checked", "disabled", "size", "variant", "name", "value"];
+        }
+        attributeChangedCallback() {
+          if (this.checkboxInstance) {
+            this.render();
+          }
+        }
+        render() {
+          const label = this.getAttribute("label") || this.textContent.trim() || "Checkbox";
+          const checked = this.hasAttribute("checked");
+          const disabled = this.hasAttribute("disabled");
+          const size = this.getAttribute("size") || "medium";
+          const variant = this.getAttribute("variant") || "primary";
+          const name = this.getAttribute("name") || "";
+          const value = this.getAttribute("value") || "";
+          if (this.checkboxInstance) {
+            this.innerHTML = "";
+          }
+          this.checkboxInstance = new Checkbox({
+            label,
+            checked,
+            disabled,
+            size,
+            variant,
+            name,
+            value,
+            onChange: (e) => {
+              if (e.target.checked) {
+                this.setAttribute("checked", "");
+              } else {
+                this.removeAttribute("checked");
+              }
+              this.dispatchEvent(new CustomEvent("dotbox-change", {
+                detail: {
+                  checked: e.target.checked,
+                  value: e.target.value || value,
+                  name
+                },
+                bubbles: true
+              }));
+            }
+          });
+          this.innerHTML = "";
+          this.appendChild(this.checkboxInstance.getElement());
+        }
+        // Expose checkbox methods
+        setChecked(checked) {
+          if (checked) {
+            this.setAttribute("checked", "");
+          } else {
+            this.removeAttribute("checked");
+          }
+          return this;
+        }
+        getChecked() {
+          return this.checkboxInstance ? this.checkboxInstance.getChecked() : false;
+        }
+        setDisabled(disabled) {
+          if (disabled) {
+            this.setAttribute("disabled", "");
+          } else {
+            this.removeAttribute("disabled");
+          }
+          return this;
+        }
+        setLabel(label) {
+          this.setAttribute("label", label);
+          return this;
+        }
+        focus() {
+          if (this.checkboxInstance) {
+            this.checkboxInstance.focus();
+          }
+          return this;
+        }
+      };
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-checkbox", DotboxCheckboxElement);
+      }
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = Checkbox;
+      }
+    }
+  });
+
+  // src/components/CodeBlock/JSFiddle.js
+  var require_JSFiddle = __commonJS({
+    "src/components/CodeBlock/JSFiddle.js"(exports, module) {
+      var JSFiddle = class {
+        constructor(options = {}) {
+          this.prerender = options.prerender || null;
+          this.defaultTitle = options.defaultTitle || "Code Demo";
+          this.defaultDescription = options.defaultDescription || "Interactive code demo";
+        }
+        /**
+         * Generate basic HTML content (just the code by default)
+         * @param {string} code - The code to include
+         * @param {object} options - Generation options
+         */
+        generateHTML(code, options = {}) {
+          const { title = this.defaultTitle } = options;
+          return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+</head>
+<body>
+    ${code}
+</body>
+</html>`;
+        }
+        /**
+         * Generate basic CSS content (empty by default)
+         * @param {object} options - CSS generation options
+         */
+        generateCSS(options = {}) {
+          const { additionalCSS = "" } = options;
+          return `body {
+    font-family: Arial, sans-serif;
+    margin: 1rem;
+    padding: 0;
+}
+
+${additionalCSS}`;
+        }
+        /**
+         * Generate basic JavaScript content (empty by default)
+         * @param {string} code - JavaScript code if needed
+         * @param {object} options - JS generation options
+         */
+        generateJS(code = "", options = {}) {
+          const { additionalJS = "" } = options;
+          return `${code}
+
+${additionalJS}`;
+        }
+        /**
+         * Open code in JSFiddle
+         * @param {string} code - The code to demonstrate
+         * @param {object} options - JSFiddle options
+         */
+        openInJSFiddle(code, options = {}) {
+          const {
+            title = this.defaultTitle,
+            description = this.defaultDescription,
+            language = "html",
+            // 'html', 'css', 'js'
+            additionalCSS = "",
+            additionalJS = "",
+            resources = ""
+          } = options;
+          let htmlContent, cssContent, jsContent;
+          if (this.prerender) {
+            const prerendered = this.prerender(code, options);
+            htmlContent = prerendered.html || this.generateHTML(code, options);
+            cssContent = prerendered.css || this.generateCSS({ additionalCSS });
+            jsContent = prerendered.js || this.generateJS(additionalJS, options);
+          } else {
+            if (language === "html") {
+              htmlContent = this.generateHTML(code, options);
+              cssContent = this.generateCSS({ additionalCSS });
+              jsContent = this.generateJS(additionalJS, options);
+            } else if (language === "css") {
+              htmlContent = this.generateHTML("<div>CSS Demo</div>", options);
+              cssContent = this.generateCSS({ additionalCSS: code + "\n" + additionalCSS });
+              jsContent = this.generateJS(additionalJS, options);
+            } else if (language === "js" || language === "javascript") {
+              htmlContent = this.generateHTML('<div id="demo">JavaScript Demo</div>', options);
+              cssContent = this.generateCSS({ additionalCSS });
+              jsContent = this.generateJS(code + "\n" + additionalJS, options);
+            } else {
+              htmlContent = this.generateHTML(code, options);
+              cssContent = this.generateCSS({ additionalCSS });
+              jsContent = this.generateJS(additionalJS, options);
+            }
+          }
+          this.submitToJSFiddle({
+            title,
+            description,
+            html: htmlContent,
+            css: cssContent,
+            js: jsContent,
+            resources
+          });
+        }
+        /**
+         * Submit data to JSFiddle API (generic implementation)
+         * @param {object} data - JSFiddle submission data
+         */
+        submitToJSFiddle(data) {
+          const { title, description, html, css, js, resources = "" } = data;
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = "https://jsfiddle.net/api/post/library/pure/";
+          form.target = "_blank";
+          form.style.display = "none";
+          const fields = {
+            title,
+            description,
+            html,
+            css,
+            js,
+            wrap: "l"
+            // No wrap
+          };
+          if (resources) {
+            fields.resources = resources;
+          }
+          Object.entries(fields).forEach(([name, value]) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = name;
+            input.value = value;
+            form.appendChild(input);
+          });
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
+          console.log("Opening JSFiddle with:", { title, description });
+        }
+        /**
+         * Create JSFiddle button for CodeBlock toolbar
+         * @param {string} code - The code to demonstrate
+         * @param {object} options - Button options
+         */
+        createButton(code, options = {}) {
+          const {
+            text = "\u{1F680} Try in JSFiddle",
+            variant = "secondary",
+            size = "small",
+            buttonClass = "jsfiddle-button",
+            ...jsfiddleOptions
+          } = options;
+          const button = document.createElement("button");
+          button.className = buttonClass;
+          button.textContent = text;
+          button.style.cssText = `
+            padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            background: #f8f9fa;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
+        `;
+          button.addEventListener("mouseenter", () => {
+            button.style.background = "#e9ecef";
+            button.style.borderColor = "#007bff";
+          });
+          button.addEventListener("mouseleave", () => {
+            button.style.background = "#f8f9fa";
+            button.style.borderColor = "#ccc";
+          });
+          button.addEventListener("click", () => {
+            this.openInJSFiddle(code, jsfiddleOptions);
+          });
+          return button;
+        }
+        /**
+         * Set a custom prerender function
+         * @param {Function} prerenderFunc - Function that takes (code, options) and returns {html, css, js}
+         */
+        setPrerender(prerenderFunc) {
+          this.prerender = prerenderFunc;
+          return this;
+        }
+      };
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = JSFiddle;
+      }
+      if (typeof window !== "undefined") {
+        window.JSFiddle = JSFiddle;
+      }
+    }
+  });
+
+  // src/components/CodeBlock/CodeBlock.js
+  var require_CodeBlock = __commonJS({
+    "src/components/CodeBlock/CodeBlock.js"(exports, module) {
+      var JSFiddle = require_JSFiddle();
+      var CodeBlock = class {
+        constructor(options = {}) {
+          this.id = options.id || `codeblock-${Math.random().toString(36).substr(2, 9)}`;
+          this.language = options.language || "javascript";
+          this.code = options.code || "";
+          this.preview = options.preview !== false;
+          this.expandable = options.expandable !== false;
+          this.fiddle = options.fiddle !== false;
+          this.previewType = options.previewType || "auto";
+          this.title = options.title || "";
+          this.expanded = false;
+          this.originalHeight = "300px";
+          this.expandedHeight = "450px";
+          this.element = null;
+          this.previewContainer = null;
+          this.codeContainer = null;
+          this.toolbar = null;
+          this.jsfiddle = options.jsfiddle || new JSFiddle();
+          this._loadPrism(() => {
+            this.element = this._render();
+            if (this.preview) {
+              this._updatePreview();
+            }
+          });
+        }
+        _loadPrism(cb) {
+          if (window.Prism) return cb();
+          const css = document.createElement("link");
+          css.rel = "stylesheet";
+          css.href = "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css";
+          document.head.appendChild(css);
+          const script = document.createElement("script");
+          script.src = "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js";
+          script.onload = cb;
+          document.head.appendChild(script);
+        }
+        _render() {
+          const container = document.createElement("div");
+          container.className = "dotbox-codeblock-container";
+          container.id = this.id;
+          if (this.preview) {
+            this.previewContainer = this._createPreviewPane();
+            container.appendChild(this.previewContainer);
+          }
+          if (this.expandable || this.fiddle) {
+            this.toolbar = this._createToolbar();
+            container.appendChild(this.toolbar);
+          }
+          this.codeContainer = this._createCodeBlock();
+          container.appendChild(this.codeContainer);
+          return container;
+        }
+        _createToolbar() {
+          const toolbar = document.createElement("div");
+          toolbar.className = "dotbox-codeblock-toolbar";
+          if (this.title) {
+            const title = document.createElement("span");
+            title.className = "dotbox-codeblock-title";
+            title.textContent = this.title;
+            toolbar.appendChild(title);
+          }
+          const spacer = document.createElement("div");
+          spacer.className = "dotbox-codeblock-spacer";
+          toolbar.appendChild(spacer);
+          if (this.expandable) {
+            const expandBtn = document.createElement("dotbox-button");
+            expandBtn.setAttribute("variant", "secondary");
+            expandBtn.setAttribute("size", "small");
+            expandBtn.textContent = this.expanded ? "\u{1F4C9} Collapse" : "\u{1F4C8} Expand";
+            expandBtn.addEventListener("click", () => this._toggleExpand());
+            toolbar.appendChild(expandBtn);
+            this.expandButton = expandBtn;
+          }
+          if (this.fiddle) {
+            const fiddleBtn = document.createElement("dotbox-button");
+            fiddleBtn.setAttribute("variant", "secondary");
+            fiddleBtn.setAttribute("size", "small");
+            fiddleBtn.textContent = "\u{1F680} Try in JSFiddle";
+            fiddleBtn.addEventListener("click", () => {
+              this.jsfiddle.openInJSFiddle(this.code, {
+                language: this.language,
+                title: this.title || "Code Demo"
+              });
+            });
+            toolbar.appendChild(fiddleBtn);
+          }
+          return toolbar;
+        }
+        _createPreviewPane() {
+          const container = document.createElement("div");
+          container.className = "dotbox-codeblock-preview";
+          const header = document.createElement("div");
+          header.className = "dotbox-codeblock-preview-header";
+          header.innerHTML = `
+            <span class="dotbox-codeblock-preview-title">Preview</span>
+            <button class="dotbox-codeblock-refresh-btn" onclick="this.parentNode.parentNode.querySelector('.dotbox-codeblock').dispatchEvent(new CustomEvent('refresh'))">\u{1F504}</button>
+        `;
+          const content = document.createElement("div");
+          content.className = "dotbox-codeblock-preview-content";
+          content.id = `${this.id}-preview`;
+          container.appendChild(header);
+          container.appendChild(content);
+          return container;
+        }
+        _createCodeBlock() {
+          const container = document.createElement("div");
+          container.className = "dotbox-codeblock-wrapper";
+          const pre = document.createElement("pre");
+          pre.className = "dotbox-codeblock";
+          pre.style.height = this.originalHeight;
+          const code = document.createElement("code");
+          code.className = `language-${this.language}`;
+          code.contentEditable = this.preview;
+          code.textContent = this.code;
+          if (this.preview) {
+            code.addEventListener("input", () => {
+              this.code = code.textContent;
+              this._updatePreview();
+            });
+            pre.addEventListener("refresh", () => {
+              this._updatePreview();
+            });
+          }
+          pre.appendChild(code);
+          container.appendChild(pre);
+          if (window.Prism) window.Prism.highlightElement(code);
+          return container;
+        }
+        _getPreviewType() {
+          if (this.previewType !== "auto") {
+            return this.previewType;
+          }
+          if (this.language === "html" || this.code.includes("<") || this.code.includes("dotbox-")) {
+            return "html";
+          } else if (this.language === "javascript" || this.code.includes("new ") || this.code.includes("Dotbox.")) {
+            return "javascript";
+          }
+          return "html";
+        }
+        _updatePreview() {
+          if (!this.previewContainer) return;
+          const content = this.previewContainer.querySelector(".dotbox-codeblock-preview-content");
+          const type = this._getPreviewType();
+          try {
+            if (type === "html") {
+              content.innerHTML = this.code;
+            } else if (type === "javascript") {
+              content.innerHTML = '<div id="js-demo"></div>';
+              setTimeout(() => {
+                try {
+                  const func = new Function("container", `
+                            const Dotbox = window.Dotbox;
+                            ${this.code}
+                        `);
+                  func(content.querySelector("#js-demo"));
+                } catch (error) {
+                  console.error("Preview execution error:", error);
+                  content.innerHTML = `<div style="color: red; padding: 1rem;">Error: ${error.message}</div>`;
+                }
+              }, 100);
+            }
+          } catch (error) {
+            console.error("Preview error:", error);
+            content.innerHTML = `<div style="color: red; padding: 1rem;">Preview Error: ${error.message}</div>`;
+          }
+        }
+        _toggleExpand() {
+          this.expanded = !this.expanded;
+          const codeBlock = this.codeContainer.querySelector(".dotbox-codeblock");
+          if (this.expanded) {
+            codeBlock.style.height = this.expandedHeight;
+            this.expandButton.textContent = "\u{1F4C9} Collapse";
+          } else {
+            codeBlock.style.height = this.originalHeight;
+            this.expandButton.textContent = "\u{1F4C8} Expand";
+          }
+        }
+        // Public methods
+        setCode(code) {
+          this.code = code;
+          const codeElement = this.element.querySelector("code");
+          if (codeElement) {
+            codeElement.textContent = code;
+            if (window.Prism) window.Prism.highlightElement(codeElement);
+          }
+          if (this.preview) {
+            this._updatePreview();
+          }
+          return this;
+        }
+        setLanguage(language) {
+          this.language = language;
+          const codeElement = this.element.querySelector("code");
+          if (codeElement) {
+            codeElement.className = `language-${language}`;
+            if (window.Prism) window.Prism.highlightElement(codeElement);
+          }
+          return this;
+        }
+        togglePreview() {
+          if (this.previewContainer) {
+            this.previewContainer.style.display = this.previewContainer.style.display === "none" ? "block" : "none";
+          }
+          return this;
+        }
+        getElement() {
+          if (!this.element) this.element = this._render();
+          return this.element;
+        }
+      };
+      var DotboxCodeBlockElement = class extends HTMLElement {
+        constructor() {
+          super();
+          this.codeBlockInstance = null;
+        }
+        connectedCallback() {
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["language", "code", "preview", "expandable", "fiddle", "preview-type", "title"];
+        }
+        attributeChangedCallback() {
+          if (this.codeBlockInstance) {
+            this.render();
+          }
+        }
+        render() {
+          const language = this.getAttribute("language") || "javascript";
+          const code = this.getAttribute("code") || this.textContent.trim() || "";
+          const preview = this.getAttribute("preview") !== "false";
+          const expandable = this.getAttribute("expandable") !== "false";
+          const fiddle = this.getAttribute("fiddle") !== "false";
+          const previewType = this.getAttribute("preview-type") || "auto";
+          const title = this.getAttribute("title") || "";
+          if (this.codeBlockInstance) {
+            this.innerHTML = "";
+          }
+          this.codeBlockInstance = new CodeBlock({
+            language,
+            code,
+            preview,
+            expandable,
+            fiddle,
+            previewType,
+            title
+          });
+          this.innerHTML = "";
+          this.appendChild(this.codeBlockInstance.getElement());
+        }
+        // Expose codeblock methods
+        setCode(code) {
+          this.setAttribute("code", code);
+          return this;
+        }
+        setLanguage(language) {
+          this.setAttribute("language", language);
+          return this;
+        }
+        togglePreview() {
+          if (this.codeBlockInstance) {
+            this.codeBlockInstance.togglePreview();
+          }
+          return this;
+        }
+      };
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-code-block", DotboxCodeBlockElement);
+      }
+      if (typeof window !== "undefined") {
+        window.Dotbox = window.Dotbox || {};
+        window.Dotbox.CodeBlock = CodeBlock;
+      }
+      module.exports = CodeBlock;
+    }
+  });
+
+  // src/components/Dropdown/Dropdown.js
+  var require_Dropdown = __commonJS({
+    "src/components/Dropdown/Dropdown.js"(exports, module) {
+      var Dropdown = class {
+        constructor(options = {}) {
+          this.options = {
+            label: "",
+            placeholder: "Select an option...",
+            allowNull: true,
+            // Allow placeholder/null selection
+            options: [],
+            // Array of {value, label, disabled} objects
+            value: "",
+            disabled: false,
+            required: false,
+            helpText: "",
+            error: false,
+            success: false,
+            size: "medium",
+            // small, medium, large
+            onChange: null,
+            onFocus: null,
+            onBlur: null,
+            ...options
+          };
+          this.container = null;
+          this.selectElement = null;
+          this.labelElement = null;
+          this.helpTextElement = null;
+          this.createElement();
+          this.bindEvents();
+        }
+        createElement() {
+          this.container = document.createElement("div");
+          this.container.className = this.getContainerClasses();
+          if (this.options.label) {
+            this.labelElement = document.createElement("label");
+            this.labelElement.className = "dropdown-label";
+            this.labelElement.textContent = this.options.label;
+            if (this.options.required) {
+              this.labelElement.textContent += " *";
+            }
+            this.container.appendChild(this.labelElement);
+          }
+          const wrapper = document.createElement("div");
+          wrapper.className = "dropdown-wrapper";
+          this.selectElement = document.createElement("select");
+          this.selectElement.className = "dropdown-select";
+          this.selectElement.disabled = this.options.disabled;
+          if (this.options.required) {
+            this.selectElement.required = true;
+          }
+          if (this.options.allowNull && this.options.placeholder) {
+            const placeholderOption = document.createElement("option");
+            placeholderOption.value = "";
+            placeholderOption.textContent = this.options.placeholder;
+            placeholderOption.disabled = true;
+            placeholderOption.selected = !this.options.value;
+            this.selectElement.appendChild(placeholderOption);
+          }
+          this.updateOptions();
+          const arrow = document.createElement("span");
+          arrow.className = "dropdown-arrow";
+          arrow.innerHTML = "\u25BC";
+          wrapper.appendChild(this.selectElement);
+          wrapper.appendChild(arrow);
+          this.container.appendChild(wrapper);
+          if (this.options.helpText) {
+            this.helpTextElement = document.createElement("div");
+            this.helpTextElement.className = "dropdown-help-text";
+            this.helpTextElement.textContent = this.options.helpText;
+            this.container.appendChild(this.helpTextElement);
+          }
+          return this.container;
+        }
+        getContainerClasses() {
+          let classes = ["dropdown-container"];
+          if (this.options.size !== "medium") {
+            classes.push(`dropdown-${this.options.size}`);
+          }
+          if (this.options.error) {
+            classes.push("dropdown-error");
+          } else if (this.options.success) {
+            classes.push("dropdown-success");
+          }
+          return classes.join(" ");
+        }
+        updateOptions() {
+          const placeholder = this.selectElement.querySelector('option[value=""]');
+          this.selectElement.innerHTML = "";
+          if (placeholder) {
+            this.selectElement.appendChild(placeholder);
+          }
+          this.options.options.forEach((optionData) => {
+            const option = document.createElement("option");
+            option.value = optionData.value || optionData.label;
+            option.textContent = optionData.label;
+            option.disabled = optionData.disabled || false;
+            if (this.options.value === option.value) {
+              option.selected = true;
+            }
+            this.selectElement.appendChild(option);
+          });
+        }
+        bindEvents() {
+          if (this.selectElement) {
+            this.selectElement.addEventListener("change", (e) => {
+              this.options.value = e.target.value;
+              if (this.options.onChange) {
+                this.options.onChange(e);
+              }
+            });
+            this.selectElement.addEventListener("focus", (e) => {
+              if (this.options.onFocus) {
+                this.options.onFocus(e);
+              }
+            });
+            this.selectElement.addEventListener("blur", (e) => {
+              if (this.options.onBlur) {
+                this.options.onBlur(e);
+              }
+            });
+          }
+        }
+        // Public methods
+        getValue() {
+          return this.selectElement ? this.selectElement.value : this.options.value;
+        }
+        setValue(value) {
+          this.options.value = value;
+          if (this.selectElement) {
+            this.selectElement.value = value;
+          }
+          return this;
+        }
+        setOptions(options) {
+          this.options.options = options;
+          if (this.selectElement) {
+            this.updateOptions();
+          }
+          return this;
+        }
+        addOption(option) {
+          this.options.options.push(option);
+          if (this.selectElement) {
+            this.updateOptions();
+          }
+          return this;
+        }
+        removeOption(value) {
+          this.options.options = this.options.options.filter(
+            (opt) => (opt.value || opt.label) !== value
+          );
+          if (this.selectElement) {
+            this.updateOptions();
+          }
+          return this;
+        }
+        setDisabled(disabled) {
+          this.options.disabled = disabled;
+          if (this.selectElement) {
+            this.selectElement.disabled = disabled;
+          }
+          return this;
+        }
+        setError(error, helpText = null) {
+          this.options.error = error;
+          this.options.success = false;
+          if (helpText !== null) {
+            this.setHelpText(helpText);
+          }
+          if (this.container) {
+            this.container.className = this.getContainerClasses();
+          }
+          return this;
+        }
+        setSuccess(success, helpText = null) {
+          this.options.success = success;
+          this.options.error = false;
+          if (helpText !== null) {
+            this.setHelpText(helpText);
+          }
+          if (this.container) {
+            this.container.className = this.getContainerClasses();
+          }
+          return this;
+        }
+        setHelpText(helpText) {
+          this.options.helpText = helpText;
+          if (this.helpTextElement) {
+            this.helpTextElement.textContent = helpText;
+          } else if (helpText && this.container) {
+            this.helpTextElement = document.createElement("div");
+            this.helpTextElement.className = "dropdown-help-text";
+            this.helpTextElement.textContent = helpText;
+            this.container.appendChild(this.helpTextElement);
+          }
+          return this;
+        }
+        focus() {
+          if (this.selectElement) {
+            this.selectElement.focus();
+          }
+          return this;
+        }
+        getElement() {
+          return this.selectElement;
+        }
+        getContainer() {
+          return this.container;
+        }
+        destroy() {
+          if (this.container && this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
+          }
+          this.container = null;
+          this.selectElement = null;
+          this.labelElement = null;
+          this.helpTextElement = null;
+        }
+      };
+      var DotboxDropdownElement = class extends HTMLElement {
+        constructor() {
+          super();
+          this.dropdownInstance = null;
+        }
+        connectedCallback() {
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["label", "placeholder", "value", "disabled", "required", "help-text", "error", "success", "size", "options", "allow-null"];
+        }
+        attributeChangedCallback() {
+          if (this.dropdownInstance) {
+            this.render();
+          }
+        }
+        render() {
+          const label = this.getAttribute("label") || "";
+          const placeholder = this.getAttribute("placeholder") || "Select an option...";
+          const allowNull = this.hasAttribute("allow-null") || !this.hasAttribute("allow-null");
+          const value = this.getAttribute("value") || "";
+          const disabled = this.hasAttribute("disabled");
+          const required = this.hasAttribute("required");
+          const helpText = this.getAttribute("help-text") || "";
+          const error = this.hasAttribute("error");
+          const success = this.hasAttribute("success");
+          const size = this.getAttribute("size") || "medium";
+          let options = [];
+          const optionsAttr = this.getAttribute("options");
+          if (optionsAttr) {
+            try {
+              options = JSON.parse(optionsAttr);
+            } catch (e) {
+              console.warn("Invalid JSON in options attribute:", e);
+            }
+          }
+          if (options.length === 0) {
+            const optionElements = this.querySelectorAll("option");
+            options = Array.from(optionElements).map((opt) => ({
+              value: opt.value,
+              label: opt.textContent,
+              disabled: opt.disabled
+            }));
+          }
+          if (this.dropdownInstance) {
+            this.innerHTML = "";
+          }
+          this.dropdownInstance = new Dropdown({
+            label,
+            placeholder,
+            allowNull,
+            options,
+            value,
+            disabled,
+            required,
+            helpText,
+            error,
+            success,
+            size,
+            onChange: (e) => {
+              this.setAttribute("value", e.target.value);
+              this.dispatchEvent(new CustomEvent("dotbox-change", {
+                detail: {
+                  value: e.target.value,
+                  selectedOption: options.find((opt) => (opt.value || opt.label) === e.target.value)
+                },
+                bubbles: true
+              }));
+            },
+            onFocus: (e) => {
+              this.dispatchEvent(new CustomEvent("dotbox-focus", {
+                detail: { value: e.target.value },
+                bubbles: true
+              }));
+            },
+            onBlur: (e) => {
+              this.dispatchEvent(new CustomEvent("dotbox-blur", {
+                detail: { value: e.target.value },
+                bubbles: true
+              }));
+            }
+          });
+          this.innerHTML = "";
+          this.appendChild(this.dropdownInstance.getContainer());
+        }
+        // Expose dropdown methods
+        getValue() {
+          return this.dropdownInstance ? this.dropdownInstance.getValue() : this.getAttribute("value") || "";
+        }
+        setValue(value) {
+          this.setAttribute("value", value);
+          return this;
+        }
+        setOptions(options) {
+          this.setAttribute("options", JSON.stringify(options));
+          return this;
+        }
+        addOption(option) {
+          if (this.dropdownInstance) {
+            this.dropdownInstance.addOption(option);
+            const currentOptions = this.dropdownInstance.options.options;
+            this.setAttribute("options", JSON.stringify(currentOptions));
+          }
+          return this;
+        }
+        removeOption(value) {
+          if (this.dropdownInstance) {
+            this.dropdownInstance.removeOption(value);
+            const currentOptions = this.dropdownInstance.options.options;
+            this.setAttribute("options", JSON.stringify(currentOptions));
+          }
+          return this;
+        }
+        setDisabled(disabled) {
+          if (disabled) {
+            this.setAttribute("disabled", "");
+          } else {
+            this.removeAttribute("disabled");
+          }
+          return this;
+        }
+        setError(error, helpText = null) {
+          if (error) {
+            this.setAttribute("error", "");
+            this.removeAttribute("success");
+          } else {
+            this.removeAttribute("error");
+          }
+          if (helpText !== null) {
+            this.setAttribute("help-text", helpText);
+          }
+          return this;
+        }
+        setSuccess(success, helpText = null) {
+          if (success) {
+            this.setAttribute("success", "");
+            this.removeAttribute("error");
+          } else {
+            this.removeAttribute("success");
+          }
+          if (helpText !== null) {
+            this.setAttribute("help-text", helpText);
+          }
+          return this;
+        }
+        focus() {
+          if (this.dropdownInstance) {
+            this.dropdownInstance.focus();
+          }
+          return this;
+        }
+      };
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-dropdown", DotboxDropdownElement);
+      }
+      if (typeof window !== "undefined") {
+        window.Dotbox = window.Dotbox || {};
+        window.Dotbox.Dropdown = Dropdown;
+      }
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = Dropdown;
+      }
+    }
+  });
+
+  // src/components/Form/Form.js
+  var require_Form = __commonJS({
+    "src/components/Form/Form.js"(exports, module) {
+      var Form = class {
+        constructor(options = {}) {
+          this.options = {
+            layout: "vertical",
+            // vertical, horizontal, grid
+            gap: "medium",
+            // small, medium, large
+            columns: 2,
+            // for grid layout
+            submitButton: null,
+            cancelButton: null,
+            className: "",
+            onSubmit: null,
+            onReset: null,
+            ...options
+          };
+          this.element = null;
+          this.formElement = null;
+          this.fieldsContainer = null;
+          this.buttonsContainer = null;
+          this.uniqueId = this.options.id || `form-${Math.random().toString(36).substr(2, 9)}`;
+          this.createElement();
+          this.bindEvents();
+        }
+        createElement() {
+          this.element = document.createElement("div");
+          this.element.className = this.getClasses();
+          this.element.id = this.uniqueId;
+          this.formElement = document.createElement("form");
+          this.formElement.className = "dotbox-form-element";
+          this.fieldsContainer = document.createElement("div");
+          this.fieldsContainer.className = "dotbox-form-fields";
+          this.formElement.appendChild(this.fieldsContainer);
+          this.buttonsContainer = document.createElement("div");
+          this.buttonsContainer.className = "dotbox-form-buttons";
+          this.formElement.appendChild(this.buttonsContainer);
+          this.element.appendChild(this.formElement);
+          if (this.options.submitButton) {
+            this.addSubmitButton(this.options.submitButton);
+          }
+          if (this.options.cancelButton) {
+            this.addCancelButton(this.options.cancelButton);
+          }
+          return this.element;
+        }
+        getClasses() {
+          let classes = ["dotbox-form"];
+          classes.push(`dotbox-form-${this.options.layout}`);
+          classes.push(`dotbox-form-gap-${this.options.gap}`);
+          if (this.options.layout === "grid") {
+            classes.push(`dotbox-form-columns-${this.options.columns}`);
+          }
+          if (this.options.className) {
+            classes.push(this.options.className);
+          }
+          return classes.join(" ");
+        }
+        bindEvents() {
+          this.formElement.addEventListener("submit", (e) => {
+            if (this.options.onSubmit) {
+              e.preventDefault();
+              const formData = this.getFormData();
+              this.options.onSubmit(formData, e);
+            }
+          });
+          this.formElement.addEventListener("reset", (e) => {
+            if (this.options.onReset) {
+              this.options.onReset(e);
+            }
+          });
+        }
+        // Public methods
+        addField(element) {
+          if (element instanceof HTMLElement) {
+            this.fieldsContainer.appendChild(element);
+          } else if (element && element.getElement) {
+            this.fieldsContainer.appendChild(element.getElement());
+          } else if (element && element.getContainer) {
+            this.fieldsContainer.appendChild(element.getContainer());
+          }
+          return this;
+        }
+        addFields(elements) {
+          elements.forEach((element) => this.addField(element));
+          return this;
+        }
+        addSubmitButton(options = {}) {
+          const buttonOptions = {
+            text: "Submit",
+            type: "submit",
+            variant: "primary",
+            ...options
+          };
+          const button = document.createElement("button");
+          button.type = buttonOptions.type;
+          button.className = `btn btn-${buttonOptions.variant}`;
+          button.textContent = buttonOptions.text;
+          if (buttonOptions.onClick) {
+            button.addEventListener("click", buttonOptions.onClick);
+          }
+          this.buttonsContainer.appendChild(button);
+          return button;
+        }
+        addCancelButton(options = {}) {
+          const buttonOptions = {
+            text: "Cancel",
+            type: "button",
+            variant: "secondary",
+            ...options
+          };
+          const button = document.createElement("button");
+          button.type = buttonOptions.type;
+          button.className = `btn btn-${buttonOptions.variant}`;
+          button.textContent = buttonOptions.text;
+          if (buttonOptions.onClick) {
+            button.addEventListener("click", buttonOptions.onClick);
+          }
+          this.buttonsContainer.appendChild(button);
+          return button;
+        }
+        addButton(options = {}) {
+          const buttonOptions = {
+            text: "Button",
+            type: "button",
+            variant: "secondary",
+            ...options
+          };
+          const button = document.createElement("button");
+          button.type = buttonOptions.type;
+          button.className = `btn btn-${buttonOptions.variant}`;
+          button.textContent = buttonOptions.text;
+          if (buttonOptions.onClick) {
+            button.addEventListener("click", buttonOptions.onClick);
+          }
+          this.buttonsContainer.appendChild(button);
+          return button;
+        }
+        setLayout(layout) {
+          this.options.layout = layout;
+          this.element.className = this.getClasses();
+          return this;
+        }
+        setGap(gap) {
+          this.options.gap = gap;
+          this.element.className = this.getClasses();
+          return this;
+        }
+        setColumns(columns) {
+          this.options.columns = columns;
+          this.element.className = this.getClasses();
+          return this;
+        }
+        getFormData() {
+          const formData = new FormData(this.formElement);
+          const data = {};
+          for (let [key, value] of formData.entries()) {
+            if (data[key]) {
+              if (Array.isArray(data[key])) {
+                data[key].push(value);
+              } else {
+                data[key] = [data[key], value];
+              }
+            } else {
+              data[key] = value;
+            }
+          }
+          return data;
+        }
+        reset() {
+          this.formElement.reset();
+          return this;
+        }
+        // Get the DOM elements
+        getElement() {
+          return this.element;
+        }
+        getFormElement() {
+          return this.formElement;
+        }
+        getFieldsContainer() {
+          return this.fieldsContainer;
+        }
+        // Destroy form
+        destroy() {
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          this.element = null;
+          this.formElement = null;
+          this.fieldsContainer = null;
+          this.buttonsContainer = null;
+        }
+      };
+      var DotboxFormElement = class extends HTMLElement {
+        constructor() {
+          super();
+          this.formInstance = null;
+        }
+        connectedCallback() {
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["layout", "gap", "columns"];
+        }
+        attributeChangedCallback() {
+          if (this.formInstance) {
+            this.render();
+          }
+        }
+        render() {
+          const layout = this.getAttribute("layout") || "vertical";
+          const gap = this.getAttribute("gap") || "medium";
+          const columns = parseInt(this.getAttribute("columns")) || 2;
+          const content = this.innerHTML.trim();
+          if (this.formInstance) {
+            this.innerHTML = "";
+          }
+          this.formInstance = new Form({
+            layout,
+            gap,
+            columns,
+            onSubmit: (data, e) => {
+              this.dispatchEvent(new CustomEvent("dotbox-submit", {
+                detail: { data, originalEvent: e },
+                bubbles: true
+              }));
+            },
+            onReset: (e) => {
+              this.dispatchEvent(new CustomEvent("dotbox-reset", {
+                detail: { originalEvent: e },
+                bubbles: true
+              }));
+            }
+          });
+          if (content) {
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = content;
+            Array.from(tempDiv.children).forEach((child) => {
+              this.formInstance.addField(child);
+            });
+          }
+          this.innerHTML = "";
+          this.appendChild(this.formInstance.getElement());
+        }
+        // Expose form methods
+        addField(element) {
+          if (this.formInstance) {
+            this.formInstance.addField(element);
+          }
+          return this;
+        }
+        setLayout(layout) {
+          this.setAttribute("layout", layout);
+          return this;
+        }
+        getFormData() {
+          return this.formInstance ? this.formInstance.getFormData() : {};
+        }
+        reset() {
+          if (this.formInstance) {
+            this.formInstance.reset();
+          }
+          return this;
+        }
+      };
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-form", DotboxFormElement);
+      }
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = Form;
+      }
+    }
+  });
+
+  // src/components/Loader/Loader.js
+  var require_Loader = __commonJS({
+    "src/components/Loader/Loader.js"(exports, module) {
+      var Loader = class {
+        constructor(options = {}) {
+          this.options = {
+            size: "medium",
+            // small, medium, large
+            variant: "primary",
+            // primary, secondary, success, danger
+            className: "",
+            ...options
+          };
+          this.element = null;
+          this.createElement();
+        }
+        createElement() {
+          this.element = document.createElement("div");
+          this.element.className = this.getClasses();
+          this.element.innerHTML = `
+            <svg width="64px" height="48px" viewBox="0 0 64 48">
+                <polyline points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24" id="back"></polyline>
+                <polyline points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24" id="front"></polyline>
+            </svg>
+        `;
+          return this.element;
+        }
+        getClasses() {
+          let classes = ["dotbox-loader"];
+          classes.push(this.options.size);
+          classes.push(this.options.variant);
+          if (this.options.className) {
+            classes.push(this.options.className);
+          }
+          return classes.join(" ");
+        }
+        // Public methods
+        setSize(size) {
+          this.options.size = size;
+          this.element.className = this.getClasses();
+          return this;
+        }
+        setVariant(variant) {
+          this.options.variant = variant;
+          this.element.className = this.getClasses();
+          return this;
+        }
+        show() {
+          if (this.element) {
+            this.element.style.display = "inline-flex";
+          }
+          return this;
+        }
+        hide() {
+          if (this.element) {
+            this.element.style.display = "none";
+          }
+          return this;
+        }
+        // Get the DOM element
+        getElement() {
+          return this.element;
+        }
+        // Destroy loader
+        destroy() {
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          this.element = null;
+        }
+      };
+      var DotboxLoaderElement = class extends HTMLElement {
+        constructor() {
+          super();
+          this.loaderInstance = null;
+        }
+        connectedCallback() {
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["size", "variant"];
+        }
+        attributeChangedCallback() {
+          if (this.loaderInstance) {
+            this.render();
+          }
+        }
+        render() {
+          const size = this.getAttribute("size") || "medium";
+          const variant = this.getAttribute("variant") || "primary";
+          if (this.loaderInstance) {
+            this.innerHTML = "";
+          }
+          this.loaderInstance = new Loader({
+            size,
+            variant
+          });
+          this.innerHTML = "";
+          this.appendChild(this.loaderInstance.getElement());
+        }
+        // Expose loader methods
+        setSize(size) {
+          this.setAttribute("size", size);
+          return this;
+        }
+        setVariant(variant) {
+          this.setAttribute("variant", variant);
+          return this;
+        }
+        show() {
+          if (this.loaderInstance) {
+            this.loaderInstance.show();
+          }
+          return this;
+        }
+        hide() {
+          if (this.loaderInstance) {
+            this.loaderInstance.hide();
+          }
+          return this;
+        }
+      };
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-loader", DotboxLoaderElement);
+      }
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = Loader;
+      }
+    }
+  });
+
+  // src/components/Menu/Menu.js
+  var require_Menu = __commonJS({
+    "src/components/Menu/Menu.js"(exports, module) {
+      var Menu = class {
+        constructor(options = {}) {
+          this.id = options.id || `menu-${Math.random().toString(36).substr(2, 9)}`;
+          this.items = options.items || [];
+          this.selected = options.selected || null;
+          this.onSelect = options.onSelect || (() => {
+          });
+          this.bordered = options.bordered !== false;
+          this.compact = options.compact || false;
+          this.routingMode = options.routingMode || false;
+          this.collapsibleHeaders = options.collapsibleHeaders || false;
+          this.headerArrowPosition = options.headerArrowPosition || "right";
+          this.collapsedGroups = /* @__PURE__ */ new Set();
+          this.element = this._render();
+          if (this.routingMode) {
+            this._setupRouting();
+          }
+        }
+        _render() {
+          const menu = document.createElement("nav");
+          let classes = ["dotbox-menu"];
+          classes.push(this.bordered ? "dotbox-menu-bordered" : "dotbox-menu-borderless");
+          if (this.compact) {
+            classes.push("dotbox-menu-compact");
+          }
+          if (this.collapsibleHeaders) {
+            classes.push("dotbox-menu-collapsible");
+          }
+          menu.className = classes.join(" ");
+          menu.id = this.id;
+          if (this.collapsibleHeaders) {
+            this._renderWithHeaders(menu);
+          } else {
+            this._renderFlat(menu);
+          }
+          return menu;
+        }
+        _renderFlat(menu) {
+          this.items.forEach((item) => {
+            const el = document.createElement("div");
+            el.className = "dotbox-menu-item" + (item.id === this.selected ? " selected" : "");
+            el.textContent = item.label;
+            el.onclick = () => {
+              this.select(item.id);
+              if (this.routingMode) {
+                window.location.hash = item.id;
+              }
+              this.onSelect(item.id);
+            };
+            menu.appendChild(el);
+          });
+        }
+        _renderWithHeaders(menu) {
+          const groups = {};
+          this.items.forEach((item) => {
+            const group = item.group || "default";
+            if (!groups[group]) {
+              groups[group] = {
+                header: item.groupHeader || group,
+                items: []
+              };
+            }
+            groups[group].items.push(item);
+          });
+          Object.keys(groups).forEach((groupKey) => {
+            const group = groups[groupKey];
+            const isCollapsed = this.collapsedGroups.has(groupKey);
+            const headerEl = document.createElement("div");
+            headerEl.className = "dotbox-menu-header" + (isCollapsed ? " collapsed" : "");
+            const arrowIcon = `<span class="dotbox-menu-header-icon">${isCollapsed ? "\u25BC" : "\u25BC"}</span>`;
+            const headerText = `<span class="dotbox-menu-header-text">${group.header}</span>`;
+            if (this.headerArrowPosition === "left") {
+              headerEl.innerHTML = `${arrowIcon}${headerText}`;
+            } else {
+              headerEl.innerHTML = `${headerText}${arrowIcon}`;
+            }
+            headerEl.classList.add(`dotbox-menu-header-arrow-${this.headerArrowPosition}`);
+            headerEl.onclick = () => this._toggleGroup(groupKey);
+            menu.appendChild(headerEl);
+            const groupEl = document.createElement("div");
+            groupEl.className = "dotbox-menu-group" + (isCollapsed ? " collapsed" : "");
+            groupEl.setAttribute("data-group", groupKey);
+            group.items.forEach((item) => {
+              const el = document.createElement("div");
+              el.className = "dotbox-menu-item" + (item.id === this.selected ? " selected" : "");
+              el.textContent = item.label;
+              el.onclick = () => {
+                this.select(item.id);
+                if (this.routingMode) {
+                  window.location.hash = item.id;
+                }
+                this.onSelect(item.id);
+              };
+              groupEl.appendChild(el);
+            });
+            menu.appendChild(groupEl);
+          });
+        }
+        _toggleGroup(groupKey) {
+          const isCollapsed = this.collapsedGroups.has(groupKey);
+          if (isCollapsed) {
+            this.collapsedGroups.delete(groupKey);
+          } else {
+            this.collapsedGroups.add(groupKey);
+          }
+          const newElement = this._render();
+          this.element.parentNode.replaceChild(newElement, this.element);
+          this.element = newElement;
+        }
+        select(id) {
+          this.selected = id;
+          if (this.collapsibleHeaders) {
+            const allItems = this.element.querySelectorAll(".dotbox-menu-item");
+            allItems.forEach((item) => {
+              const itemText = item.textContent;
+              const dataItem = this.items.find((dataItem2) => dataItem2.label === itemText && dataItem2.id === id);
+              item.classList.toggle("selected", !!dataItem);
+            });
+          } else {
+            Array.from(this.element.children).forEach((el, i) => {
+              if (el.classList.contains("dotbox-menu-item")) {
+                el.classList.toggle("selected", this.items[i].id === id);
+              }
+            });
+          }
+        }
+        getElement() {
+          return this.element;
+        }
+        _setupRouting() {
+          window.addEventListener("hashchange", () => {
+            this._handleHashChange();
+          });
+          this._handleHashChange();
+        }
+        _handleHashChange() {
+          const hash = window.location.hash.substring(1);
+          if (hash && this.items.find((item) => item.id === hash)) {
+            this.select(hash);
+            this.onSelect(hash);
+          }
+        }
+      };
+      var DotboxMenuElement = class extends HTMLElement {
+        constructor() {
+          super();
+          this.menuInstance = null;
+          this.items = [];
+          this._isInternalUpdate = false;
+        }
+        connectedCallback() {
+          this.parseItems();
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["selected", "bordered", "compact", "items", "data-items", "routing-mode", "collapsible-headers", "header-arrow-position"];
+        }
+        attributeChangedCallback(name) {
+          if (this.menuInstance && !this._isInternalUpdate) {
+            if (name === "items" || name === "data-items") {
+              this.parseItems();
+              this.render();
+            } else if (name === "selected") {
+              const selected = this.getAttribute("selected");
+              if (this.menuInstance && selected !== this.menuInstance.selected) {
+                this.menuInstance.select(selected);
+              }
+            } else {
+              this.render();
+            }
+          }
+        }
+        parseItems() {
+          const children = Array.from(this.children);
+          this.items = children.map((child) => {
+            if (child.tagName.toLowerCase() === "dotbox-menu-item") {
+              return {
+                id: child.getAttribute("id") || child.textContent.trim().toLowerCase().replace(/\s+/g, "-"),
+                label: child.getAttribute("label") || child.textContent.trim()
+              };
+            }
+            return null;
+          }).filter(Boolean);
+          if (this.items.length === 0 && (this.hasAttribute("items") || this.hasAttribute("data-items"))) {
+            try {
+              const itemsAttr = this.getAttribute("items") || this.getAttribute("data-items");
+              this.items = JSON.parse(itemsAttr);
+            } catch (e) {
+              console.warn("Invalid items JSON in dotbox-menu:", e);
+            }
+          }
+        }
+        render() {
+          const selected = this.getAttribute("selected") || null;
+          const bordered = this.getAttribute("bordered") !== "false";
+          const compact = this.hasAttribute("compact");
+          const routingMode = this.hasAttribute("routing-mode");
+          const collapsibleHeaders = this.hasAttribute("collapsible-headers");
+          const headerArrowPosition = this.getAttribute("header-arrow-position") || "right";
+          if (this.menuInstance) {
+            this.innerHTML = "";
+          }
+          this.menuInstance = new Menu({
+            items: this.items,
+            selected,
+            bordered,
+            compact,
+            routingMode,
+            collapsibleHeaders,
+            headerArrowPosition,
+            onSelect: (id) => {
+              this._isInternalUpdate = true;
+              this.setAttribute("selected", id);
+              this._isInternalUpdate = false;
+              this.dispatchEvent(new CustomEvent("dotbox-select", {
+                detail: { selectedId: id, items: this.items },
+                bubbles: true
+              }));
+            }
+          });
+          this.innerHTML = "";
+          this.appendChild(this.menuInstance.getElement());
+        }
+        // Expose menu methods
+        select(id) {
+          this.setAttribute("selected", id);
+          return this;
+        }
+        addItem(item) {
+          this.items.push(item);
+          this.render();
+          return this;
+        }
+        removeItem(id) {
+          this.items = this.items.filter((item) => item.id !== id);
+          this.render();
+          return this;
+        }
+        toggleGroup(groupKey) {
+          if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
+            this.menuInstance._toggleGroup(groupKey);
+          }
+          return this;
+        }
+        expandAllGroups() {
+          if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
+            this.menuInstance.collapsedGroups.clear();
+            this.render();
+          }
+          return this;
+        }
+        collapseAllGroups() {
+          if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
+            const groups = /* @__PURE__ */ new Set();
+            this.items.forEach((item) => {
+              const group = item.group || "default";
+              groups.add(group);
+            });
+            this.menuInstance.collapsedGroups = groups;
+            this.render();
+          }
+          return this;
+        }
+      };
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-menu", DotboxMenuElement);
+      }
+      if (typeof window !== "undefined") {
+        window.DotBox = window.DotBox || {};
+        window.DotBox.Menu = Menu;
+      }
+      module.exports = Menu;
+    }
+  });
+
+  // src/components/MessageBox/MessageBox.js
+  var require_MessageBox = __commonJS({
+    "src/components/MessageBox/MessageBox.js"(exports, module) {
+      var MessageBox = class _MessageBox {
+        constructor(options = {}) {
+          this.options = {
+            title: options.title || "Message",
+            message: options.message || "This is a message",
+            variant: options.variant || "primary",
+            // success, danger, warning, info, primary
+            closable: options.closable !== false,
+            // true by default
+            buttons: options.buttons || [],
+            // Array of button configs
+            onClose: options.onClose || null,
+            maxWidth: options.maxWidth || "380px",
+            ...options
+          };
+          this.element = null;
+          this.isVisible = false;
+          this.init();
+        }
+        init() {
+          this.createElement();
+          this.bindEvents();
+        }
+        createElement() {
+          this.element = document.createElement("div");
+          this.element.className = this.getClasses();
+          this.element.style.maxWidth = this.options.maxWidth;
+          const icon = this.getIcon();
+          this.element.innerHTML = `
+            ${this.options.closable ? `
+                <button type="button" class="dotbox-messagebox-dismiss" aria-label="Close message">\xD7</button>
+            ` : ""}
+            <div class="dotbox-messagebox-header">
+                <div class="dotbox-messagebox-icon">
+                    ${icon}
+                </div>
+                <div class="dotbox-messagebox-content">
+                    <span class="dotbox-messagebox-title">${this.options.title}</span>
+                    <p class="dotbox-messagebox-message">${this.options.message}</p>
+                </div>
+            </div>
+            ${this.options.buttons.length > 0 ? `
+                <div class="dotbox-messagebox-actions">
+                    ${this.renderButtons()}
+                </div>
+            ` : ""}
+        `;
+        }
+        getClasses() {
+          let classes = ["dotbox-messagebox"];
+          classes.push(`dotbox-messagebox-${this.options.variant}`);
+          return classes.join(" ");
+        }
+        getIcon() {
+          const icons = {
+            success: `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" d="M20 7L9.00004 18L3.99994 13"></path>
+                </svg>
+            `,
+            danger: `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2.5" d="M18 6L6 18M6 6l12 12"></path>
+                </svg>
+            `,
+            warning: `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            `,
+            info: `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            `,
+            primary: `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            `
+          };
+          return icons[this.options.variant] || icons.primary;
+        }
+        renderButtons() {
+          return this.options.buttons.map((button, index) => {
+            const variant = button.variant || "secondary";
+            const text = button.text || "Button";
+            const id = button.id || `btn-${index}`;
+            return `<dotbox-button 
+                variant="${variant}" 
+                data-button-id="${id}"
+                ${button.disabled ? "disabled" : ""}
+                ${button.size ? `size="${button.size}"` : ""}
+            >${text}</dotbox-button>`;
+          }).join("");
+        }
+        bindEvents() {
+          const closeBtn = this.element.querySelector(".dotbox-messagebox-dismiss");
+          if (closeBtn) {
+            closeBtn.addEventListener("click", () => this.close());
+          }
+          const actionButtons = this.element.querySelectorAll("[data-button-id]");
+          actionButtons.forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const buttonId = e.target.getAttribute("data-button-id");
+              const buttonConfig = this.options.buttons.find((b) => (b.id || `btn-${this.options.buttons.indexOf(b)}`) === buttonId);
+              if (buttonConfig && buttonConfig.onClick) {
+                buttonConfig.onClick(this, buttonConfig);
+              }
+              this.element.dispatchEvent(new CustomEvent("dotbox-messagebox-button", {
+                detail: {
+                  buttonId,
+                  buttonConfig,
+                  messageBox: this
+                }
+              }));
+            });
+          });
+        }
+        close() {
+          if (this.options.onClose) {
+            this.options.onClose(this);
+          }
+          this.element.dispatchEvent(new CustomEvent("dotbox-messagebox-close", {
+            detail: { messageBox: this }
+          }));
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          this.isVisible = false;
+        }
+        show() {
+          this.isVisible = true;
+          this.element.dispatchEvent(new CustomEvent("dotbox-messagebox-show", {
+            detail: { messageBox: this }
+          }));
+        }
+        hide() {
+          this.element.style.display = "none";
+          this.isVisible = false;
+        }
+        setTitle(title) {
+          this.options.title = title;
+          const titleElement = this.element.querySelector(".dotbox-messagebox-title");
+          if (titleElement) {
+            titleElement.textContent = title;
+          }
+          return this;
+        }
+        setMessage(message) {
+          this.options.message = message;
+          const messageElement = this.element.querySelector(".dotbox-messagebox-message");
+          if (messageElement) {
+            messageElement.textContent = message;
+          }
+          return this;
+        }
+        setVariant(variant) {
+          this.element.classList.remove(`dotbox-messagebox-${this.options.variant}`);
+          this.options.variant = variant;
+          this.element.classList.add(`dotbox-messagebox-${variant}`);
+          const iconElement = this.element.querySelector(".dotbox-messagebox-icon");
+          if (iconElement) {
+            iconElement.innerHTML = this.getIcon();
+          }
+          return this;
+        }
+        getElement() {
+          return this.element;
+        }
+        // Static methods for common use cases
+        static success(title, message, buttons = []) {
+          return new _MessageBox({
+            title,
+            message,
+            variant: "success",
+            buttons
+          });
+        }
+        static danger(title, message, buttons = []) {
+          return new _MessageBox({
+            title,
+            message,
+            variant: "danger",
+            buttons
+          });
+        }
+        static warning(title, message, buttons = []) {
+          return new _MessageBox({
+            title,
+            message,
+            variant: "warning",
+            buttons
+          });
+        }
+        static info(title, message, buttons = []) {
+          return new _MessageBox({
+            title,
+            message,
+            variant: "info",
+            buttons
+          });
+        }
+        static confirm(title, message, onConfirm, onCancel) {
+          return new Promise((resolve, reject) => {
+            const messageBox = new _MessageBox({
+              title,
+              message,
+              variant: "primary",
+              buttons: [
+                {
+                  id: "cancel",
+                  text: "Cancel",
+                  variant: "secondary",
+                  onClick: (messageBox2) => {
+                    if (onCancel) onCancel();
+                    messageBox2.close();
+                    resolve(false);
+                  }
+                },
+                {
+                  id: "confirm",
+                  text: "Confirm",
+                  variant: "primary",
+                  onClick: (messageBox2) => {
+                    if (onConfirm) onConfirm();
+                    messageBox2.close();
+                    resolve(true);
+                  }
+                }
+              ]
+            });
+            document.body.appendChild(messageBox.getElement());
+            messageBox.show();
+          });
+        }
+        static error(title, message, buttons = []) {
+          const defaultButtons = buttons.length > 0 ? buttons : [
+            {
+              id: "ok",
+              text: "OK",
+              variant: "danger",
+              onClick: (messageBox2) => messageBox2.close()
+            }
+          ];
+          const messageBox = new _MessageBox({
+            title,
+            message,
+            variant: "danger",
+            buttons: defaultButtons
+          });
+          document.body.appendChild(messageBox.getElement());
+          messageBox.show();
+          return messageBox;
+        }
+        static show(options = {}) {
+          return new Promise((resolve, reject) => {
+            if (!options.buttons || options.buttons.length === 0) {
+              options.buttons = [
+                {
+                  id: "ok",
+                  text: "OK",
+                  variant: options.variant || "primary",
+                  onClick: (messageBox2) => {
+                    messageBox2.close();
+                    resolve(true);
+                  }
+                }
+              ];
+            } else {
+              options.buttons = options.buttons.map((button) => ({
+                ...button,
+                onClick: (messageBox2, buttonConfig) => {
+                  if (button.onClick) {
+                    button.onClick(messageBox2, buttonConfig);
+                  }
+                  messageBox2.close();
+                  resolve(button.id || button.text);
+                }
+              }));
+            }
+            const messageBox = new _MessageBox(options);
+            document.body.appendChild(messageBox.getElement());
+            messageBox.show();
+          });
+        }
+      };
+      var DotboxMessageBox = class extends HTMLElement {
+        constructor() {
+          super();
+          this.messageBox = null;
+        }
+        connectedCallback() {
+          const buttonsData = this.getAttribute("buttons");
+          let buttons = [];
+          if (buttonsData) {
+            try {
+              buttons = JSON.parse(buttonsData);
+            } catch (e) {
+              console.warn("Invalid buttons JSON in dotbox-messagebox:", e);
+            }
+          }
+          const options = {
+            title: this.getAttribute("title") || "Message",
+            message: this.getAttribute("message") || this.textContent || "This is a message",
+            variant: this.getAttribute("variant") || "primary",
+            closable: this.getAttribute("closable") !== "false",
+            maxWidth: this.getAttribute("max-width") || "380px",
+            buttons
+          };
+          this.messageBox = new MessageBox(options);
+          this.appendChild(this.messageBox.getElement());
+        }
+        disconnectedCallback() {
+          if (this.messageBox) {
+          }
+        }
+        // Methods for programmatic control
+        setTitle(title) {
+          if (this.messageBox) {
+            this.messageBox.setTitle(title);
+          }
+          return this;
+        }
+        setMessage(message) {
+          if (this.messageBox) {
+            this.messageBox.setMessage(message);
+          }
+          return this;
+        }
+        setVariant(variant) {
+          if (this.messageBox) {
+            this.messageBox.setVariant(variant);
+          }
+          return this;
+        }
+        close() {
+          if (this.messageBox) {
+            this.messageBox.close();
+          }
+        }
+      };
+      customElements.define("dotbox-messagebox", DotboxMessageBox);
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = MessageBox;
+      }
+    }
+  });
+
+  // src/components/MetricItem/MetricItem.js
+  var require_MetricItem = __commonJS({
+    "src/components/MetricItem/MetricItem.js"(exports, module) {
+      var MetricItem = class {
+        constructor(id, options = {}) {
+          this.id = id;
+          this.options = {
+            label: "Metric",
+            value: 0,
+            unit: "",
+            threshold: null,
+            warningThreshold: null,
+            container: null,
+            trend: null,
+            icon: null,
+            ...options
+          };
+          this.element = null;
+          this.initialize();
+        }
+        initialize() {
+          this.createElement();
+          this.render();
+        }
+        createElement() {
+          this.element = document.createElement("div");
+          this.element.className = "metric-item";
+          this.element.id = this.id;
+          if (this.options.container) {
+            this.options.container.appendChild(this.element);
+          }
+        }
+        render() {
+          const iconHtml = this.options.icon ? `<div class="metric-item-icon">${this.options.icon}</div>` : "";
+          const trendHtml = this.options.trend ? `<div class="metric-item-trend trend-${this.options.trend}"></div>` : "";
+          this.element.innerHTML = `
+            ${iconHtml}
+            <div class="metric-item-content">
+                <div class="metric-item-label">${this.options.label}</div>
+                <div class="metric-item-value value">
+                    ${this.options.value}
+                    <span class="metric-item-unit">${this.options.unit}</span>
+                    ${trendHtml}
+                </div>
+            </div>
+        `;
+          this.updateStatus();
+        }
+        updateValue(value) {
+          this.options.value = value;
+          const valueElement = this.element.querySelector(".metric-item-value");
+          if (valueElement) {
+            const trendHtml = this.options.trend ? `<div class="metric-item-trend trend-${this.options.trend}"></div>` : "";
+            valueElement.innerHTML = `
+                ${value}
+                <span class="metric-item-unit">${this.options.unit}</span>
+                ${trendHtml}
+            `;
+            valueElement.classList.add("value");
+          }
+          this.updateStatus();
+        }
+        updateStatus() {
+          this.element.classList.remove("warning", "error", "success");
+          const value = parseFloat(this.options.value);
+          if (this.options.threshold && value >= this.options.threshold) {
+            this.element.classList.add("error");
+          } else if (this.options.warningThreshold && value >= this.options.warningThreshold) {
+            this.element.classList.add("warning");
+          } else {
+            this.element.classList.add("success");
+          }
+        }
+        show() {
+          if (this.element) {
+            this.element.style.display = "flex";
+          }
+        }
+        hide() {
+          if (this.element) {
+            this.element.style.display = "none";
+          }
+        }
+        destroy() {
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          this.element = null;
+        }
+        // Get the DOM element
+        getElement() {
+          return this.element;
+        }
+      };
+      var DotboxMetricElement = class extends HTMLElement {
+        constructor() {
+          super();
+          this.metricInstance = null;
+        }
+        connectedCallback() {
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["label", "value", "unit", "trend", "icon", "threshold", "warning-threshold"];
+        }
+        attributeChangedCallback() {
+          if (this.metricInstance) {
+            this.render();
+          }
+        }
+        render() {
+          const id = this.getAttribute("id") || `metric-${Math.random().toString(36).substr(2, 9)}`;
+          const label = this.getAttribute("label") || "Metric";
+          const value = this.getAttribute("value") || "0";
+          const unit = this.getAttribute("unit") || "";
+          const trend = this.getAttribute("trend") || null;
+          const icon = this.getAttribute("icon") || null;
+          const threshold = this.getAttribute("threshold") ? parseFloat(this.getAttribute("threshold")) : null;
+          const warningThreshold = this.getAttribute("warning-threshold") ? parseFloat(this.getAttribute("warning-threshold")) : null;
+          if (this.metricInstance) {
+            this.innerHTML = "";
+          }
+          this.metricInstance = new MetricItem(id, {
+            label,
+            value,
+            unit,
+            trend,
+            icon,
+            threshold,
+            warningThreshold
+          });
+          this.innerHTML = "";
+          this.appendChild(this.metricInstance.getElement());
+        }
+        // Expose metric methods
+        updateValue(value) {
+          this.setAttribute("value", value);
+          return this;
+        }
+        setThreshold(threshold) {
+          this.setAttribute("threshold", threshold);
+          return this;
+        }
+        setTrend(trend) {
+          this.setAttribute("trend", trend);
+          return this;
+        }
+      };
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-metric", DotboxMetricElement);
+      }
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = MetricItem;
+      }
+    }
+  });
+
   // src/components/ModalDialog/ModalDialog.js
   var require_ModalDialog = __commonJS({
     "src/components/ModalDialog/ModalDialog.js"(exports, module) {
@@ -506,6 +2783,385 @@
       }
       if (typeof module !== "undefined" && module.exports) {
         module.exports = ModalDialog;
+      }
+    }
+  });
+
+  // src/components/Notification/Notification.js
+  var require_Notification = __commonJS({
+    "src/components/Notification/Notification.js"(exports, module) {
+      var Notification = class _Notification {
+        constructor(options = {}) {
+          this.options = {
+            message: options.message || "Notification message",
+            variant: options.variant || "success",
+            // success, danger, warning, info
+            mode: options.mode || "static",
+            // static, popup
+            position: options.position || "bottom-right",
+            // bottom-right, bottom-left, top-right, top-left
+            autoClose: options.autoClose !== false,
+            // true by default
+            timeout: options.timeout || 3e3,
+            // 3 seconds default
+            showCloseButton: options.showCloseButton !== void 0 ? options.showCloseButton : options.mode === "popup",
+            // only true by default for popups
+            icon: options.icon || null,
+            // custom icon, will use default if null
+            onClose: options.onClose || null,
+            ...options
+          };
+          this.element = null;
+          this.timeoutId = null;
+          this.isVisible = false;
+          this.init();
+        }
+        init() {
+          this.createElement();
+          this.bindEvents();
+          if (this.options.mode === "popup") {
+            this.showPopup();
+          }
+        }
+        createElement() {
+          this.element = document.createElement("div");
+          this.element.className = this.getClasses();
+          const icon = this.getIcon();
+          this.element.innerHTML = `
+            <div class="dotbox-notification-icon">
+                ${icon}
+            </div>
+            <div class="dotbox-notification-content">
+                <div class="dotbox-notification-message">${this.options.message}</div>
+            </div>
+            ${this.options.showCloseButton ? `
+                <button class="dotbox-notification-close" type="button" aria-label="Close notification">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            ` : ""}
+        `;
+          if (this.options.mode === "popup") {
+            this.ensurePopupContainer();
+            this.getPopupContainer().appendChild(this.element);
+          }
+        }
+        getClasses() {
+          let classes = ["dotbox-notification"];
+          classes.push(`dotbox-notification-${this.options.variant}`);
+          classes.push(`dotbox-notification-${this.options.mode}`);
+          if (this.options.mode === "popup") {
+            classes.push(`dotbox-notification-popup-${this.options.position}`);
+          }
+          return classes.join(" ");
+        }
+        getIcon() {
+          if (this.options.icon) {
+            return this.options.icon;
+          }
+          const icons = {
+            success: `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `,
+            danger: `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            `,
+            warning: `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            `,
+            info: `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            `
+          };
+          return icons[this.options.variant] || icons.info;
+        }
+        bindEvents() {
+          const closeBtn = this.element.querySelector(".dotbox-notification-close");
+          if (closeBtn) {
+            closeBtn.addEventListener("click", () => this.close());
+          }
+          if (this.options.mode === "popup" && this.options.autoClose) {
+            this.timeoutId = setTimeout(() => {
+              this.close();
+            }, this.options.timeout);
+          }
+          if (this.options.mode === "popup" && this.options.autoClose) {
+            this.element.addEventListener("mouseenter", () => {
+              if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
+              }
+            });
+            this.element.addEventListener("mouseleave", () => {
+              this.timeoutId = setTimeout(() => {
+                this.close();
+              }, this.options.timeout);
+            });
+          }
+        }
+        ensurePopupContainer() {
+          const containerId = `dotbox-notifications-${this.options.position}`;
+          let container = document.getElementById(containerId);
+          if (!container) {
+            container = document.createElement("div");
+            container.id = containerId;
+            container.className = `dotbox-notifications-container dotbox-notifications-${this.options.position}`;
+            document.body.appendChild(container);
+          }
+          return container;
+        }
+        getPopupContainer() {
+          return document.getElementById(`dotbox-notifications-${this.options.position}`);
+        }
+        showPopup() {
+          this.isVisible = true;
+          setTimeout(() => {
+            this.element.classList.add("dotbox-notification-show");
+          }, 10);
+        }
+        close() {
+          if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+          }
+          if (this.options.mode === "popup") {
+            this.element.classList.add("dotbox-notification-hide");
+            setTimeout(() => {
+              this.destroy();
+            }, 300);
+          } else {
+            this.destroy();
+          }
+          if (this.options.onClose) {
+            this.options.onClose(this);
+          }
+          this.element.dispatchEvent(new CustomEvent("dotbox-notification-close", {
+            detail: { notification: this }
+          }));
+        }
+        destroy() {
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          this.isVisible = false;
+          if (this.options.mode === "popup") {
+            const container = this.getPopupContainer();
+            if (container && container.children.length === 0) {
+              container.parentNode.removeChild(container);
+            }
+          }
+        }
+        getElement() {
+          return this.element;
+        }
+        // Static method to create popup notifications easily
+        static show(message, variant = "success", options = {}) {
+          return new _Notification({
+            message,
+            variant,
+            mode: "popup",
+            ...options
+          });
+        }
+        // Static method to create success notifications
+        static success(message, options = {}) {
+          return _Notification.show(message, "success", options);
+        }
+        // Static method to create danger notifications
+        static danger(message, options = {}) {
+          return _Notification.show(message, "danger", options);
+        }
+        // Static method to create warning notifications
+        static warning(message, options = {}) {
+          return _Notification.show(message, "warning", options);
+        }
+        // Static method to create info notifications
+        static info(message, options = {}) {
+          return _Notification.show(message, "info", options);
+        }
+      };
+      var DotboxNotification = class extends HTMLElement {
+        constructor() {
+          super();
+          this.notification = null;
+        }
+        connectedCallback() {
+          const mode = this.getAttribute("mode") || "static";
+          const options = {
+            message: this.getAttribute("message") || this.textContent || "Notification",
+            variant: this.getAttribute("variant") || "success",
+            mode,
+            position: this.getAttribute("position") || "bottom-right",
+            autoClose: this.getAttribute("auto-close") !== "false",
+            timeout: parseInt(this.getAttribute("timeout")) || 3e3,
+            showCloseButton: this.getAttribute("show-close-button") !== null ? this.getAttribute("show-close-button") !== "false" : mode === "popup",
+            icon: this.getAttribute("icon") || null
+          };
+          this.notification = new Notification(options);
+          if (options.mode === "static") {
+            this.appendChild(this.notification.getElement());
+          }
+        }
+        disconnectedCallback() {
+          if (this.notification) {
+            this.notification.destroy();
+          }
+        }
+      };
+      customElements.define("dotbox-notification", DotboxNotification);
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = Notification;
+      }
+    }
+  });
+
+  // src/components/Section/Section.js
+  var require_Section = __commonJS({
+    "src/components/Section/Section.js"(exports, module) {
+      var Section = class {
+        constructor(options = {}) {
+          this.options = {
+            title: "",
+            className: "",
+            id: "",
+            ...options
+          };
+          this.element = null;
+          this.titleElement = null;
+          this.contentElement = null;
+          this.uniqueId = this.options.id || `section-${Math.random().toString(36).substr(2, 9)}`;
+          this.createElement();
+        }
+        createElement() {
+          this.element = document.createElement("section");
+          this.element.className = this.getClasses();
+          this.element.id = this.uniqueId;
+          if (this.options.title) {
+            this.titleElement = document.createElement("h2");
+            this.titleElement.className = "dotbox-section-title";
+            this.titleElement.textContent = this.options.title;
+            this.element.appendChild(this.titleElement);
+          }
+          this.contentElement = document.createElement("div");
+          this.contentElement.className = "dotbox-section-content";
+          this.element.appendChild(this.contentElement);
+          return this.element;
+        }
+        getClasses() {
+          let classes = ["dotbox-section"];
+          if (this.options.className) {
+            classes.push(this.options.className);
+          }
+          return classes.join(" ");
+        }
+        // Public methods
+        setTitle(title) {
+          this.options.title = title;
+          if (title && !this.titleElement) {
+            this.titleElement = document.createElement("h2");
+            this.titleElement.className = "dotbox-section-title";
+            this.titleElement.textContent = title;
+            this.element.insertBefore(this.titleElement, this.contentElement);
+          } else if (title && this.titleElement) {
+            this.titleElement.textContent = title;
+          } else if (!title && this.titleElement) {
+            this.element.removeChild(this.titleElement);
+            this.titleElement = null;
+          }
+          return this;
+        }
+        setContent(content) {
+          if (typeof content === "string") {
+            this.contentElement.innerHTML = content;
+          } else if (content instanceof HTMLElement) {
+            this.contentElement.innerHTML = "";
+            this.contentElement.appendChild(content);
+          }
+          return this;
+        }
+        appendChild(element) {
+          this.contentElement.appendChild(element);
+          return this;
+        }
+        // Get the DOM elements
+        getElement() {
+          return this.element;
+        }
+        getContentElement() {
+          return this.contentElement;
+        }
+        // Destroy section
+        destroy() {
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          this.element = null;
+          this.titleElement = null;
+          this.contentElement = null;
+        }
+      };
+      var DotboxSectionElement = class extends HTMLElement {
+        constructor() {
+          super();
+          this.sectionInstance = null;
+        }
+        connectedCallback() {
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["title"];
+        }
+        attributeChangedCallback() {
+          if (this.sectionInstance) {
+            this.render();
+          }
+        }
+        render() {
+          const title = this.getAttribute("title") || "";
+          const content = this.innerHTML.trim();
+          if (this.sectionInstance) {
+            const currentContent = this.sectionInstance.getContentElement().innerHTML;
+            this.innerHTML = "";
+          }
+          this.sectionInstance = new Section({
+            title
+          });
+          if (content) {
+            this.sectionInstance.setContent(content);
+          }
+          this.innerHTML = "";
+          this.appendChild(this.sectionInstance.getElement());
+        }
+        // Expose section methods
+        setTitle(title) {
+          this.setAttribute("title", title);
+          return this;
+        }
+        setContent(content) {
+          if (this.sectionInstance) {
+            this.sectionInstance.setContent(content);
+          }
+          return this;
+        }
+        appendContent(element) {
+          if (this.sectionInstance) {
+            this.sectionInstance.appendChild(element);
+          }
+          return this;
+        }
+      };
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-section", DotboxSectionElement);
+      }
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = Section;
       }
     }
   });
@@ -992,1885 +3648,6 @@
     }
   });
 
-  // src/components/Dropdown/Dropdown.js
-  var require_Dropdown = __commonJS({
-    "src/components/Dropdown/Dropdown.js"(exports, module) {
-      var Dropdown = class {
-        constructor(options = {}) {
-          this.options = {
-            label: "",
-            placeholder: "Select an option...",
-            allowNull: true,
-            // Allow placeholder/null selection
-            options: [],
-            // Array of {value, label, disabled} objects
-            value: "",
-            disabled: false,
-            required: false,
-            helpText: "",
-            error: false,
-            success: false,
-            size: "medium",
-            // small, medium, large
-            onChange: null,
-            onFocus: null,
-            onBlur: null,
-            ...options
-          };
-          this.container = null;
-          this.selectElement = null;
-          this.labelElement = null;
-          this.helpTextElement = null;
-          this.createElement();
-          this.bindEvents();
-        }
-        createElement() {
-          this.container = document.createElement("div");
-          this.container.className = this.getContainerClasses();
-          if (this.options.label) {
-            this.labelElement = document.createElement("label");
-            this.labelElement.className = "dropdown-label";
-            this.labelElement.textContent = this.options.label;
-            if (this.options.required) {
-              this.labelElement.textContent += " *";
-            }
-            this.container.appendChild(this.labelElement);
-          }
-          const wrapper = document.createElement("div");
-          wrapper.className = "dropdown-wrapper";
-          this.selectElement = document.createElement("select");
-          this.selectElement.className = "dropdown-select";
-          this.selectElement.disabled = this.options.disabled;
-          if (this.options.required) {
-            this.selectElement.required = true;
-          }
-          if (this.options.allowNull && this.options.placeholder) {
-            const placeholderOption = document.createElement("option");
-            placeholderOption.value = "";
-            placeholderOption.textContent = this.options.placeholder;
-            placeholderOption.disabled = true;
-            placeholderOption.selected = !this.options.value;
-            this.selectElement.appendChild(placeholderOption);
-          }
-          this.updateOptions();
-          const arrow = document.createElement("span");
-          arrow.className = "dropdown-arrow";
-          arrow.innerHTML = "\u25BC";
-          wrapper.appendChild(this.selectElement);
-          wrapper.appendChild(arrow);
-          this.container.appendChild(wrapper);
-          if (this.options.helpText) {
-            this.helpTextElement = document.createElement("div");
-            this.helpTextElement.className = "dropdown-help-text";
-            this.helpTextElement.textContent = this.options.helpText;
-            this.container.appendChild(this.helpTextElement);
-          }
-          return this.container;
-        }
-        getContainerClasses() {
-          let classes = ["dropdown-container"];
-          if (this.options.size !== "medium") {
-            classes.push(`dropdown-${this.options.size}`);
-          }
-          if (this.options.error) {
-            classes.push("dropdown-error");
-          } else if (this.options.success) {
-            classes.push("dropdown-success");
-          }
-          return classes.join(" ");
-        }
-        updateOptions() {
-          const placeholder = this.selectElement.querySelector('option[value=""]');
-          this.selectElement.innerHTML = "";
-          if (placeholder) {
-            this.selectElement.appendChild(placeholder);
-          }
-          this.options.options.forEach((optionData) => {
-            const option = document.createElement("option");
-            option.value = optionData.value || optionData.label;
-            option.textContent = optionData.label;
-            option.disabled = optionData.disabled || false;
-            if (this.options.value === option.value) {
-              option.selected = true;
-            }
-            this.selectElement.appendChild(option);
-          });
-        }
-        bindEvents() {
-          if (this.selectElement) {
-            this.selectElement.addEventListener("change", (e) => {
-              this.options.value = e.target.value;
-              if (this.options.onChange) {
-                this.options.onChange(e);
-              }
-            });
-            this.selectElement.addEventListener("focus", (e) => {
-              if (this.options.onFocus) {
-                this.options.onFocus(e);
-              }
-            });
-            this.selectElement.addEventListener("blur", (e) => {
-              if (this.options.onBlur) {
-                this.options.onBlur(e);
-              }
-            });
-          }
-        }
-        // Public methods
-        getValue() {
-          return this.selectElement ? this.selectElement.value : this.options.value;
-        }
-        setValue(value) {
-          this.options.value = value;
-          if (this.selectElement) {
-            this.selectElement.value = value;
-          }
-          return this;
-        }
-        setOptions(options) {
-          this.options.options = options;
-          if (this.selectElement) {
-            this.updateOptions();
-          }
-          return this;
-        }
-        addOption(option) {
-          this.options.options.push(option);
-          if (this.selectElement) {
-            this.updateOptions();
-          }
-          return this;
-        }
-        removeOption(value) {
-          this.options.options = this.options.options.filter(
-            (opt) => (opt.value || opt.label) !== value
-          );
-          if (this.selectElement) {
-            this.updateOptions();
-          }
-          return this;
-        }
-        setDisabled(disabled) {
-          this.options.disabled = disabled;
-          if (this.selectElement) {
-            this.selectElement.disabled = disabled;
-          }
-          return this;
-        }
-        setError(error, helpText = null) {
-          this.options.error = error;
-          this.options.success = false;
-          if (helpText !== null) {
-            this.setHelpText(helpText);
-          }
-          if (this.container) {
-            this.container.className = this.getContainerClasses();
-          }
-          return this;
-        }
-        setSuccess(success, helpText = null) {
-          this.options.success = success;
-          this.options.error = false;
-          if (helpText !== null) {
-            this.setHelpText(helpText);
-          }
-          if (this.container) {
-            this.container.className = this.getContainerClasses();
-          }
-          return this;
-        }
-        setHelpText(helpText) {
-          this.options.helpText = helpText;
-          if (this.helpTextElement) {
-            this.helpTextElement.textContent = helpText;
-          } else if (helpText && this.container) {
-            this.helpTextElement = document.createElement("div");
-            this.helpTextElement.className = "dropdown-help-text";
-            this.helpTextElement.textContent = helpText;
-            this.container.appendChild(this.helpTextElement);
-          }
-          return this;
-        }
-        focus() {
-          if (this.selectElement) {
-            this.selectElement.focus();
-          }
-          return this;
-        }
-        getElement() {
-          return this.selectElement;
-        }
-        getContainer() {
-          return this.container;
-        }
-        destroy() {
-          if (this.container && this.container.parentNode) {
-            this.container.parentNode.removeChild(this.container);
-          }
-          this.container = null;
-          this.selectElement = null;
-          this.labelElement = null;
-          this.helpTextElement = null;
-        }
-      };
-      var DotboxDropdownElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.dropdownInstance = null;
-        }
-        connectedCallback() {
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["label", "placeholder", "value", "disabled", "required", "help-text", "error", "success", "size", "options", "allow-null"];
-        }
-        attributeChangedCallback() {
-          if (this.dropdownInstance) {
-            this.render();
-          }
-        }
-        render() {
-          const label = this.getAttribute("label") || "";
-          const placeholder = this.getAttribute("placeholder") || "Select an option...";
-          const allowNull = this.hasAttribute("allow-null") || !this.hasAttribute("allow-null");
-          const value = this.getAttribute("value") || "";
-          const disabled = this.hasAttribute("disabled");
-          const required = this.hasAttribute("required");
-          const helpText = this.getAttribute("help-text") || "";
-          const error = this.hasAttribute("error");
-          const success = this.hasAttribute("success");
-          const size = this.getAttribute("size") || "medium";
-          let options = [];
-          const optionsAttr = this.getAttribute("options");
-          if (optionsAttr) {
-            try {
-              options = JSON.parse(optionsAttr);
-            } catch (e) {
-              console.warn("Invalid JSON in options attribute:", e);
-            }
-          }
-          if (options.length === 0) {
-            const optionElements = this.querySelectorAll("option");
-            options = Array.from(optionElements).map((opt) => ({
-              value: opt.value,
-              label: opt.textContent,
-              disabled: opt.disabled
-            }));
-          }
-          if (this.dropdownInstance) {
-            this.innerHTML = "";
-          }
-          this.dropdownInstance = new Dropdown({
-            label,
-            placeholder,
-            allowNull,
-            options,
-            value,
-            disabled,
-            required,
-            helpText,
-            error,
-            success,
-            size,
-            onChange: (e) => {
-              this.setAttribute("value", e.target.value);
-              this.dispatchEvent(new CustomEvent("dotbox-change", {
-                detail: {
-                  value: e.target.value,
-                  selectedOption: options.find((opt) => (opt.value || opt.label) === e.target.value)
-                },
-                bubbles: true
-              }));
-            },
-            onFocus: (e) => {
-              this.dispatchEvent(new CustomEvent("dotbox-focus", {
-                detail: { value: e.target.value },
-                bubbles: true
-              }));
-            },
-            onBlur: (e) => {
-              this.dispatchEvent(new CustomEvent("dotbox-blur", {
-                detail: { value: e.target.value },
-                bubbles: true
-              }));
-            }
-          });
-          this.innerHTML = "";
-          this.appendChild(this.dropdownInstance.getContainer());
-        }
-        // Expose dropdown methods
-        getValue() {
-          return this.dropdownInstance ? this.dropdownInstance.getValue() : this.getAttribute("value") || "";
-        }
-        setValue(value) {
-          this.setAttribute("value", value);
-          return this;
-        }
-        setOptions(options) {
-          this.setAttribute("options", JSON.stringify(options));
-          return this;
-        }
-        addOption(option) {
-          if (this.dropdownInstance) {
-            this.dropdownInstance.addOption(option);
-            const currentOptions = this.dropdownInstance.options.options;
-            this.setAttribute("options", JSON.stringify(currentOptions));
-          }
-          return this;
-        }
-        removeOption(value) {
-          if (this.dropdownInstance) {
-            this.dropdownInstance.removeOption(value);
-            const currentOptions = this.dropdownInstance.options.options;
-            this.setAttribute("options", JSON.stringify(currentOptions));
-          }
-          return this;
-        }
-        setDisabled(disabled) {
-          if (disabled) {
-            this.setAttribute("disabled", "");
-          } else {
-            this.removeAttribute("disabled");
-          }
-          return this;
-        }
-        setError(error, helpText = null) {
-          if (error) {
-            this.setAttribute("error", "");
-            this.removeAttribute("success");
-          } else {
-            this.removeAttribute("error");
-          }
-          if (helpText !== null) {
-            this.setAttribute("help-text", helpText);
-          }
-          return this;
-        }
-        setSuccess(success, helpText = null) {
-          if (success) {
-            this.setAttribute("success", "");
-            this.removeAttribute("error");
-          } else {
-            this.removeAttribute("success");
-          }
-          if (helpText !== null) {
-            this.setAttribute("help-text", helpText);
-          }
-          return this;
-        }
-        focus() {
-          if (this.dropdownInstance) {
-            this.dropdownInstance.focus();
-          }
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-dropdown", DotboxDropdownElement);
-      }
-      if (typeof window !== "undefined") {
-        window.Dotbox = window.Dotbox || {};
-        window.Dotbox.Dropdown = Dropdown;
-      }
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = Dropdown;
-      }
-    }
-  });
-
-  // src/components/MetricItem/MetricItem.js
-  var require_MetricItem = __commonJS({
-    "src/components/MetricItem/MetricItem.js"(exports, module) {
-      var MetricItem = class {
-        constructor(id, options = {}) {
-          this.id = id;
-          this.options = {
-            label: "Metric",
-            value: 0,
-            unit: "",
-            threshold: null,
-            warningThreshold: null,
-            container: null,
-            trend: null,
-            icon: null,
-            ...options
-          };
-          this.element = null;
-          this.initialize();
-        }
-        initialize() {
-          this.createElement();
-          this.render();
-        }
-        createElement() {
-          this.element = document.createElement("div");
-          this.element.className = "metric-item";
-          this.element.id = this.id;
-          if (this.options.container) {
-            this.options.container.appendChild(this.element);
-          }
-        }
-        render() {
-          const iconHtml = this.options.icon ? `<div class="metric-item-icon">${this.options.icon}</div>` : "";
-          const trendHtml = this.options.trend ? `<div class="metric-item-trend trend-${this.options.trend}"></div>` : "";
-          this.element.innerHTML = `
-            ${iconHtml}
-            <div class="metric-item-content">
-                <div class="metric-item-label">${this.options.label}</div>
-                <div class="metric-item-value value">
-                    ${this.options.value}
-                    <span class="metric-item-unit">${this.options.unit}</span>
-                    ${trendHtml}
-                </div>
-            </div>
-        `;
-          this.updateStatus();
-        }
-        updateValue(value) {
-          this.options.value = value;
-          const valueElement = this.element.querySelector(".metric-item-value");
-          if (valueElement) {
-            const trendHtml = this.options.trend ? `<div class="metric-item-trend trend-${this.options.trend}"></div>` : "";
-            valueElement.innerHTML = `
-                ${value}
-                <span class="metric-item-unit">${this.options.unit}</span>
-                ${trendHtml}
-            `;
-            valueElement.classList.add("value");
-          }
-          this.updateStatus();
-        }
-        updateStatus() {
-          this.element.classList.remove("warning", "error", "success");
-          const value = parseFloat(this.options.value);
-          if (this.options.threshold && value >= this.options.threshold) {
-            this.element.classList.add("error");
-          } else if (this.options.warningThreshold && value >= this.options.warningThreshold) {
-            this.element.classList.add("warning");
-          } else {
-            this.element.classList.add("success");
-          }
-        }
-        show() {
-          if (this.element) {
-            this.element.style.display = "flex";
-          }
-        }
-        hide() {
-          if (this.element) {
-            this.element.style.display = "none";
-          }
-        }
-        destroy() {
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          this.element = null;
-        }
-        // Get the DOM element
-        getElement() {
-          return this.element;
-        }
-      };
-      var DotboxMetricElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.metricInstance = null;
-        }
-        connectedCallback() {
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["label", "value", "unit", "trend", "icon", "threshold", "warning-threshold"];
-        }
-        attributeChangedCallback() {
-          if (this.metricInstance) {
-            this.render();
-          }
-        }
-        render() {
-          const id = this.getAttribute("id") || `metric-${Math.random().toString(36).substr(2, 9)}`;
-          const label = this.getAttribute("label") || "Metric";
-          const value = this.getAttribute("value") || "0";
-          const unit = this.getAttribute("unit") || "";
-          const trend = this.getAttribute("trend") || null;
-          const icon = this.getAttribute("icon") || null;
-          const threshold = this.getAttribute("threshold") ? parseFloat(this.getAttribute("threshold")) : null;
-          const warningThreshold = this.getAttribute("warning-threshold") ? parseFloat(this.getAttribute("warning-threshold")) : null;
-          if (this.metricInstance) {
-            this.innerHTML = "";
-          }
-          this.metricInstance = new MetricItem(id, {
-            label,
-            value,
-            unit,
-            trend,
-            icon,
-            threshold,
-            warningThreshold
-          });
-          this.innerHTML = "";
-          this.appendChild(this.metricInstance.getElement());
-        }
-        // Expose metric methods
-        updateValue(value) {
-          this.setAttribute("value", value);
-          return this;
-        }
-        setThreshold(threshold) {
-          this.setAttribute("threshold", threshold);
-          return this;
-        }
-        setTrend(trend) {
-          this.setAttribute("trend", trend);
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-metric", DotboxMetricElement);
-      }
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = MetricItem;
-      }
-    }
-  });
-
-  // src/components/ToolButton/ToolButton.js
-  var require_ToolButton = __commonJS({
-    "src/components/ToolButton/ToolButton.js"(exports, module) {
-      var ToolButton = class {
-        constructor(options = {}) {
-          this.options = {
-            icon: "\u2699\uFE0F",
-            text: "",
-            tooltip: "",
-            variant: "default",
-            // default, primary, danger
-            size: "medium",
-            // small, medium, large
-            disabled: false,
-            active: false,
-            className: "",
-            ...options
-          };
-          this.element = null;
-          this.onClick = options.onClick || null;
-          this.createElement();
-          this.bindEvents();
-        }
-        createElement() {
-          this.element = document.createElement("button");
-          this.element.type = "button";
-          this.element.disabled = this.options.disabled;
-          if (this.options.tooltip) {
-            this.element.title = this.options.tooltip;
-          }
-          this.updateClasses();
-          this.updateContent();
-          return this.element;
-        }
-        updateClasses() {
-          let classes = ["tool-btn"];
-          classes.push(`tool-btn-${this.options.variant}`);
-          classes.push(`tool-btn-${this.options.size}`);
-          if (this.options.active) {
-            classes.push("tool-btn-active");
-          }
-          if (this.options.className) {
-            classes.push(this.options.className);
-          }
-          this.element.className = classes.join(" ");
-        }
-        updateContent() {
-          let content = this.options.icon;
-          if (this.options.text) {
-            content += ` <span class="tool-btn-text">${this.options.text}</span>`;
-          }
-          this.element.innerHTML = content;
-        }
-        bindEvents() {
-          if (this.onClick) {
-            this.element.addEventListener("click", (e) => {
-              if (!this.options.disabled) {
-                this.onClick(e);
-              }
-            });
-          }
-        }
-        // Public methods
-        setIcon(icon) {
-          this.options.icon = icon;
-          this.updateContent();
-          return this;
-        }
-        setText(text) {
-          this.options.text = text;
-          this.updateContent();
-          return this;
-        }
-        setTooltip(tooltip) {
-          this.options.tooltip = tooltip;
-          this.element.title = tooltip;
-          return this;
-        }
-        setActive(active) {
-          this.options.active = active;
-          this.updateClasses();
-          return this;
-        }
-        setDisabled(disabled) {
-          this.options.disabled = disabled;
-          this.element.disabled = disabled;
-          this.updateClasses();
-          return this;
-        }
-        setVariant(variant) {
-          this.options.variant = variant;
-          this.updateClasses();
-          return this;
-        }
-        // Get the DOM element
-        getElement() {
-          return this.element;
-        }
-        // Destroy button
-        destroy() {
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          this.element = null;
-        }
-      };
-      var DotboxToolButtonElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.buttonInstance = null;
-        }
-        connectedCallback() {
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["icon", "text", "tooltip", "variant", "size", "disabled", "active"];
-        }
-        attributeChangedCallback() {
-          if (this.buttonInstance) {
-            this.render();
-          }
-        }
-        render() {
-          const icon = this.getAttribute("icon") || "\u2699\uFE0F";
-          const text = this.getAttribute("text") || "";
-          const tooltip = this.getAttribute("tooltip") || "";
-          const variant = this.getAttribute("variant") || "default";
-          const size = this.getAttribute("size") || "medium";
-          const disabled = this.hasAttribute("disabled");
-          const active = this.hasAttribute("active");
-          if (this.buttonInstance) {
-            this.innerHTML = "";
-          }
-          this.buttonInstance = new ToolButton({
-            icon,
-            text,
-            tooltip,
-            variant,
-            size,
-            disabled,
-            active,
-            onClick: () => {
-              this.dispatchEvent(new CustomEvent("dotbox-click", {
-                detail: { icon, text, tooltip, variant, size, disabled, active },
-                bubbles: true
-              }));
-            }
-          });
-          this.innerHTML = "";
-          this.appendChild(this.buttonInstance.getElement());
-        }
-        // Expose button methods
-        setIcon(icon) {
-          this.setAttribute("icon", icon);
-          return this;
-        }
-        setText(text) {
-          this.setAttribute("text", text);
-          return this;
-        }
-        setTooltip(tooltip) {
-          this.setAttribute("tooltip", tooltip);
-          return this;
-        }
-        setVariant(variant) {
-          this.setAttribute("variant", variant);
-          return this;
-        }
-        setActive(active) {
-          if (active) {
-            this.setAttribute("active", "");
-          } else {
-            this.removeAttribute("active");
-          }
-          return this;
-        }
-        setDisabled(disabled) {
-          if (disabled) {
-            this.setAttribute("disabled", "");
-          } else {
-            this.removeAttribute("disabled");
-          }
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-tool-button", DotboxToolButtonElement);
-      }
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = ToolButton;
-      }
-    }
-  });
-
-  // src/components/Menu/Menu.js
-  var require_Menu = __commonJS({
-    "src/components/Menu/Menu.js"(exports, module) {
-      var Menu = class {
-        constructor(options = {}) {
-          this.id = options.id || `menu-${Math.random().toString(36).substr(2, 9)}`;
-          this.items = options.items || [];
-          this.selected = options.selected || null;
-          this.onSelect = options.onSelect || (() => {
-          });
-          this.bordered = options.bordered !== false;
-          this.compact = options.compact || false;
-          this.routingMode = options.routingMode || false;
-          this.collapsibleHeaders = options.collapsibleHeaders || false;
-          this.headerArrowPosition = options.headerArrowPosition || "right";
-          this.collapsedGroups = /* @__PURE__ */ new Set();
-          this.element = this._render();
-          if (this.routingMode) {
-            this._setupRouting();
-          }
-        }
-        _render() {
-          const menu = document.createElement("nav");
-          let classes = ["dotbox-menu"];
-          classes.push(this.bordered ? "dotbox-menu-bordered" : "dotbox-menu-borderless");
-          if (this.compact) {
-            classes.push("dotbox-menu-compact");
-          }
-          if (this.collapsibleHeaders) {
-            classes.push("dotbox-menu-collapsible");
-          }
-          menu.className = classes.join(" ");
-          menu.id = this.id;
-          if (this.collapsibleHeaders) {
-            this._renderWithHeaders(menu);
-          } else {
-            this._renderFlat(menu);
-          }
-          return menu;
-        }
-        _renderFlat(menu) {
-          this.items.forEach((item) => {
-            const el = document.createElement("div");
-            el.className = "dotbox-menu-item" + (item.id === this.selected ? " selected" : "");
-            el.textContent = item.label;
-            el.onclick = () => {
-              this.select(item.id);
-              if (this.routingMode) {
-                window.location.hash = item.id;
-              }
-              this.onSelect(item.id);
-            };
-            menu.appendChild(el);
-          });
-        }
-        _renderWithHeaders(menu) {
-          const groups = {};
-          this.items.forEach((item) => {
-            const group = item.group || "default";
-            if (!groups[group]) {
-              groups[group] = {
-                header: item.groupHeader || group,
-                items: []
-              };
-            }
-            groups[group].items.push(item);
-          });
-          Object.keys(groups).forEach((groupKey) => {
-            const group = groups[groupKey];
-            const isCollapsed = this.collapsedGroups.has(groupKey);
-            const headerEl = document.createElement("div");
-            headerEl.className = "dotbox-menu-header" + (isCollapsed ? " collapsed" : "");
-            const arrowIcon = `<span class="dotbox-menu-header-icon">${isCollapsed ? "\u25BC" : "\u25BC"}</span>`;
-            const headerText = `<span class="dotbox-menu-header-text">${group.header}</span>`;
-            if (this.headerArrowPosition === "left") {
-              headerEl.innerHTML = `${arrowIcon}${headerText}`;
-            } else {
-              headerEl.innerHTML = `${headerText}${arrowIcon}`;
-            }
-            headerEl.classList.add(`dotbox-menu-header-arrow-${this.headerArrowPosition}`);
-            headerEl.onclick = () => this._toggleGroup(groupKey);
-            menu.appendChild(headerEl);
-            const groupEl = document.createElement("div");
-            groupEl.className = "dotbox-menu-group" + (isCollapsed ? " collapsed" : "");
-            groupEl.setAttribute("data-group", groupKey);
-            group.items.forEach((item) => {
-              const el = document.createElement("div");
-              el.className = "dotbox-menu-item" + (item.id === this.selected ? " selected" : "");
-              el.textContent = item.label;
-              el.onclick = () => {
-                this.select(item.id);
-                if (this.routingMode) {
-                  window.location.hash = item.id;
-                }
-                this.onSelect(item.id);
-              };
-              groupEl.appendChild(el);
-            });
-            menu.appendChild(groupEl);
-          });
-        }
-        _toggleGroup(groupKey) {
-          const isCollapsed = this.collapsedGroups.has(groupKey);
-          if (isCollapsed) {
-            this.collapsedGroups.delete(groupKey);
-          } else {
-            this.collapsedGroups.add(groupKey);
-          }
-          const newElement = this._render();
-          this.element.parentNode.replaceChild(newElement, this.element);
-          this.element = newElement;
-        }
-        select(id) {
-          this.selected = id;
-          if (this.collapsibleHeaders) {
-            const allItems = this.element.querySelectorAll(".dotbox-menu-item");
-            allItems.forEach((item) => {
-              const itemText = item.textContent;
-              const dataItem = this.items.find((dataItem2) => dataItem2.label === itemText && dataItem2.id === id);
-              item.classList.toggle("selected", !!dataItem);
-            });
-          } else {
-            Array.from(this.element.children).forEach((el, i) => {
-              if (el.classList.contains("dotbox-menu-item")) {
-                el.classList.toggle("selected", this.items[i].id === id);
-              }
-            });
-          }
-        }
-        getElement() {
-          return this.element;
-        }
-        _setupRouting() {
-          window.addEventListener("hashchange", () => {
-            this._handleHashChange();
-          });
-          this._handleHashChange();
-        }
-        _handleHashChange() {
-          const hash = window.location.hash.substring(1);
-          if (hash && this.items.find((item) => item.id === hash)) {
-            this.select(hash);
-            this.onSelect(hash);
-          }
-        }
-      };
-      var DotboxMenuElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.menuInstance = null;
-          this.items = [];
-          this._isInternalUpdate = false;
-        }
-        connectedCallback() {
-          this.parseItems();
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["selected", "bordered", "compact", "items", "data-items", "routing-mode", "collapsible-headers", "header-arrow-position"];
-        }
-        attributeChangedCallback(name) {
-          if (this.menuInstance && !this._isInternalUpdate) {
-            if (name === "items" || name === "data-items") {
-              this.parseItems();
-              this.render();
-            } else if (name === "selected") {
-              const selected = this.getAttribute("selected");
-              if (this.menuInstance && selected !== this.menuInstance.selected) {
-                this.menuInstance.select(selected);
-              }
-            } else {
-              this.render();
-            }
-          }
-        }
-        parseItems() {
-          const children = Array.from(this.children);
-          this.items = children.map((child) => {
-            if (child.tagName.toLowerCase() === "dotbox-menu-item") {
-              return {
-                id: child.getAttribute("id") || child.textContent.trim().toLowerCase().replace(/\s+/g, "-"),
-                label: child.getAttribute("label") || child.textContent.trim()
-              };
-            }
-            return null;
-          }).filter(Boolean);
-          if (this.items.length === 0 && (this.hasAttribute("items") || this.hasAttribute("data-items"))) {
-            try {
-              const itemsAttr = this.getAttribute("items") || this.getAttribute("data-items");
-              this.items = JSON.parse(itemsAttr);
-            } catch (e) {
-              console.warn("Invalid items JSON in dotbox-menu:", e);
-            }
-          }
-        }
-        render() {
-          const selected = this.getAttribute("selected") || null;
-          const bordered = this.getAttribute("bordered") !== "false";
-          const compact = this.hasAttribute("compact");
-          const routingMode = this.hasAttribute("routing-mode");
-          const collapsibleHeaders = this.hasAttribute("collapsible-headers");
-          const headerArrowPosition = this.getAttribute("header-arrow-position") || "right";
-          if (this.menuInstance) {
-            this.innerHTML = "";
-          }
-          this.menuInstance = new Menu({
-            items: this.items,
-            selected,
-            bordered,
-            compact,
-            routingMode,
-            collapsibleHeaders,
-            headerArrowPosition,
-            onSelect: (id) => {
-              this._isInternalUpdate = true;
-              this.setAttribute("selected", id);
-              this._isInternalUpdate = false;
-              this.dispatchEvent(new CustomEvent("dotbox-select", {
-                detail: { selectedId: id, items: this.items },
-                bubbles: true
-              }));
-            }
-          });
-          this.innerHTML = "";
-          this.appendChild(this.menuInstance.getElement());
-        }
-        // Expose menu methods
-        select(id) {
-          this.setAttribute("selected", id);
-          return this;
-        }
-        addItem(item) {
-          this.items.push(item);
-          this.render();
-          return this;
-        }
-        removeItem(id) {
-          this.items = this.items.filter((item) => item.id !== id);
-          this.render();
-          return this;
-        }
-        toggleGroup(groupKey) {
-          if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
-            this.menuInstance._toggleGroup(groupKey);
-          }
-          return this;
-        }
-        expandAllGroups() {
-          if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
-            this.menuInstance.collapsedGroups.clear();
-            this.render();
-          }
-          return this;
-        }
-        collapseAllGroups() {
-          if (this.menuInstance && this.menuInstance.collapsibleHeaders) {
-            const groups = /* @__PURE__ */ new Set();
-            this.items.forEach((item) => {
-              const group = item.group || "default";
-              groups.add(group);
-            });
-            this.menuInstance.collapsedGroups = groups;
-            this.render();
-          }
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-menu", DotboxMenuElement);
-      }
-      if (typeof window !== "undefined") {
-        window.DotBox = window.DotBox || {};
-        window.DotBox.Menu = Menu;
-      }
-      module.exports = Menu;
-    }
-  });
-
-  // src/components/CodeBlock/CodeBlock.js
-  var require_CodeBlock = __commonJS({
-    "src/components/CodeBlock/CodeBlock.js"(exports, module) {
-      var CodeBlock = class {
-        constructor(options = {}) {
-          this.id = options.id || `codeblock-${Math.random().toString(36).substr(2, 9)}`;
-          this.language = options.language || "javascript";
-          this.code = options.code || "";
-          this._loadPrism(() => {
-            this.element = this._render();
-          });
-        }
-        _loadPrism(cb) {
-          if (window.Prism) return cb();
-          const css = document.createElement("link");
-          css.rel = "stylesheet";
-          css.href = "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css";
-          document.head.appendChild(css);
-          const script = document.createElement("script");
-          script.src = "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js";
-          script.onload = cb;
-          document.head.appendChild(script);
-        }
-        _render() {
-          const pre = document.createElement("pre");
-          pre.className = "dotbox-codeblock";
-          pre.id = this.id;
-          const code = document.createElement("code");
-          code.className = `language-${this.language}`;
-          code.textContent = this.code;
-          pre.appendChild(code);
-          if (window.Prism) window.Prism.highlightElement(code);
-          return pre;
-        }
-        getElement() {
-          if (!this.element) this.element = this._render();
-          return this.element;
-        }
-      };
-      var DotboxCodeBlockElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.codeBlockInstance = null;
-        }
-        connectedCallback() {
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["language", "code"];
-        }
-        attributeChangedCallback() {
-          if (this.codeBlockInstance) {
-            this.render();
-          }
-        }
-        render() {
-          const language = this.getAttribute("language") || "javascript";
-          const code = this.getAttribute("code") || this.textContent.trim() || "";
-          if (this.codeBlockInstance) {
-            this.innerHTML = "";
-          }
-          this.codeBlockInstance = new CodeBlock({
-            language,
-            code
-          });
-          this.innerHTML = "";
-          this.appendChild(this.codeBlockInstance.getElement());
-        }
-        // Expose codeblock methods
-        setCode(code) {
-          this.setAttribute("code", code);
-          return this;
-        }
-        setLanguage(language) {
-          this.setAttribute("language", language);
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-code-block", DotboxCodeBlockElement);
-      }
-      if (typeof window !== "undefined") {
-        window.DotBox = window.DotBox || {};
-        window.DotBox.CodeBlock = CodeBlock;
-      }
-      module.exports = CodeBlock;
-    }
-  });
-
-  // src/components/Loader/Loader.js
-  var require_Loader = __commonJS({
-    "src/components/Loader/Loader.js"(exports, module) {
-      var Loader = class {
-        constructor(options = {}) {
-          this.options = {
-            size: "medium",
-            // small, medium, large
-            variant: "primary",
-            // primary, secondary, success, danger
-            className: "",
-            ...options
-          };
-          this.element = null;
-          this.createElement();
-        }
-        createElement() {
-          this.element = document.createElement("div");
-          this.element.className = this.getClasses();
-          this.element.innerHTML = `
-            <svg width="64px" height="48px" viewBox="0 0 64 48">
-                <polyline points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24" id="back"></polyline>
-                <polyline points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24" id="front"></polyline>
-            </svg>
-        `;
-          return this.element;
-        }
-        getClasses() {
-          let classes = ["dotbox-loader"];
-          classes.push(this.options.size);
-          classes.push(this.options.variant);
-          if (this.options.className) {
-            classes.push(this.options.className);
-          }
-          return classes.join(" ");
-        }
-        // Public methods
-        setSize(size) {
-          this.options.size = size;
-          this.element.className = this.getClasses();
-          return this;
-        }
-        setVariant(variant) {
-          this.options.variant = variant;
-          this.element.className = this.getClasses();
-          return this;
-        }
-        show() {
-          if (this.element) {
-            this.element.style.display = "inline-flex";
-          }
-          return this;
-        }
-        hide() {
-          if (this.element) {
-            this.element.style.display = "none";
-          }
-          return this;
-        }
-        // Get the DOM element
-        getElement() {
-          return this.element;
-        }
-        // Destroy loader
-        destroy() {
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          this.element = null;
-        }
-      };
-      var DotboxLoaderElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.loaderInstance = null;
-        }
-        connectedCallback() {
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["size", "variant"];
-        }
-        attributeChangedCallback() {
-          if (this.loaderInstance) {
-            this.render();
-          }
-        }
-        render() {
-          const size = this.getAttribute("size") || "medium";
-          const variant = this.getAttribute("variant") || "primary";
-          if (this.loaderInstance) {
-            this.innerHTML = "";
-          }
-          this.loaderInstance = new Loader({
-            size,
-            variant
-          });
-          this.innerHTML = "";
-          this.appendChild(this.loaderInstance.getElement());
-        }
-        // Expose loader methods
-        setSize(size) {
-          this.setAttribute("size", size);
-          return this;
-        }
-        setVariant(variant) {
-          this.setAttribute("variant", variant);
-          return this;
-        }
-        show() {
-          if (this.loaderInstance) {
-            this.loaderInstance.show();
-          }
-          return this;
-        }
-        hide() {
-          if (this.loaderInstance) {
-            this.loaderInstance.hide();
-          }
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-loader", DotboxLoaderElement);
-      }
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = Loader;
-      }
-    }
-  });
-
-  // src/components/Checkbox/Checkbox.js
-  var require_Checkbox = __commonJS({
-    "src/components/Checkbox/Checkbox.js"(exports, module) {
-      var Checkbox = class {
-        constructor(options = {}) {
-          this.options = {
-            label: "Checkbox",
-            checked: false,
-            disabled: false,
-            size: "medium",
-            // small, medium, large
-            variant: "primary",
-            // primary, success, danger
-            name: "",
-            value: "",
-            id: "",
-            className: "",
-            onChange: null,
-            ...options
-          };
-          this.element = null;
-          this.input = null;
-          this.uniqueId = this.options.id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
-          this.createElement();
-          this.bindEvents();
-        }
-        createElement() {
-          this.element = document.createElement("div");
-          this.element.className = this.getClasses();
-          this.input = document.createElement("input");
-          this.input.type = "checkbox";
-          this.input.id = this.uniqueId;
-          this.input.checked = this.options.checked;
-          this.input.disabled = this.options.disabled;
-          if (this.options.name) {
-            this.input.name = this.options.name;
-          }
-          if (this.options.value) {
-            this.input.value = this.options.value;
-          }
-          const label = document.createElement("label");
-          label.htmlFor = this.uniqueId;
-          label.className = "dotbox-checkbox-label";
-          const checkboxBox = document.createElement("span");
-          checkboxBox.className = "dotbox-checkbox-box";
-          checkboxBox.innerHTML = `
-            <svg viewBox="0 0 12 10" height="10px" width="12px">
-                <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-            </svg>
-        `;
-          const textSpan = document.createElement("span");
-          textSpan.className = "dotbox-checkbox-text";
-          textSpan.textContent = this.options.label;
-          label.appendChild(checkboxBox);
-          label.appendChild(textSpan);
-          this.element.appendChild(this.input);
-          this.element.appendChild(label);
-          return this.element;
-        }
-        getClasses() {
-          let classes = ["dotbox-checkbox-container"];
-          classes.push(this.options.size);
-          classes.push(this.options.variant);
-          if (this.options.className) {
-            classes.push(this.options.className);
-          }
-          return classes.join(" ");
-        }
-        bindEvents() {
-          if (this.options.onChange) {
-            this.input.addEventListener("change", (e) => {
-              this.options.checked = e.target.checked;
-              this.options.onChange(e);
-            });
-          }
-        }
-        // Public methods
-        setChecked(checked) {
-          this.options.checked = checked;
-          this.input.checked = checked;
-          return this;
-        }
-        getChecked() {
-          return this.input.checked;
-        }
-        setDisabled(disabled) {
-          this.options.disabled = disabled;
-          this.input.disabled = disabled;
-          this.element.className = this.getClasses();
-          return this;
-        }
-        setLabel(label) {
-          this.options.label = label;
-          const textSpan = this.element.querySelector(".dotbox-checkbox-text");
-          if (textSpan) {
-            textSpan.textContent = label;
-          }
-          return this;
-        }
-        setSize(size) {
-          this.options.size = size;
-          this.element.className = this.getClasses();
-          return this;
-        }
-        setVariant(variant) {
-          this.options.variant = variant;
-          this.element.className = this.getClasses();
-          return this;
-        }
-        focus() {
-          this.input.focus();
-          return this;
-        }
-        // Get the DOM elements
-        getElement() {
-          return this.element;
-        }
-        getInput() {
-          return this.input;
-        }
-        // Destroy checkbox
-        destroy() {
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          this.element = null;
-          this.input = null;
-        }
-      };
-      var DotboxCheckboxElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.checkboxInstance = null;
-        }
-        connectedCallback() {
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["label", "checked", "disabled", "size", "variant", "name", "value"];
-        }
-        attributeChangedCallback() {
-          if (this.checkboxInstance) {
-            this.render();
-          }
-        }
-        render() {
-          const label = this.getAttribute("label") || this.textContent.trim() || "Checkbox";
-          const checked = this.hasAttribute("checked");
-          const disabled = this.hasAttribute("disabled");
-          const size = this.getAttribute("size") || "medium";
-          const variant = this.getAttribute("variant") || "primary";
-          const name = this.getAttribute("name") || "";
-          const value = this.getAttribute("value") || "";
-          if (this.checkboxInstance) {
-            this.innerHTML = "";
-          }
-          this.checkboxInstance = new Checkbox({
-            label,
-            checked,
-            disabled,
-            size,
-            variant,
-            name,
-            value,
-            onChange: (e) => {
-              if (e.target.checked) {
-                this.setAttribute("checked", "");
-              } else {
-                this.removeAttribute("checked");
-              }
-              this.dispatchEvent(new CustomEvent("dotbox-change", {
-                detail: {
-                  checked: e.target.checked,
-                  value: e.target.value || value,
-                  name
-                },
-                bubbles: true
-              }));
-            }
-          });
-          this.innerHTML = "";
-          this.appendChild(this.checkboxInstance.getElement());
-        }
-        // Expose checkbox methods
-        setChecked(checked) {
-          if (checked) {
-            this.setAttribute("checked", "");
-          } else {
-            this.removeAttribute("checked");
-          }
-          return this;
-        }
-        getChecked() {
-          return this.checkboxInstance ? this.checkboxInstance.getChecked() : false;
-        }
-        setDisabled(disabled) {
-          if (disabled) {
-            this.setAttribute("disabled", "");
-          } else {
-            this.removeAttribute("disabled");
-          }
-          return this;
-        }
-        setLabel(label) {
-          this.setAttribute("label", label);
-          return this;
-        }
-        focus() {
-          if (this.checkboxInstance) {
-            this.checkboxInstance.focus();
-          }
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-checkbox", DotboxCheckboxElement);
-      }
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = Checkbox;
-      }
-    }
-  });
-
-  // src/components/Section/Section.js
-  var require_Section = __commonJS({
-    "src/components/Section/Section.js"(exports, module) {
-      var Section = class {
-        constructor(options = {}) {
-          this.options = {
-            title: "",
-            className: "",
-            id: "",
-            ...options
-          };
-          this.element = null;
-          this.titleElement = null;
-          this.contentElement = null;
-          this.uniqueId = this.options.id || `section-${Math.random().toString(36).substr(2, 9)}`;
-          this.createElement();
-        }
-        createElement() {
-          this.element = document.createElement("section");
-          this.element.className = this.getClasses();
-          this.element.id = this.uniqueId;
-          if (this.options.title) {
-            this.titleElement = document.createElement("h2");
-            this.titleElement.className = "dotbox-section-title";
-            this.titleElement.textContent = this.options.title;
-            this.element.appendChild(this.titleElement);
-          }
-          this.contentElement = document.createElement("div");
-          this.contentElement.className = "dotbox-section-content";
-          this.element.appendChild(this.contentElement);
-          return this.element;
-        }
-        getClasses() {
-          let classes = ["dotbox-section"];
-          if (this.options.className) {
-            classes.push(this.options.className);
-          }
-          return classes.join(" ");
-        }
-        // Public methods
-        setTitle(title) {
-          this.options.title = title;
-          if (title && !this.titleElement) {
-            this.titleElement = document.createElement("h2");
-            this.titleElement.className = "dotbox-section-title";
-            this.titleElement.textContent = title;
-            this.element.insertBefore(this.titleElement, this.contentElement);
-          } else if (title && this.titleElement) {
-            this.titleElement.textContent = title;
-          } else if (!title && this.titleElement) {
-            this.element.removeChild(this.titleElement);
-            this.titleElement = null;
-          }
-          return this;
-        }
-        setContent(content) {
-          if (typeof content === "string") {
-            this.contentElement.innerHTML = content;
-          } else if (content instanceof HTMLElement) {
-            this.contentElement.innerHTML = "";
-            this.contentElement.appendChild(content);
-          }
-          return this;
-        }
-        appendChild(element) {
-          this.contentElement.appendChild(element);
-          return this;
-        }
-        // Get the DOM elements
-        getElement() {
-          return this.element;
-        }
-        getContentElement() {
-          return this.contentElement;
-        }
-        // Destroy section
-        destroy() {
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          this.element = null;
-          this.titleElement = null;
-          this.contentElement = null;
-        }
-      };
-      var DotboxSectionElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.sectionInstance = null;
-        }
-        connectedCallback() {
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["title"];
-        }
-        attributeChangedCallback() {
-          if (this.sectionInstance) {
-            this.render();
-          }
-        }
-        render() {
-          const title = this.getAttribute("title") || "";
-          const content = this.innerHTML.trim();
-          if (this.sectionInstance) {
-            const currentContent = this.sectionInstance.getContentElement().innerHTML;
-            this.innerHTML = "";
-          }
-          this.sectionInstance = new Section({
-            title
-          });
-          if (content) {
-            this.sectionInstance.setContent(content);
-          }
-          this.innerHTML = "";
-          this.appendChild(this.sectionInstance.getElement());
-        }
-        // Expose section methods
-        setTitle(title) {
-          this.setAttribute("title", title);
-          return this;
-        }
-        setContent(content) {
-          if (this.sectionInstance) {
-            this.sectionInstance.setContent(content);
-          }
-          return this;
-        }
-        appendContent(element) {
-          if (this.sectionInstance) {
-            this.sectionInstance.appendChild(element);
-          }
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-section", DotboxSectionElement);
-      }
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = Section;
-      }
-    }
-  });
-
-  // src/components/Form/Form.js
-  var require_Form = __commonJS({
-    "src/components/Form/Form.js"(exports, module) {
-      var Form = class {
-        constructor(options = {}) {
-          this.options = {
-            layout: "vertical",
-            // vertical, horizontal, grid
-            gap: "medium",
-            // small, medium, large
-            columns: 2,
-            // for grid layout
-            submitButton: null,
-            cancelButton: null,
-            className: "",
-            onSubmit: null,
-            onReset: null,
-            ...options
-          };
-          this.element = null;
-          this.formElement = null;
-          this.fieldsContainer = null;
-          this.buttonsContainer = null;
-          this.uniqueId = this.options.id || `form-${Math.random().toString(36).substr(2, 9)}`;
-          this.createElement();
-          this.bindEvents();
-        }
-        createElement() {
-          this.element = document.createElement("div");
-          this.element.className = this.getClasses();
-          this.element.id = this.uniqueId;
-          this.formElement = document.createElement("form");
-          this.formElement.className = "dotbox-form-element";
-          this.fieldsContainer = document.createElement("div");
-          this.fieldsContainer.className = "dotbox-form-fields";
-          this.formElement.appendChild(this.fieldsContainer);
-          this.buttonsContainer = document.createElement("div");
-          this.buttonsContainer.className = "dotbox-form-buttons";
-          this.formElement.appendChild(this.buttonsContainer);
-          this.element.appendChild(this.formElement);
-          if (this.options.submitButton) {
-            this.addSubmitButton(this.options.submitButton);
-          }
-          if (this.options.cancelButton) {
-            this.addCancelButton(this.options.cancelButton);
-          }
-          return this.element;
-        }
-        getClasses() {
-          let classes = ["dotbox-form"];
-          classes.push(`dotbox-form-${this.options.layout}`);
-          classes.push(`dotbox-form-gap-${this.options.gap}`);
-          if (this.options.layout === "grid") {
-            classes.push(`dotbox-form-columns-${this.options.columns}`);
-          }
-          if (this.options.className) {
-            classes.push(this.options.className);
-          }
-          return classes.join(" ");
-        }
-        bindEvents() {
-          this.formElement.addEventListener("submit", (e) => {
-            if (this.options.onSubmit) {
-              e.preventDefault();
-              const formData = this.getFormData();
-              this.options.onSubmit(formData, e);
-            }
-          });
-          this.formElement.addEventListener("reset", (e) => {
-            if (this.options.onReset) {
-              this.options.onReset(e);
-            }
-          });
-        }
-        // Public methods
-        addField(element) {
-          if (element instanceof HTMLElement) {
-            this.fieldsContainer.appendChild(element);
-          } else if (element && element.getElement) {
-            this.fieldsContainer.appendChild(element.getElement());
-          } else if (element && element.getContainer) {
-            this.fieldsContainer.appendChild(element.getContainer());
-          }
-          return this;
-        }
-        addFields(elements) {
-          elements.forEach((element) => this.addField(element));
-          return this;
-        }
-        addSubmitButton(options = {}) {
-          const buttonOptions = {
-            text: "Submit",
-            type: "submit",
-            variant: "primary",
-            ...options
-          };
-          const button = document.createElement("button");
-          button.type = buttonOptions.type;
-          button.className = `btn btn-${buttonOptions.variant}`;
-          button.textContent = buttonOptions.text;
-          if (buttonOptions.onClick) {
-            button.addEventListener("click", buttonOptions.onClick);
-          }
-          this.buttonsContainer.appendChild(button);
-          return button;
-        }
-        addCancelButton(options = {}) {
-          const buttonOptions = {
-            text: "Cancel",
-            type: "button",
-            variant: "secondary",
-            ...options
-          };
-          const button = document.createElement("button");
-          button.type = buttonOptions.type;
-          button.className = `btn btn-${buttonOptions.variant}`;
-          button.textContent = buttonOptions.text;
-          if (buttonOptions.onClick) {
-            button.addEventListener("click", buttonOptions.onClick);
-          }
-          this.buttonsContainer.appendChild(button);
-          return button;
-        }
-        addButton(options = {}) {
-          const buttonOptions = {
-            text: "Button",
-            type: "button",
-            variant: "secondary",
-            ...options
-          };
-          const button = document.createElement("button");
-          button.type = buttonOptions.type;
-          button.className = `btn btn-${buttonOptions.variant}`;
-          button.textContent = buttonOptions.text;
-          if (buttonOptions.onClick) {
-            button.addEventListener("click", buttonOptions.onClick);
-          }
-          this.buttonsContainer.appendChild(button);
-          return button;
-        }
-        setLayout(layout) {
-          this.options.layout = layout;
-          this.element.className = this.getClasses();
-          return this;
-        }
-        setGap(gap) {
-          this.options.gap = gap;
-          this.element.className = this.getClasses();
-          return this;
-        }
-        setColumns(columns) {
-          this.options.columns = columns;
-          this.element.className = this.getClasses();
-          return this;
-        }
-        getFormData() {
-          const formData = new FormData(this.formElement);
-          const data = {};
-          for (let [key, value] of formData.entries()) {
-            if (data[key]) {
-              if (Array.isArray(data[key])) {
-                data[key].push(value);
-              } else {
-                data[key] = [data[key], value];
-              }
-            } else {
-              data[key] = value;
-            }
-          }
-          return data;
-        }
-        reset() {
-          this.formElement.reset();
-          return this;
-        }
-        // Get the DOM elements
-        getElement() {
-          return this.element;
-        }
-        getFormElement() {
-          return this.formElement;
-        }
-        getFieldsContainer() {
-          return this.fieldsContainer;
-        }
-        // Destroy form
-        destroy() {
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          this.element = null;
-          this.formElement = null;
-          this.fieldsContainer = null;
-          this.buttonsContainer = null;
-        }
-      };
-      var DotboxFormElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.formInstance = null;
-        }
-        connectedCallback() {
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["layout", "gap", "columns"];
-        }
-        attributeChangedCallback() {
-          if (this.formInstance) {
-            this.render();
-          }
-        }
-        render() {
-          const layout = this.getAttribute("layout") || "vertical";
-          const gap = this.getAttribute("gap") || "medium";
-          const columns = parseInt(this.getAttribute("columns")) || 2;
-          const content = this.innerHTML.trim();
-          if (this.formInstance) {
-            this.innerHTML = "";
-          }
-          this.formInstance = new Form({
-            layout,
-            gap,
-            columns,
-            onSubmit: (data, e) => {
-              this.dispatchEvent(new CustomEvent("dotbox-submit", {
-                detail: { data, originalEvent: e },
-                bubbles: true
-              }));
-            },
-            onReset: (e) => {
-              this.dispatchEvent(new CustomEvent("dotbox-reset", {
-                detail: { originalEvent: e },
-                bubbles: true
-              }));
-            }
-          });
-          if (content) {
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = content;
-            Array.from(tempDiv.children).forEach((child) => {
-              this.formInstance.addField(child);
-            });
-          }
-          this.innerHTML = "";
-          this.appendChild(this.formInstance.getElement());
-        }
-        // Expose form methods
-        addField(element) {
-          if (this.formInstance) {
-            this.formInstance.addField(element);
-          }
-          return this;
-        }
-        setLayout(layout) {
-          this.setAttribute("layout", layout);
-          return this;
-        }
-        getFormData() {
-          return this.formInstance ? this.formInstance.getFormData() : {};
-        }
-        reset() {
-          if (this.formInstance) {
-            this.formInstance.reset();
-          }
-          return this;
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-form", DotboxFormElement);
-      }
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = Form;
-      }
-    }
-  });
-
   // src/components/Toggle/Toggle.js
   var require_Toggle = __commonJS({
     "src/components/Toggle/Toggle.js"(exports, module) {
@@ -3081,533 +3858,196 @@
     }
   });
 
-  // src/components/Notification/Notification.js
-  var require_Notification = __commonJS({
-    "src/components/Notification/Notification.js"(exports, module) {
-      var Notification = class _Notification {
+  // src/components/ToolButton/ToolButton.js
+  var require_ToolButton = __commonJS({
+    "src/components/ToolButton/ToolButton.js"(exports, module) {
+      var ToolButton = class {
         constructor(options = {}) {
           this.options = {
-            message: options.message || "Notification message",
-            variant: options.variant || "success",
-            // success, danger, warning, info
-            mode: options.mode || "static",
-            // static, popup
-            position: options.position || "bottom-right",
-            // bottom-right, bottom-left, top-right, top-left
-            autoClose: options.autoClose !== false,
-            // true by default
-            timeout: options.timeout || 3e3,
-            // 3 seconds default
-            showCloseButton: options.showCloseButton !== void 0 ? options.showCloseButton : options.mode === "popup",
-            // only true by default for popups
-            icon: options.icon || null,
-            // custom icon, will use default if null
-            onClose: options.onClose || null,
+            icon: "\u2699\uFE0F",
+            text: "",
+            tooltip: "",
+            variant: "default",
+            // default, primary, danger
+            size: "medium",
+            // small, medium, large
+            disabled: false,
+            active: false,
+            className: "",
             ...options
           };
           this.element = null;
-          this.timeoutId = null;
-          this.isVisible = false;
-          this.init();
-        }
-        init() {
+          this.onClick = options.onClick || null;
           this.createElement();
           this.bindEvents();
-          if (this.options.mode === "popup") {
-            this.showPopup();
-          }
         }
         createElement() {
-          this.element = document.createElement("div");
-          this.element.className = this.getClasses();
-          const icon = this.getIcon();
-          this.element.innerHTML = `
-            <div class="dotbox-notification-icon">
-                ${icon}
-            </div>
-            <div class="dotbox-notification-content">
-                <div class="dotbox-notification-message">${this.options.message}</div>
-            </div>
-            ${this.options.showCloseButton ? `
-                <button class="dotbox-notification-close" type="button" aria-label="Close notification">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            ` : ""}
-        `;
-          if (this.options.mode === "popup") {
-            this.ensurePopupContainer();
-            this.getPopupContainer().appendChild(this.element);
+          this.element = document.createElement("button");
+          this.element.type = "button";
+          this.element.disabled = this.options.disabled;
+          if (this.options.tooltip) {
+            this.element.title = this.options.tooltip;
           }
+          this.updateClasses();
+          this.updateContent();
+          return this.element;
         }
-        getClasses() {
-          let classes = ["dotbox-notification"];
-          classes.push(`dotbox-notification-${this.options.variant}`);
-          classes.push(`dotbox-notification-${this.options.mode}`);
-          if (this.options.mode === "popup") {
-            classes.push(`dotbox-notification-popup-${this.options.position}`);
+        updateClasses() {
+          let classes = ["tool-btn"];
+          classes.push(`tool-btn-${this.options.variant}`);
+          classes.push(`tool-btn-${this.options.size}`);
+          if (this.options.active) {
+            classes.push("tool-btn-active");
           }
-          return classes.join(" ");
+          if (this.options.className) {
+            classes.push(this.options.className);
+          }
+          this.element.className = classes.join(" ");
         }
-        getIcon() {
-          if (this.options.icon) {
-            return this.options.icon;
+        updateContent() {
+          let content = this.options.icon;
+          if (this.options.text) {
+            content += ` <span class="tool-btn-text">${this.options.text}</span>`;
           }
-          const icons = {
-            success: `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            `,
-            danger: `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-            `,
-            warning: `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-            `,
-            info: `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-            `
-          };
-          return icons[this.options.variant] || icons.info;
+          this.element.innerHTML = content;
         }
         bindEvents() {
-          const closeBtn = this.element.querySelector(".dotbox-notification-close");
-          if (closeBtn) {
-            closeBtn.addEventListener("click", () => this.close());
-          }
-          if (this.options.mode === "popup" && this.options.autoClose) {
-            this.timeoutId = setTimeout(() => {
-              this.close();
-            }, this.options.timeout);
-          }
-          if (this.options.mode === "popup" && this.options.autoClose) {
-            this.element.addEventListener("mouseenter", () => {
-              if (this.timeoutId) {
-                clearTimeout(this.timeoutId);
+          if (this.onClick) {
+            this.element.addEventListener("click", (e) => {
+              if (!this.options.disabled) {
+                this.onClick(e);
               }
             });
-            this.element.addEventListener("mouseleave", () => {
-              this.timeoutId = setTimeout(() => {
-                this.close();
-              }, this.options.timeout);
-            });
           }
         }
-        ensurePopupContainer() {
-          const containerId = `dotbox-notifications-${this.options.position}`;
-          let container = document.getElementById(containerId);
-          if (!container) {
-            container = document.createElement("div");
-            container.id = containerId;
-            container.className = `dotbox-notifications-container dotbox-notifications-${this.options.position}`;
-            document.body.appendChild(container);
-          }
-          return container;
+        // Public methods
+        setIcon(icon) {
+          this.options.icon = icon;
+          this.updateContent();
+          return this;
         }
-        getPopupContainer() {
-          return document.getElementById(`dotbox-notifications-${this.options.position}`);
+        setText(text) {
+          this.options.text = text;
+          this.updateContent();
+          return this;
         }
-        showPopup() {
-          this.isVisible = true;
-          setTimeout(() => {
-            this.element.classList.add("dotbox-notification-show");
-          }, 10);
+        setTooltip(tooltip) {
+          this.options.tooltip = tooltip;
+          this.element.title = tooltip;
+          return this;
         }
-        close() {
-          if (this.timeoutId) {
-            clearTimeout(this.timeoutId);
-          }
-          if (this.options.mode === "popup") {
-            this.element.classList.add("dotbox-notification-hide");
-            setTimeout(() => {
-              this.destroy();
-            }, 300);
-          } else {
-            this.destroy();
-          }
-          if (this.options.onClose) {
-            this.options.onClose(this);
-          }
-          this.element.dispatchEvent(new CustomEvent("dotbox-notification-close", {
-            detail: { notification: this }
-          }));
+        setActive(active) {
+          this.options.active = active;
+          this.updateClasses();
+          return this;
         }
+        setDisabled(disabled) {
+          this.options.disabled = disabled;
+          this.element.disabled = disabled;
+          this.updateClasses();
+          return this;
+        }
+        setVariant(variant) {
+          this.options.variant = variant;
+          this.updateClasses();
+          return this;
+        }
+        // Get the DOM element
+        getElement() {
+          return this.element;
+        }
+        // Destroy button
         destroy() {
           if (this.element && this.element.parentNode) {
             this.element.parentNode.removeChild(this.element);
           }
-          this.isVisible = false;
-          if (this.options.mode === "popup") {
-            const container = this.getPopupContainer();
-            if (container && container.children.length === 0) {
-              container.parentNode.removeChild(container);
-            }
-          }
-        }
-        getElement() {
-          return this.element;
-        }
-        // Static method to create popup notifications easily
-        static show(message, variant = "success", options = {}) {
-          return new _Notification({
-            message,
-            variant,
-            mode: "popup",
-            ...options
-          });
-        }
-        // Static method to create success notifications
-        static success(message, options = {}) {
-          return _Notification.show(message, "success", options);
-        }
-        // Static method to create danger notifications
-        static danger(message, options = {}) {
-          return _Notification.show(message, "danger", options);
-        }
-        // Static method to create warning notifications
-        static warning(message, options = {}) {
-          return _Notification.show(message, "warning", options);
-        }
-        // Static method to create info notifications
-        static info(message, options = {}) {
-          return _Notification.show(message, "info", options);
-        }
-      };
-      var DotboxNotification = class extends HTMLElement {
-        constructor() {
-          super();
-          this.notification = null;
-        }
-        connectedCallback() {
-          const mode = this.getAttribute("mode") || "static";
-          const options = {
-            message: this.getAttribute("message") || this.textContent || "Notification",
-            variant: this.getAttribute("variant") || "success",
-            mode,
-            position: this.getAttribute("position") || "bottom-right",
-            autoClose: this.getAttribute("auto-close") !== "false",
-            timeout: parseInt(this.getAttribute("timeout")) || 3e3,
-            showCloseButton: this.getAttribute("show-close-button") !== null ? this.getAttribute("show-close-button") !== "false" : mode === "popup",
-            icon: this.getAttribute("icon") || null
-          };
-          this.notification = new Notification(options);
-          if (options.mode === "static") {
-            this.appendChild(this.notification.getElement());
-          }
-        }
-        disconnectedCallback() {
-          if (this.notification) {
-            this.notification.destroy();
-          }
-        }
-      };
-      customElements.define("dotbox-notification", DotboxNotification);
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = Notification;
-      }
-    }
-  });
-
-  // src/components/MessageBox/MessageBox.js
-  var require_MessageBox = __commonJS({
-    "src/components/MessageBox/MessageBox.js"(exports, module) {
-      var MessageBox = class _MessageBox {
-        constructor(options = {}) {
-          this.options = {
-            title: options.title || "Message",
-            message: options.message || "This is a message",
-            variant: options.variant || "primary",
-            // success, danger, warning, info, primary
-            closable: options.closable !== false,
-            // true by default
-            buttons: options.buttons || [],
-            // Array of button configs
-            onClose: options.onClose || null,
-            maxWidth: options.maxWidth || "380px",
-            ...options
-          };
           this.element = null;
-          this.isVisible = false;
-          this.init();
-        }
-        init() {
-          this.createElement();
-          this.bindEvents();
-        }
-        createElement() {
-          this.element = document.createElement("div");
-          this.element.className = this.getClasses();
-          this.element.style.maxWidth = this.options.maxWidth;
-          const icon = this.getIcon();
-          this.element.innerHTML = `
-            ${this.options.closable ? `
-                <button type="button" class="dotbox-messagebox-dismiss" aria-label="Close message">\xD7</button>
-            ` : ""}
-            <div class="dotbox-messagebox-header">
-                <div class="dotbox-messagebox-icon">
-                    ${icon}
-                </div>
-                <div class="dotbox-messagebox-content">
-                    <span class="dotbox-messagebox-title">${this.options.title}</span>
-                    <p class="dotbox-messagebox-message">${this.options.message}</p>
-                </div>
-            </div>
-            ${this.options.buttons.length > 0 ? `
-                <div class="dotbox-messagebox-actions">
-                    ${this.renderButtons()}
-                </div>
-            ` : ""}
-        `;
-        }
-        getClasses() {
-          let classes = ["dotbox-messagebox"];
-          classes.push(`dotbox-messagebox-${this.options.variant}`);
-          return classes.join(" ");
-        }
-        getIcon() {
-          const icons = {
-            success: `
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" d="M20 7L9.00004 18L3.99994 13"></path>
-                </svg>
-            `,
-            danger: `
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2.5" d="M18 6L6 18M6 6l12 12"></path>
-                </svg>
-            `,
-            warning: `
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            `,
-            info: `
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            `,
-            primary: `
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            `
-          };
-          return icons[this.options.variant] || icons.primary;
-        }
-        renderButtons() {
-          return this.options.buttons.map((button, index) => {
-            const variant = button.variant || "secondary";
-            const text = button.text || "Button";
-            const id = button.id || `btn-${index}`;
-            return `<dotbox-button 
-                variant="${variant}" 
-                data-button-id="${id}"
-                ${button.disabled ? "disabled" : ""}
-                ${button.size ? `size="${button.size}"` : ""}
-            >${text}</dotbox-button>`;
-          }).join("");
-        }
-        bindEvents() {
-          const closeBtn = this.element.querySelector(".dotbox-messagebox-dismiss");
-          if (closeBtn) {
-            closeBtn.addEventListener("click", () => this.close());
-          }
-          const actionButtons = this.element.querySelectorAll("[data-button-id]");
-          actionButtons.forEach((button) => {
-            button.addEventListener("click", (e) => {
-              const buttonId = e.target.getAttribute("data-button-id");
-              const buttonConfig = this.options.buttons.find((b) => (b.id || `btn-${this.options.buttons.indexOf(b)}`) === buttonId);
-              if (buttonConfig && buttonConfig.onClick) {
-                buttonConfig.onClick(this, buttonConfig);
-              }
-              this.element.dispatchEvent(new CustomEvent("dotbox-messagebox-button", {
-                detail: {
-                  buttonId,
-                  buttonConfig,
-                  messageBox: this
-                }
-              }));
-            });
-          });
-        }
-        close() {
-          if (this.options.onClose) {
-            this.options.onClose(this);
-          }
-          this.element.dispatchEvent(new CustomEvent("dotbox-messagebox-close", {
-            detail: { messageBox: this }
-          }));
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          this.isVisible = false;
-        }
-        show() {
-          this.isVisible = true;
-          this.element.dispatchEvent(new CustomEvent("dotbox-messagebox-show", {
-            detail: { messageBox: this }
-          }));
-        }
-        hide() {
-          this.element.style.display = "none";
-          this.isVisible = false;
-        }
-        setTitle(title) {
-          this.options.title = title;
-          const titleElement = this.element.querySelector(".dotbox-messagebox-title");
-          if (titleElement) {
-            titleElement.textContent = title;
-          }
-          return this;
-        }
-        setMessage(message) {
-          this.options.message = message;
-          const messageElement = this.element.querySelector(".dotbox-messagebox-message");
-          if (messageElement) {
-            messageElement.textContent = message;
-          }
-          return this;
-        }
-        setVariant(variant) {
-          this.element.classList.remove(`dotbox-messagebox-${this.options.variant}`);
-          this.options.variant = variant;
-          this.element.classList.add(`dotbox-messagebox-${variant}`);
-          const iconElement = this.element.querySelector(".dotbox-messagebox-icon");
-          if (iconElement) {
-            iconElement.innerHTML = this.getIcon();
-          }
-          return this;
-        }
-        getElement() {
-          return this.element;
-        }
-        // Static methods for common use cases
-        static success(title, message, buttons = []) {
-          return new _MessageBox({
-            title,
-            message,
-            variant: "success",
-            buttons
-          });
-        }
-        static danger(title, message, buttons = []) {
-          return new _MessageBox({
-            title,
-            message,
-            variant: "danger",
-            buttons
-          });
-        }
-        static warning(title, message, buttons = []) {
-          return new _MessageBox({
-            title,
-            message,
-            variant: "warning",
-            buttons
-          });
-        }
-        static info(title, message, buttons = []) {
-          return new _MessageBox({
-            title,
-            message,
-            variant: "info",
-            buttons
-          });
-        }
-        static confirm(title, message, onConfirm, onCancel) {
-          return new _MessageBox({
-            title,
-            message,
-            variant: "primary",
-            buttons: [
-              {
-                id: "cancel",
-                text: "Cancel",
-                variant: "secondary",
-                onClick: (messageBox) => {
-                  if (onCancel) onCancel();
-                  messageBox.close();
-                }
-              },
-              {
-                id: "confirm",
-                text: "Confirm",
-                variant: "primary",
-                onClick: (messageBox) => {
-                  if (onConfirm) onConfirm();
-                  messageBox.close();
-                }
-              }
-            ]
-          });
         }
       };
-      var DotboxMessageBox = class extends HTMLElement {
+      var DotboxToolButtonElement = class extends HTMLElement {
         constructor() {
           super();
-          this.messageBox = null;
+          this.buttonInstance = null;
         }
         connectedCallback() {
-          const buttonsData = this.getAttribute("buttons");
-          let buttons = [];
-          if (buttonsData) {
-            try {
-              buttons = JSON.parse(buttonsData);
-            } catch (e) {
-              console.warn("Invalid buttons JSON in dotbox-messagebox:", e);
+          this.render();
+        }
+        static get observedAttributes() {
+          return ["icon", "text", "tooltip", "variant", "size", "disabled", "active"];
+        }
+        attributeChangedCallback() {
+          if (this.buttonInstance) {
+            this.render();
+          }
+        }
+        render() {
+          const icon = this.getAttribute("icon") || "\u2699\uFE0F";
+          const text = this.getAttribute("text") || "";
+          const tooltip = this.getAttribute("tooltip") || "";
+          const variant = this.getAttribute("variant") || "default";
+          const size = this.getAttribute("size") || "medium";
+          const disabled = this.hasAttribute("disabled");
+          const active = this.hasAttribute("active");
+          if (this.buttonInstance) {
+            this.innerHTML = "";
+          }
+          this.buttonInstance = new ToolButton({
+            icon,
+            text,
+            tooltip,
+            variant,
+            size,
+            disabled,
+            active,
+            onClick: () => {
+              this.dispatchEvent(new CustomEvent("dotbox-click", {
+                detail: { icon, text, tooltip, variant, size, disabled, active },
+                bubbles: true
+              }));
             }
-          }
-          const options = {
-            title: this.getAttribute("title") || "Message",
-            message: this.getAttribute("message") || this.textContent || "This is a message",
-            variant: this.getAttribute("variant") || "primary",
-            closable: this.getAttribute("closable") !== "false",
-            maxWidth: this.getAttribute("max-width") || "380px",
-            buttons
-          };
-          this.messageBox = new MessageBox(options);
-          this.appendChild(this.messageBox.getElement());
+          });
+          this.innerHTML = "";
+          this.appendChild(this.buttonInstance.getElement());
         }
-        disconnectedCallback() {
-          if (this.messageBox) {
-          }
-        }
-        // Methods for programmatic control
-        setTitle(title) {
-          if (this.messageBox) {
-            this.messageBox.setTitle(title);
-          }
+        // Expose button methods
+        setIcon(icon) {
+          this.setAttribute("icon", icon);
           return this;
         }
-        setMessage(message) {
-          if (this.messageBox) {
-            this.messageBox.setMessage(message);
-          }
+        setText(text) {
+          this.setAttribute("text", text);
+          return this;
+        }
+        setTooltip(tooltip) {
+          this.setAttribute("tooltip", tooltip);
           return this;
         }
         setVariant(variant) {
-          if (this.messageBox) {
-            this.messageBox.setVariant(variant);
+          this.setAttribute("variant", variant);
+          return this;
+        }
+        setActive(active) {
+          if (active) {
+            this.setAttribute("active", "");
+          } else {
+            this.removeAttribute("active");
           }
           return this;
         }
-        close() {
-          if (this.messageBox) {
-            this.messageBox.close();
+        setDisabled(disabled) {
+          if (disabled) {
+            this.setAttribute("disabled", "");
+          } else {
+            this.removeAttribute("disabled");
           }
+          return this;
         }
       };
-      customElements.define("dotbox-messagebox", DotboxMessageBox);
+      if (typeof customElements !== "undefined") {
+        customElements.define("dotbox-tool-button", DotboxToolButtonElement);
+      }
       if (typeof module !== "undefined" && module.exports) {
-        module.exports = MessageBox;
+        module.exports = ToolButton;
       }
     }
   });
@@ -3615,7 +4055,7 @@
   // src/index.css
   var require_index = __commonJS({
     "src/index.css"(exports, module) {
-      module.exports = "./index-WVXDJAU2.css";
+      module.exports = "./index-Y4LFJ3KV.css";
     }
   });
 
@@ -3623,39 +4063,39 @@
   var require_index2 = __commonJS({
     "src/index.js"(exports, module) {
       var Button = require_Button();
+      var Checkbox = require_Checkbox();
+      var CodeBlock = require_CodeBlock();
+      var Dropdown = require_Dropdown();
+      var Form = require_Form();
+      var Loader = require_Loader();
+      var Menu = require_Menu();
+      var MessageBox = require_MessageBox();
+      var MetricItem = require_MetricItem();
       var ModalDialog = require_ModalDialog();
+      var Notification = require_Notification();
+      var Section = require_Section();
       var TabView = require_TabView();
       var TextBox = require_TextBox();
-      var Dropdown = require_Dropdown();
-      var MetricItem = require_MetricItem();
-      var ToolButton = require_ToolButton();
-      var Menu = require_Menu();
-      var CodeBlock = require_CodeBlock();
-      var Loader = require_Loader();
-      var Checkbox = require_Checkbox();
-      var Section = require_Section();
-      var Form = require_Form();
       var Toggle = require_Toggle();
-      var Notification = require_Notification();
-      var MessageBox = require_MessageBox();
+      var ToolButton = require_ToolButton();
       require_index();
       var Dotbox = {
         Button,
+        Checkbox,
+        CodeBlock,
+        Dropdown,
+        Form,
+        Loader,
+        Menu,
+        MessageBox,
+        MetricItem,
         ModalDialog,
+        Notification,
+        Section,
         TabView,
         TextBox,
-        Dropdown,
-        MetricItem,
-        ToolButton,
-        Menu,
-        CodeBlock,
-        Loader,
-        Checkbox,
-        Section,
-        Form,
         Toggle,
-        Notification,
-        MessageBox
+        ToolButton
       };
       if (typeof window !== "undefined") {
         window.Dotbox = Dotbox;
