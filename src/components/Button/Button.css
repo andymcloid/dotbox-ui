@@ -1,26 +1,20 @@
-/* Button Component Styles - Professional look inspired by Menu items */
+/* Smart Button Component Styles - Modern animated design */
 .btn {
-    display: inline-flex;
+    height: 40px;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    padding: 0.875rem 1.25rem; /* More generous padding like menu items */
-    margin: 2px; /* Default spacing between buttons */
-    border: 1px solid transparent;
-    border-radius: var(--radius); /* Use main radius instead of small */
-    font-family: var(--font-family);
-    font-size: 0.95rem; /* Slightly larger font */
-    font-weight: 500;
-    line-height: 1.4;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
     cursor: pointer;
+    overflow: hidden;
+    padding: 0;
+    margin: 1px;
+    transition: background 200ms;
+    font-family: var(--font-family);
     user-select: none;
-    background-color: transparent;
-    transition: all 0.15s ease; /* Faster, smoother transition like menu */
     position: relative;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    min-width: 120px; /* Prevent shrinking */
 }
 
 .btn:disabled {
@@ -29,188 +23,220 @@
     cursor: not-allowed;
 }
 
-/* Size variants - Professional spacing */
-.btn-small {
-    padding: 0.5rem 0.875rem;
-    font-size: 0.875rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-}
-
-.btn-medium {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.95rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.btn-large {
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
-}
-
-/* Color variants */
-.btn-primary {
-    color: var(--color-text-inverse);
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-}
-
-.btn-primary:hover:not(:disabled) {
-    background-color: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px); /* Subtle lift effect like professional buttons */
-}
-
-.btn-secondary {
-    color: var(--color-text);
-    background-color: var(--color-bg-panel);
-    border-color: var(--color-border);
-}
-
-.btn-secondary:hover:not(:disabled) {
-    color: var(--color-text);
-    background-color: var(--color-bg-hover);
-    border-color: var(--color-primary);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
-}
-
-.btn-danger {
-    color: var(--color-text-inverse);
-    background-color: var(--color-danger);
-    border-color: var(--color-danger);
-}
-
-.btn-danger:hover:not(:disabled) {
-    color: var(--color-text-inverse);
-    background-color: #dc2626;
-    border-color: #dc2626;
-    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
-    transform: translateY(-1px);
-}
-
-.btn-success {
-    color: var(--color-text-inverse);
-    background-color: var(--color-success);
-    border-color: var(--color-success);
-}
-
-.btn-success:hover:not(:disabled) {
-    color: var(--color-text-inverse);
-    background-color: #059669;
-    border-color: #059669;
-    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
-    transform: translateY(-1px);
-}
-
-/* Delete variant with special red styling and animations */
-.btn-delete {
-    width: 150px;
-    height: 50px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    background: #e62222;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+/* Button text styling */
+.btn .btn-text {
+    flex: 1 1 100%;
     color: white;
     font-weight: bold;
-    position: relative;
-    overflow: hidden;
-    transition: 200ms;
-}
-
-.btn-delete .btn-text {
-    transform: translateX(35px);
-    transition: 200ms;
-}
-
-.btn-delete .btn-icon {
-    position: absolute;
-    border-left: 1px solid #c41b1b;
-    transform: translateX(110px);
-    height: 40px;
-    width: 40px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    transition: 200ms;
-}
-
-.btn-delete .btn-icon svg {
-    width: 15px;
-    fill: #eee;
-    transition: 200ms;
-}
-
-.btn-delete:hover {
-    background: #ff3636;
-}
-
-.btn-delete:hover .btn-text {
-    color: transparent;
-}
-
-.btn-delete:hover .btn-icon {
-    width: 150px;
-    border-left: none;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transition:
+        flex-basis 600ms ease,
+        opacity 300ms ease,
+        transform 300ms ease;
     transform: translateX(0);
 }
 
-.btn-delete:focus {
-    outline: none;
+/* Button icon styling */
+.btn .btn-icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: width 300ms ease;
 }
 
-.btn-delete:active .btn-icon svg {
+.btn .btn-icon svg {
+    width: 15px;
+    height: 15px;
+    transition: transform 150ms ease;
+}
+
+.btn .btn-divider {
+    position: absolute;
+    left: 0;
+    top: 10%;
+    height: 80%;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.15);
+    transition: opacity 300ms ease;
+}
+
+/* Hover animations - ONLY for buttons with BOTH text AND icon */
+.btn:not(.btn-no-icon):not(.btn-icon-only):hover .btn-text {
+    flex-basis: 0;
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.btn:not(.btn-no-icon):not(.btn-icon-only):hover .btn-icon {
+    width: 100%;
+}
+
+.btn:not(.btn-no-icon):not(.btn-icon-only):hover .btn-divider {
+    opacity: 0;
+}
+
+.btn:not(.btn-no-icon):not(.btn-icon-only):not(:hover) .btn-text {
+    flex-basis: 100%;
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 150ms;
+}
+
+.btn:not(.btn-no-icon):not(.btn-icon-only):not(:hover) .btn-divider {
+    transition-delay: 150ms;
+}
+
+.btn:active .btn-icon svg {
     transform: scale(0.8);
 }
 
-/* Small delete variant */
-.btn-delete.btn-small {
-    width: 120px;
-    height: 40px;
+/* Buttons without icons - simple layout, no animations */
+.btn.btn-no-icon {
+    justify-content: center;
+    padding: 0 1rem;
+    min-width: 80px;
 }
 
-.btn-delete.btn-small .btn-text {
-    transform: translateX(25px);
+.btn.btn-no-icon .btn-text {
+    flex: none;
+}
+
+/* Icon-only buttons - no text animations */
+.btn.btn-icon-only {
+    justify-content: center;
+    min-width: 40px;
+    padding: 0;
+}
+
+.btn.btn-icon-only .btn-text {
+    display: none;
+}
+
+.btn.btn-icon-only .btn-divider {
+    display: none;
+}
+
+/* Size variants */
+.btn-small {
+    height: 32px;
+    border-radius: 4px;
     font-size: 0.875rem;
+    min-width: 100px;
 }
 
-.btn-delete.btn-small .btn-icon {
-    transform: translateX(85px);
-    height: 30px;
-    width: 30px;
+.btn-small .btn-icon {
+    width: 32px;
 }
 
-.btn-delete.btn-small:hover .btn-icon {
-    width: 120px;
+.btn-small .btn-icon svg {
+    width: 12px;
+    height: 12px;
 }
 
-/* Large delete variant */
-.btn-delete.btn-large {
-    width: 180px;
-    height: 60px;
+.btn-small.btn-no-icon {
+    padding: 0 0.75rem;
+    min-width: 60px;
 }
 
-.btn-delete.btn-large .btn-text {
-    transform: translateX(45px);
+.btn-small.btn-icon-only {
+    min-width: 32px;
+}
+
+.btn-medium {
+    height: 40px;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    min-width: 120px;
+}
+
+.btn-medium .btn-icon {
+    width: 40px;
+}
+
+.btn-medium .btn-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+.btn-medium.btn-no-icon {
+    padding: 0 1rem;
+    min-width: 80px;
+}
+
+.btn-medium.btn-icon-only {
+    min-width: 40px;
+}
+
+.btn-large {
+    height: 48px;
+    border-radius: 6px;
     font-size: 1rem;
+    min-width: 140px;
 }
 
-.btn-delete.btn-large .btn-icon {
-    transform: translateX(135px);
-    height: 50px;
-    width: 50px;
+.btn-large .btn-icon {
+    width: 48px;
 }
 
-.btn-delete.btn-large .btn-icon svg {
+.btn-large .btn-icon svg {
     width: 18px;
+    height: 18px;
 }
 
-.btn-delete.btn-large:hover .btn-icon {
-    width: 180px;
+.btn-large.btn-no-icon {
+    padding: 0 1.25rem;
+    min-width: 100px;
+}
+
+.btn-large.btn-icon-only {
+    min-width: 48px;
+}
+
+/* Color variants - Swapped primary/secondary for more subtle defaults */
+.btn-primary {
+    background: var(--color-bg-panel);
+    border: 1px solid var(--color-border);
+}
+
+.btn-primary .btn-text {
+    color: var(--color-text);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary);
+}
+
+.btn-secondary {
+    background: var(--color-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+}
+
+.btn-success {
+    background: var(--color-success);
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #059669;
+}
+
+.btn-danger {
+    background: #e62222;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #ff3636;
 }
 
 /* Loading state */
@@ -218,21 +244,19 @@
     pointer-events: none;
 }
 
+.btn-loading .btn-text {
+    opacity: 0.7;
+}
+
 .btn-spinner {
     animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
 }
 
 /* Focus styles */
 .btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
-}
-
-/* Active (pressed) state */
-.btn:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2), 1px 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 /* Button groups */
@@ -260,6 +284,7 @@
     }
 }
 
+/* Legacy button class support */
 .button {
     background: var(--color-primary);
     color: var(--color-text-inverse);
@@ -279,4 +304,4 @@
     background: var(--color-primary-hover);
     color: var(--color-text-inverse);
     box-shadow: 0 4px 16px rgba(0,0,0,0.16);
-} 
+}

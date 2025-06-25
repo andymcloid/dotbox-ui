@@ -15,7 +15,7 @@
       "type": "string",
       "default": "primary",
       "description": "Visual style variant of the button",
-      "options": ["primary", "secondary", "danger", "success", "delete"]
+      "options": ["primary", "secondary", "danger", "success"]
     },
     {
       "name": "size",
@@ -47,13 +47,7 @@
       "name": "icon",
       "type": "string",
       "default": null,
-      "description": "Icon to display before the button text (HTML or emoji)"
-    },
-    {
-      "name": "animation",
-      "type": "boolean",
-      "default": false,
-      "description": "Enable hover animations for delete variant with icon"
+      "description": "Icon to display with smart animations (predefined icons: 'delete', 'close', 'check', 'plus' or custom SVG)"
     },
     {
       "name": "className",
@@ -91,19 +85,7 @@
         }
       ],
       "returns": "Button",
-      "description": "Updates the button icon"
-    },
-    {
-      "name": "setAnimation",
-      "parameters": [
-        {
-          "name": "animation",
-          "type": "boolean",
-          "description": "Animation state"
-        }
-      ],
-      "returns": "Button",
-      "description": "Enables/disables animation for delete variant"
+      "description": "Updates the button icon and rebuilds the smart button structure"
     },
     {
       "name": "setLoading",
@@ -164,8 +146,7 @@
         "text": "string",
         "disabled": "boolean",
         "loading": "boolean",
-        "icon": "string|null",
-        "animation": "boolean"
+        "icon": "string|null"
       }
     }
   ],
@@ -177,8 +158,7 @@
       "disabled",
       "loading",
       "text",
-      "icon",
-      "animation"
+      "icon"
     ]
   },
   "dependencies": [],
@@ -201,11 +181,7 @@
     },
     {
       "name": ".btn-danger",
-      "description": "Danger button variant styling"
-    },
-    {
-      "name": ".btn-delete",
-      "description": "Delete button variant with special red styling and animations"
+      "description": "Danger button variant styling (red theme like your JSFiddle example)"
     },
     {
       "name": ".btn-small",
@@ -229,11 +205,19 @@
     },
     {
       "name": ".btn-text",
-      "description": "Text wrapper for delete variant animations"
+      "description": "Text wrapper with smart animations for all buttons"
     },
     {
       "name": ".btn-icon",
-      "description": "Icon wrapper for delete variant animations"
+      "description": "Icon wrapper with smart animations and divider"
+    },
+    {
+      "name": ".btn-divider",
+      "description": "Visual divider between text and icon areas"
+    },
+    {
+      "name": ".btn-no-icon",
+      "description": "Modifier class for buttons without icons (simple layout)"
     }
   ]
 }

@@ -1,0 +1,34 @@
+<!-- Complete Button Test Examples -->
+<h4>Text-Only Buttons (No Icons, Background Change Only)</h4>
+<dotbox-button variant="primary">Primary</dotbox-button>
+<dotbox-button variant="secondary">Secondary</dotbox-button>
+<dotbox-button variant="danger">Danger</dotbox-button>
+<dotbox-button variant="success">Success</dotbox-button>
+
+<h4>Icon + Text Buttons (Smart Animations)</h4>
+<dotbox-button variant="primary" icon="plus">Add Item</dotbox-button>
+<dotbox-button variant="secondary" icon="check">Save</dotbox-button>
+<dotbox-button variant="danger" icon="delete">Delete</dotbox-button>
+<dotbox-button variant="success" icon="check">Confirm</dotbox-button>
+
+<h4>Icon-Only Buttons (No Animations, Background Change Only)</h4>
+<dotbox-button variant="primary" icon="plus" text=""></dotbox-button>
+<dotbox-button variant="secondary" icon="check" text=""></dotbox-button>
+<dotbox-button variant="danger" icon="delete" text=""></dotbox-button>
+<dotbox-button variant="success" icon="close" text=""></dotbox-button>
+
+<h4>Different Sizes</h4>
+<p>Small:</p>
+<dotbox-button variant="danger" icon="delete" size="small">Delete</dotbox-button>
+<dotbox-button variant="danger" size="small">Delete</dotbox-button>
+<dotbox-button variant="danger" icon="delete" text="" size="small"></dotbox-button>
+
+<p>Medium (default):</p>
+<dotbox-button variant="danger" icon="delete" size="medium">Delete</dotbox-button>
+<dotbox-button variant="danger" size="medium">Delete</dotbox-button>
+<dotbox-button variant="danger" icon="delete" text="" size="medium"></dotbox-button>
+
+<p>Large:</p>
+<dotbox-button variant="danger" icon="delete" size="large">Delete</dotbox-button>
+<dotbox-button variant="danger" size="large">Delete</dotbox-button>
+<dotbox-button variant="danger" icon="delete" text="" size="large"></dotbox-button>

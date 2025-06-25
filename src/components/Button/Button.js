@@ -7,13 +7,12 @@ class Button {
         this.options = {
             text: 'Button',
             type: 'button',
-            variant: 'primary', // primary, secondary, danger, success, delete
+            variant: 'primary', // primary, secondary, danger, success
             size: 'small', // small, medium, large
             disabled: false,
             loading: false,
             icon: null,
             className: '',
-            animation: false, // Enable animation for delete variant
             ...options
         };
         
@@ -49,6 +48,13 @@ class Button {
             classes.push('btn-loading');
         }
         
+        // Determine button layout type
+        if (!this.options.icon) {
+            classes.push('btn-no-icon');
+        } else if (!this.options.text || this.options.text.trim() === '') {
+            classes.push('btn-icon-only');
+        }
+        
         // Add custom classes
         if (this.options.className) {
             classes.push(this.options.className);
@@ -59,20 +65,48 @@ class Button {
     
     updateContent() {
         let content = '';
+        const hasText = this.options.text && this.options.text.trim() !== '';
         
         if (this.options.loading) {
-            content = '<span class="btn-spinner">⟳</span> Loading...';
-        } else if (this.options.variant === 'delete' && this.options.animation && this.options.icon) {
-            // Special structure for delete variant with animation
-            const defaultIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>';
-            const iconHtml = this.options.icon === 'delete' ? defaultIcon : this.options.icon;
-            content = `<span class="btn-text">${this.options.text}</span><span class="btn-icon">${iconHtml}</span>`;
-        } else {
-            if (this.options.icon) {
-                content = `${this.options.icon} ${this.options.text}`;
+            if (this.options.icon && hasText) {
+                content = `
+                    <span class="btn-text">
+                        <span class="btn-spinner">⟳</span> Loading...
+                    </span>
+                    <span class="btn-icon">
+                        <span class="btn-divider"></span>
+                        ${this.getIconHtml()}
+                    </span>
+                `;
+            } else if (this.options.icon && !hasText) {
+                // Icon-only loading
+                content = `
+                    <span class="btn-icon">
+                        <span class="btn-spinner">⟳</span>
+                    </span>
+                `;
             } else {
-                content = this.options.text;
+                content = '<span class="btn-text"><span class="btn-spinner">⟳</span> Loading...</span>';
             }
+        } else if (this.options.icon && hasText) {
+            // Smart button with both text and icon (has animations)
+            content = `
+                <span class="btn-text">${this.options.text}</span>
+                <span class="btn-icon">
+                    <span class="btn-divider"></span>
+                    ${this.getIconHtml()}
+                </span>
+            `;
+        } else if (this.options.icon && !hasText) {
+            // Icon-only button (no animations)
+            content = `
+                <span class="btn-icon">
+                    ${this.getIconHtml()}
+                </span>
+            `;
+        } else {
+            // Simple button without icon
+            content = `<span class="btn-text">${this.options.text}</span>`;
         }
         
         this.element.innerHTML = content;
@@ -88,6 +122,20 @@ class Button {
         }
     }
     
+    getIconHtml() {
+        if (!this.options.icon) return '';
+        
+        // Default icons for common variants
+        const defaultIcons = {
+            'delete': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
+            'close': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
+            'check': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>',
+            'plus': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/></svg>'
+        };
+        
+        return defaultIcons[this.options.icon] || this.options.icon;
+    }
+    
     // Public methods
     setText(text) {
         this.options.text = text;
@@ -97,12 +145,7 @@ class Button {
     
     setIcon(icon) {
         this.options.icon = icon;
-        this.updateContent();
-        return this;
-    }
-    
-    setAnimation(animation) {
-        this.options.animation = animation;
+        this.updateClasses();
         this.updateContent();
         return this;
     }
@@ -154,7 +197,7 @@ class DotboxButtonElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading', 'animation'];
+        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading'];
     }
 
     attributeChangedCallback() {
@@ -168,7 +211,6 @@ class DotboxButtonElement extends HTMLElement {
         const size = this.getAttribute('size') || 'small';
         const disabled = this.hasAttribute('disabled');
         const loading = this.hasAttribute('loading');
-        const animation = this.hasAttribute('animation');
         const icon = this.getAttribute('icon') || null;
         const text = this.getAttribute('text') || this.textContent.trim() || 'Button';
 
@@ -185,11 +227,10 @@ class DotboxButtonElement extends HTMLElement {
             disabled: disabled,
             loading: loading,
             icon: icon,
-            animation: animation,
             onClick: () => {
                 // Dispatch custom event
                 this.dispatchEvent(new CustomEvent('dotbox-click', {
-                    detail: { variant, size, text, disabled, loading, icon, animation },
+                    detail: { variant, size, text, disabled, loading, icon },
                     bubbles: true
                 }));
             }
@@ -234,15 +275,6 @@ class DotboxButtonElement extends HTMLElement {
             this.setAttribute('icon', icon);
         } else {
             this.removeAttribute('icon');
-        }
-        return this;
-    }
-    
-    setAnimation(animation) {
-        if (animation) {
-            this.setAttribute('animation', '');
-        } else {
-            this.removeAttribute('animation');
         }
         return this;
     }

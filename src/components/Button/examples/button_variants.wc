@@ -2,4 +2,4 @@
 <dotbox-button variant="secondary">Secondary</dotbox-button>
 <dotbox-button variant="success">Success</dotbox-button>
 <dotbox-button variant="danger">Danger</dotbox-button>
-<dotbox-button variant="delete" icon="delete" animation>Delete</dotbox-button>
+<dotbox-button variant="danger" icon="delete">Delete</dotbox-button>

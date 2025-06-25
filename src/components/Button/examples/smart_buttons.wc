@@ -1,0 +1,20 @@
+<!-- Smart Button Examples -->
+<h4>Smart Buttons with Hover Animations</h4>
+<p>These buttons use your JSFiddle design with smooth hover animations when they have icons.</p>
+
+<dotbox-button variant="danger" icon="delete">Delete Item</dotbox-button>
+<dotbox-button variant="danger" icon="close">Close</dotbox-button>
+<dotbox-button variant="success" icon="check">Confirm</dotbox-button>
+<dotbox-button variant="primary" icon="plus">Add New</dotbox-button>
+
+<h4>Without Icons (No Animation)</h4>
+<p>Buttons without icons have a simple hover effect (background color change only).</p>
+
+<dotbox-button variant="danger">Delete</dotbox-button>
+<dotbox-button variant="success">Save</dotbox-button>
+<dotbox-button variant="primary">Submit</dotbox-button>
+<dotbox-button variant="secondary">Cancel</dotbox-button>
+
+<h4>Loading State</h4>
+<dotbox-button variant="danger" icon="delete" loading>Deleting...</dotbox-button>
+<dotbox-button variant="primary" loading>Loading...</dotbox-button>
