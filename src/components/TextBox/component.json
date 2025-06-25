@@ -1,0 +1,374 @@
+{
+  "name": "TextBox",
+  "description": "A comprehensive input field component with labels, validation, help text, and animated borders supporting various input types.",
+  "category": "Input",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "type",
+      "type": "string",
+      "default": "text",
+      "description": "HTML input type attribute",
+      "options": ["text", "email", "password", "number", "tel", "url", "search", "date", "time", "datetime-local", "month", "week"]
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "",
+      "description": "Placeholder text displayed when input is empty"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "",
+      "description": "Current value of the input field"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Label text displayed above the input field"
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the input is required for form submission"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the input is disabled"
+    },
+    {
+      "name": "readonly",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the input is read-only"
+    },
+    {
+      "name": "min",
+      "type": "string|number",
+      "default": null,
+      "description": "Minimum value for number, date, and time inputs"
+    },
+    {
+      "name": "max",
+      "type": "string|number",
+      "default": null,
+      "description": "Maximum value for number, date, and time inputs"
+    },
+    {
+      "name": "step",
+      "type": "string|number",
+      "default": null,
+      "description": "Step value for number inputs"
+    },
+    {
+      "name": "pattern",
+      "type": "string",
+      "default": null,
+      "description": "Regular expression pattern for input validation"
+    },
+    {
+      "name": "helpText",
+      "type": "string",
+      "default": "",
+      "description": "Help text displayed below the input field"
+    },
+    {
+      "name": "errorText",
+      "type": "string",
+      "default": "",
+      "description": "Error text displayed when validation fails"
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "",
+      "description": "Additional CSS classes to apply to the container"
+    },
+    {
+      "name": "onChange",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when input value changes"
+    },
+    {
+      "name": "onInput",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed on input events (real-time)"
+    },
+    {
+      "name": "onFocus",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when input receives focus"
+    },
+    {
+      "name": "onBlur",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when input loses focus"
+    }
+  ],
+  "methods": [
+    {
+      "name": "getValue",
+      "parameters": [],
+      "returns": "string",
+      "description": "Returns the current value of the input field"
+    },
+    {
+      "name": "setValue",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "string",
+          "description": "New value for the input field"
+        }
+      ],
+      "returns": "TextBox",
+      "description": "Sets the input field value"
+    },
+    {
+      "name": "setPlaceholder",
+      "parameters": [
+        {
+          "name": "placeholder",
+          "type": "string",
+          "description": "New placeholder text"
+        }
+      ],
+      "returns": "TextBox",
+      "description": "Updates the placeholder text"
+    },
+    {
+      "name": "setLabel",
+      "parameters": [
+        {
+          "name": "label",
+          "type": "string",
+          "description": "New label text"
+        }
+      ],
+      "returns": "TextBox",
+      "description": "Sets or updates the input label"
+    },
+    {
+      "name": "setHelpText",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "description": "New help text"
+        }
+      ],
+      "returns": "TextBox",
+      "description": "Sets or updates the help text"
+    },
+    {
+      "name": "setDisabled",
+      "parameters": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "New disabled state"
+        }
+      ],
+      "returns": "TextBox",
+      "description": "Sets the disabled state of the input"
+    },
+    {
+      "name": "setRequired",
+      "parameters": [
+        {
+          "name": "required",
+          "type": "boolean",
+          "description": "New required state"
+        }
+      ],
+      "returns": "TextBox",
+      "description": "Sets the required state of the input"
+    },
+    {
+      "name": "showError",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Error message to display"
+        }
+      ],
+      "returns": "TextBox",
+      "description": "Shows an error message and applies error styling"
+    },
+    {
+      "name": "hideError",
+      "parameters": [],
+      "returns": "TextBox",
+      "description": "Hides the error message and removes error styling"
+    },
+    {
+      "name": "validate",
+      "parameters": [],
+      "returns": "boolean",
+      "description": "Validates the input using HTML5 validation and shows/hides errors"
+    },
+    {
+      "name": "focus",
+      "parameters": [],
+      "returns": "TextBox",
+      "description": "Focuses the input field"
+    },
+    {
+      "name": "blur",
+      "parameters": [],
+      "returns": "TextBox",
+      "description": "Removes focus from the input field"
+    },
+    {
+      "name": "getContainer",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the container DOM element"
+    },
+    {
+      "name": "getInput",
+      "parameters": [],
+      "returns": "HTMLInputElement",
+      "description": "Returns the input DOM element"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the textbox from DOM and cleans up"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-change",
+      "description": "Fired when the input value changes (Web Component only)",
+      "detail": {
+        "value": "string"
+      }
+    },
+    {
+      "name": "dotbox-input",
+      "description": "Fired on input events (real-time) (Web Component only)",
+      "detail": {
+        "value": "string"
+      }
+    },
+    {
+      "name": "dotbox-focus",
+      "description": "Fired when input receives focus (Web Component only)",
+      "detail": {
+        "value": "string"
+      }
+    },
+    {
+      "name": "dotbox-blur",
+      "description": "Fired when input loses focus (Web Component only)",
+      "detail": {
+        "value": "string"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-textbox",
+    "attributes": [
+      "label",
+      "placeholder",
+      "type",
+      "value",
+      "required",
+      "disabled",
+      "readonly",
+      "help-text",
+      "error-text"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Text Input",
+      "description": "Simple text input with label and placeholder",
+      "code": "<dotbox-textbox label=\"Full Name\" placeholder=\"Enter your full name\" required></dotbox-textbox>"
+    },
+    {
+      "title": "Different Input Types",
+      "description": "Various input types for different data",
+      "code": "<dotbox-textbox label=\"Email\" type=\"email\" placeholder=\"user@example.com\" required></dotbox-textbox>\n<dotbox-textbox label=\"Password\" type=\"password\" placeholder=\"Enter password\" required></dotbox-textbox>\n<dotbox-textbox label=\"Phone\" type=\"tel\" placeholder=\"(555) 123-4567\"></dotbox-textbox>\n<dotbox-textbox label=\"Website\" type=\"url\" placeholder=\"https://example.com\"></dotbox-textbox>"
+    },
+    {
+      "title": "Number Inputs with Validation",
+      "description": "Number inputs with min, max, and step constraints",
+      "code": "<dotbox-textbox label=\"Age\" type=\"number\" min=\"18\" max=\"120\" placeholder=\"Enter your age\"></dotbox-textbox>\n<dotbox-textbox label=\"Price\" type=\"number\" min=\"0\" step=\"0.01\" placeholder=\"0.00\"></dotbox-textbox>\n<dotbox-textbox label=\"Quantity\" type=\"number\" min=\"1\" max=\"100\" value=\"1\"></dotbox-textbox>"
+    },
+    {
+      "title": "Date and Time Inputs",
+      "description": "Date and time input variations",
+      "code": "<dotbox-textbox label=\"Birth Date\" type=\"date\"></dotbox-textbox>\n<dotbox-textbox label=\"Appointment Time\" type=\"datetime-local\"></dotbox-textbox>\n<dotbox-textbox label=\"Meeting Time\" type=\"time\"></dotbox-textbox>\n<dotbox-textbox label=\"Birth Month\" type=\"month\"></dotbox-textbox>"
+    },
+    {
+      "title": "Input States and Help Text",
+      "description": "Inputs with help text, disabled, and readonly states",
+      "code": "<dotbox-textbox \n  label=\"Username\" \n  placeholder=\"Choose a username\" \n  help-text=\"Username must be 3-20 characters long\"\n  required\n></dotbox-textbox>\n\n<dotbox-textbox \n  label=\"System ID\" \n  value=\"SYS-12345\" \n  readonly \n  help-text=\"This field is automatically generated\"\n></dotbox-textbox>\n\n<dotbox-textbox \n  label=\"Disabled Field\" \n  value=\"Cannot edit this\" \n  disabled\n></dotbox-textbox>"
+    },
+    {
+      "title": "Form Integration",
+      "description": "Text inputs within a form layout",
+      "code": "<dotbox-form layout=\"vertical\" gap=\"medium\">\n  <dotbox-textbox label=\"First Name\" placeholder=\"John\" required></dotbox-textbox>\n  <dotbox-textbox label=\"Last Name\" placeholder=\"Doe\" required></dotbox-textbox>\n  <dotbox-textbox label=\"Email\" type=\"email\" placeholder=\"john.doe@example.com\" required></dotbox-textbox>\n  <dotbox-textbox label=\"Phone\" type=\"tel\" placeholder=\"(555) 123-4567\"></dotbox-textbox>\n  <dotbox-textbox label=\"Company\" placeholder=\"Company Name\"></dotbox-textbox>\n</dotbox-form>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".textbox-group",
+      "description": "Main container for the textbox component"
+    },
+    {
+      "name": ".textbox-label",
+      "description": "Label element styling"
+    },
+    {
+      "name": ".textbox-input-wrapper",
+      "description": "Wrapper for input and animated border"
+    },
+    {
+      "name": ".textbox-input",
+      "description": "Input element styling"
+    },
+    {
+      "name": ".textbox-input-border",
+      "description": "Animated border element"
+    },
+    {
+      "name": ".textbox-help",
+      "description": "Help text styling"
+    },
+    {
+      "name": ".textbox-error",
+      "description": "Error text styling"
+    },
+    {
+      "name": ".textbox-error-state",
+      "description": "Error state styling for the container"
+    },
+    {
+      "name": ".textbox-disabled",
+      "description": "Disabled state styling"
+    },
+    {
+      "name": ".textbox-required",
+      "description": "Required field styling"
+    },
+    {
+      "name": ".hidden",
+      "description": "Hidden element utility class"
+    }
+  ]
+}

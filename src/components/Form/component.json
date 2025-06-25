@@ -1,0 +1,309 @@
+{
+  "name": "Form",
+  "description": "A flexible layout container component for organizing form elements with support for vertical, horizontal, and grid layouts.",
+  "category": "Layout",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "layout",
+      "type": "string",
+      "default": "vertical",
+      "description": "Layout style for form fields",
+      "options": ["vertical", "horizontal", "grid"]
+    },
+    {
+      "name": "gap",
+      "type": "string",
+      "default": "medium",
+      "description": "Spacing between form elements",
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "columns",
+      "type": "number",
+      "default": 2,
+      "description": "Number of columns for grid layout (1-4)"
+    },
+    {
+      "name": "submitButton",
+      "type": "object",
+      "default": null,
+      "description": "Configuration for automatic submit button creation"
+    },
+    {
+      "name": "cancelButton",
+      "type": "object",
+      "default": null,
+      "description": "Configuration for automatic cancel button creation"
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "",
+      "description": "Additional CSS classes to apply to the form container"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto-generated",
+      "description": "Unique identifier for the form element"
+    },
+    {
+      "name": "onSubmit",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when form is submitted"
+    },
+    {
+      "name": "onReset",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when form is reset"
+    }
+  ],
+  "methods": [
+    {
+      "name": "addField",
+      "parameters": [
+        {
+          "name": "element",
+          "type": "HTMLElement|Component",
+          "description": "Form field element or component instance"
+        }
+      ],
+      "returns": "Form",
+      "description": "Adds a form field to the fields container"
+    },
+    {
+      "name": "addFields",
+      "parameters": [
+        {
+          "name": "elements",
+          "type": "array",
+          "description": "Array of form field elements or components"
+        }
+      ],
+      "returns": "Form",
+      "description": "Adds multiple form fields at once"
+    },
+    {
+      "name": "addSubmitButton",
+      "parameters": [
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Button configuration options"
+        }
+      ],
+      "returns": "HTMLButtonElement",
+      "description": "Adds a submit button to the form"
+    },
+    {
+      "name": "addCancelButton",
+      "parameters": [
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Button configuration options"
+        }
+      ],
+      "returns": "HTMLButtonElement",
+      "description": "Adds a cancel button to the form"
+    },
+    {
+      "name": "addButton",
+      "parameters": [
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Button configuration options"
+        }
+      ],
+      "returns": "HTMLButtonElement",
+      "description": "Adds a custom button to the form"
+    },
+    {
+      "name": "setLayout",
+      "parameters": [
+        {
+          "name": "layout",
+          "type": "string",
+          "description": "New layout type"
+        }
+      ],
+      "returns": "Form",
+      "description": "Changes the form layout (vertical, horizontal, grid)"
+    },
+    {
+      "name": "setGap",
+      "parameters": [
+        {
+          "name": "gap",
+          "type": "string",
+          "description": "New gap size"
+        }
+      ],
+      "returns": "Form",
+      "description": "Changes the spacing between form elements"
+    },
+    {
+      "name": "setColumns",
+      "parameters": [
+        {
+          "name": "columns",
+          "type": "number",
+          "description": "Number of columns for grid layout"
+        }
+      ],
+      "returns": "Form",
+      "description": "Sets the number of columns for grid layout"
+    },
+    {
+      "name": "getFormData",
+      "parameters": [],
+      "returns": "object",
+      "description": "Returns form data as a JavaScript object"
+    },
+    {
+      "name": "reset",
+      "parameters": [],
+      "returns": "Form",
+      "description": "Resets all form fields to their default values"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the main form container element"
+    },
+    {
+      "name": "getFormElement",
+      "parameters": [],
+      "returns": "HTMLFormElement",
+      "description": "Returns the HTML form element"
+    },
+    {
+      "name": "getFieldsContainer",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the container holding form fields"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the form from DOM and cleans up"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-submit",
+      "description": "Fired when the form is submitted (Web Component only)",
+      "detail": {
+        "data": "object",
+        "originalEvent": "Event"
+      }
+    },
+    {
+      "name": "dotbox-reset",
+      "description": "Fired when the form is reset (Web Component only)",
+      "detail": {
+        "originalEvent": "Event"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-form",
+    "attributes": [
+      "layout",
+      "gap",
+      "columns"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Vertical Form",
+      "description": "Simple form with vertical layout",
+      "code": "<dotbox-form layout=\"vertical\">\n  <dotbox-textbox label=\"Name\" required></dotbox-textbox>\n  <dotbox-textbox label=\"Email\" type=\"email\" required></dotbox-textbox>\n  <dotbox-checkbox label=\"Subscribe to newsletter\"></dotbox-checkbox>\n</dotbox-form>"
+    },
+    {
+      "title": "Horizontal Form",
+      "description": "Form with horizontal layout for compact display",
+      "code": "<dotbox-form layout=\"horizontal\" gap=\"small\">\n  <dotbox-textbox label=\"First Name\" required></dotbox-textbox>\n  <dotbox-textbox label=\"Last Name\" required></dotbox-textbox>\n  <dotbox-dropdown label=\"Country\" options='[{\"value\":\"us\",\"label\":\"United States\"}]'></dotbox-dropdown>\n</dotbox-form>"
+    },
+    {
+      "title": "Grid Layout Form",
+      "description": "Form using grid layout with multiple columns",
+      "code": "<dotbox-form layout=\"grid\" columns=\"3\" gap=\"medium\">\n  <dotbox-textbox label=\"First Name\"></dotbox-textbox>\n  <dotbox-textbox label=\"Last Name\"></dotbox-textbox>\n  <dotbox-textbox label=\"Phone\"></dotbox-textbox>\n  <dotbox-textbox label=\"Email\" type=\"email\"></dotbox-textbox>\n  <dotbox-dropdown label=\"Department\" options='[{\"value\":\"sales\",\"label\":\"Sales\"}]'></dotbox-dropdown>\n  <dotbox-checkbox label=\"Active\"></dotbox-checkbox>\n</dotbox-form>"
+    },
+    {
+      "title": "Form with Different Gaps",
+      "description": "Forms showing different spacing options",
+      "code": "<dotbox-form layout=\"vertical\" gap=\"small\">\n  <dotbox-textbox label=\"Compact Form\" placeholder=\"Small gap\"></dotbox-textbox>\n  <dotbox-textbox label=\"Another Field\" placeholder=\"Tight spacing\"></dotbox-textbox>\n</dotbox-form>\n\n<dotbox-form layout=\"vertical\" gap=\"large\">\n  <dotbox-textbox label=\"Spacious Form\" placeholder=\"Large gap\"></dotbox-textbox>\n  <dotbox-textbox label=\"Another Field\" placeholder=\"Generous spacing\"></dotbox-textbox>\n</dotbox-form>"
+    },
+    {
+      "title": "Mixed Form Elements",
+      "description": "Form containing various types of form elements",
+      "code": "<dotbox-form layout=\"vertical\" gap=\"medium\">\n  <dotbox-textbox label=\"Full Name\" required></dotbox-textbox>\n  <dotbox-textbox label=\"Email\" type=\"email\" required></dotbox-textbox>\n  <dotbox-dropdown label=\"Role\" options='[{\"value\":\"admin\",\"label\":\"Admin\"},{\"value\":\"user\",\"label\":\"User\"}]'></dotbox-dropdown>\n  <dotbox-checkbox label=\"Send notifications\"></dotbox-checkbox>\n  <dotbox-toggle label=\"Account active\"></dotbox-toggle>\n</dotbox-form>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-form",
+      "description": "Main container for the form component"
+    },
+    {
+      "name": ".dotbox-form-element",
+      "description": "The HTML form element within the container"
+    },
+    {
+      "name": ".dotbox-form-fields",
+      "description": "Container for form field elements"
+    },
+    {
+      "name": ".dotbox-form-buttons",
+      "description": "Container for form action buttons"
+    },
+    {
+      "name": ".dotbox-form-vertical",
+      "description": "Vertical layout styling with stacked fields"
+    },
+    {
+      "name": ".dotbox-form-horizontal",
+      "description": "Horizontal layout styling with inline fields"
+    },
+    {
+      "name": ".dotbox-form-grid",
+      "description": "Grid layout styling with configurable columns"
+    },
+    {
+      "name": ".dotbox-form-columns-1",
+      "description": "Single column grid layout"
+    },
+    {
+      "name": ".dotbox-form-columns-2",
+      "description": "Two column grid layout"
+    },
+    {
+      "name": ".dotbox-form-columns-3",
+      "description": "Three column grid layout"
+    },
+    {
+      "name": ".dotbox-form-columns-4",
+      "description": "Four column grid layout"
+    },
+    {
+      "name": ".dotbox-form-gap-small",
+      "description": "Small spacing between form elements"
+    },
+    {
+      "name": ".dotbox-form-gap-medium",
+      "description": "Medium spacing between form elements"
+    },
+    {
+      "name": ".dotbox-form-gap-large",
+      "description": "Large spacing between form elements"
+    }
+  ]
+}

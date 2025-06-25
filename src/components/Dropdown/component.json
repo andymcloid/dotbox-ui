@@ -1,0 +1,341 @@
+{
+  "name": "Dropdown",
+  "description": "A customizable select dropdown component with TextBox-like styling, validation states, and comprehensive option management.",
+  "category": "Input",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "The text label displayed above the dropdown"
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "Select an option...",
+      "description": "Placeholder text shown when no option is selected"
+    },
+    {
+      "name": "allowNull",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to allow placeholder/null selection"
+    },
+    {
+      "name": "options",
+      "type": "array",
+      "default": "[]",
+      "description": "Array of option objects with value, label, and disabled properties"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "",
+      "description": "The currently selected value"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the dropdown is disabled"
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the dropdown is required for form submission"
+    },
+    {
+      "name": "helpText",
+      "type": "string",
+      "default": "",
+      "description": "Help text displayed below the dropdown"
+    },
+    {
+      "name": "error",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the dropdown is in an error state"
+    },
+    {
+      "name": "success",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the dropdown is in a success state"
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "default": "medium",
+      "description": "Size of the dropdown",
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "onChange",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when selection changes"
+    },
+    {
+      "name": "onFocus",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when dropdown is focused"
+    },
+    {
+      "name": "onBlur",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when dropdown loses focus"
+    }
+  ],
+  "methods": [
+    {
+      "name": "getValue",
+      "parameters": [],
+      "returns": "string",
+      "description": "Returns the currently selected value"
+    },
+    {
+      "name": "setValue",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "string",
+          "description": "New selected value"
+        }
+      ],
+      "returns": "Dropdown",
+      "description": "Sets the selected value"
+    },
+    {
+      "name": "setOptions",
+      "parameters": [
+        {
+          "name": "options",
+          "type": "array",
+          "description": "Array of option objects"
+        }
+      ],
+      "returns": "Dropdown",
+      "description": "Replaces all dropdown options"
+    },
+    {
+      "name": "addOption",
+      "parameters": [
+        {
+          "name": "option",
+          "type": "object",
+          "description": "Option object with value, label, and disabled properties"
+        }
+      ],
+      "returns": "Dropdown",
+      "description": "Adds a new option to the dropdown"
+    },
+    {
+      "name": "removeOption",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Value of the option to remove"
+        }
+      ],
+      "returns": "Dropdown",
+      "description": "Removes an option from the dropdown"
+    },
+    {
+      "name": "setDisabled",
+      "parameters": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "New disabled state"
+        }
+      ],
+      "returns": "Dropdown",
+      "description": "Sets the disabled state of the dropdown"
+    },
+    {
+      "name": "setError",
+      "parameters": [
+        {
+          "name": "error",
+          "type": "boolean",
+          "description": "Error state"
+        },
+        {
+          "name": "helpText",
+          "type": "string",
+          "description": "Optional help text to display"
+        }
+      ],
+      "returns": "Dropdown",
+      "description": "Sets the error state and optional help text"
+    },
+    {
+      "name": "setSuccess",
+      "parameters": [
+        {
+          "name": "success",
+          "type": "boolean",
+          "description": "Success state"
+        },
+        {
+          "name": "helpText",
+          "type": "string",
+          "description": "Optional help text to display"
+        }
+      ],
+      "returns": "Dropdown",
+      "description": "Sets the success state and optional help text"
+    },
+    {
+      "name": "setHelpText",
+      "parameters": [
+        {
+          "name": "helpText",
+          "type": "string",
+          "description": "New help text"
+        }
+      ],
+      "returns": "Dropdown",
+      "description": "Updates the help text displayed below the dropdown"
+    },
+    {
+      "name": "focus",
+      "parameters": [],
+      "returns": "Dropdown",
+      "description": "Focuses the dropdown element"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLSelectElement",
+      "description": "Returns the select DOM element"
+    },
+    {
+      "name": "getContainer",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the container DOM element"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the dropdown from DOM and cleans up"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-change",
+      "description": "Fired when the selected value changes (Web Component only)",
+      "detail": {
+        "value": "string",
+        "selectedOption": "object"
+      }
+    },
+    {
+      "name": "dotbox-focus",
+      "description": "Fired when the dropdown receives focus (Web Component only)",
+      "detail": {
+        "value": "string"
+      }
+    },
+    {
+      "name": "dotbox-blur",
+      "description": "Fired when the dropdown loses focus (Web Component only)",
+      "detail": {
+        "value": "string"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-dropdown",
+    "attributes": [
+      "label",
+      "placeholder",
+      "value",
+      "disabled",
+      "required",
+      "help-text",
+      "error",
+      "success",
+      "size",
+      "options",
+      "allow-null"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Dropdown",
+      "description": "Simple dropdown with label and options",
+      "code": "<dotbox-dropdown label=\"Choose a fruit\" options='[{\"value\":\"apple\",\"label\":\"Apple\"},{\"value\":\"banana\",\"label\":\"Banana\"},{\"value\":\"orange\",\"label\":\"Orange\"}]'></dotbox-dropdown>"
+    },
+    {
+      "title": "Dropdown with HTML Options",
+      "description": "Dropdown using child option elements",
+      "code": "<dotbox-dropdown label=\"Select Country\">\n  <option value=\"us\">United States</option>\n  <option value=\"ca\">Canada</option>\n  <option value=\"uk\">United Kingdom</option>\n</dotbox-dropdown>"
+    },
+    {
+      "title": "Dropdown Sizes",
+      "description": "Dropdowns in different sizes",
+      "code": "<dotbox-dropdown size=\"small\" label=\"Small\" options='[{\"value\":\"1\",\"label\":\"Option 1\"}]'></dotbox-dropdown>\n<dotbox-dropdown size=\"medium\" label=\"Medium\" options='[{\"value\":\"1\",\"label\":\"Option 1\"}]'></dotbox-dropdown>\n<dotbox-dropdown size=\"large\" label=\"Large\" options='[{\"value\":\"1\",\"label\":\"Option 1\"}]'></dotbox-dropdown>"
+    },
+    {
+      "title": "Validation States",
+      "description": "Dropdown with error and success states",
+      "code": "<dotbox-dropdown label=\"Required Field\" error help-text=\"This field is required\" options='[{\"value\":\"1\",\"label\":\"Option 1\"}]'></dotbox-dropdown>\n<dotbox-dropdown label=\"Valid Selection\" success help-text=\"Selection is valid\" value=\"1\" options='[{\"value\":\"1\",\"label\":\"Option 1\"}]'></dotbox-dropdown>"
+    },
+    {
+      "title": "Disabled and Required",
+      "description": "Dropdown with disabled and required states",
+      "code": "<dotbox-dropdown label=\"Disabled Dropdown\" disabled options='[{\"value\":\"1\",\"label\":\"Option 1\"}]'></dotbox-dropdown>\n<dotbox-dropdown label=\"Required Selection\" required help-text=\"Please make a selection\" options='[{\"value\":\"1\",\"label\":\"Option 1\"}]'></dotbox-dropdown>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dropdown-container",
+      "description": "Main container for the dropdown component"
+    },
+    {
+      "name": ".dropdown-label",
+      "description": "Label element displayed above the dropdown"
+    },
+    {
+      "name": ".dropdown-wrapper",
+      "description": "Wrapper containing the select element and arrow"
+    },
+    {
+      "name": ".dropdown-select",
+      "description": "The actual select element with custom styling"
+    },
+    {
+      "name": ".dropdown-arrow",
+      "description": "Custom arrow icon for the dropdown"
+    },
+    {
+      "name": ".dropdown-help-text",
+      "description": "Help text displayed below the dropdown"
+    },
+    {
+      "name": ".dropdown-small",
+      "description": "Small size variant styling"
+    },
+    {
+      "name": ".dropdown-large",
+      "description": "Large size variant styling"
+    },
+    {
+      "name": ".dropdown-error",
+      "description": "Error state styling with red borders and text"
+    },
+    {
+      "name": ".dropdown-success",
+      "description": "Success state styling with green borders and text"
+    }
+  ]
+}

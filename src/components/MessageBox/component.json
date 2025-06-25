@@ -1,0 +1,384 @@
+{
+  "name": "MessageBox",
+  "description": "A card-style message dialog component with variants, icons, configurable buttons, and static helper methods for common scenarios.",
+  "category": "Display",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "title",
+      "type": "string",
+      "default": "Message",
+      "description": "The title displayed in the message box header"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "default": "This is a message",
+      "description": "The main message content"
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "default": "primary",
+      "description": "Visual style variant of the message box",
+      "options": ["primary", "success", "danger", "warning", "info"]
+    },
+    {
+      "name": "closable",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the message box shows a close button"
+    },
+    {
+      "name": "buttons",
+      "type": "array",
+      "default": "[]",
+      "description": "Array of button configuration objects"
+    },
+    {
+      "name": "onClose",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when message box is closed"
+    },
+    {
+      "name": "maxWidth",
+      "type": "string",
+      "default": "380px",
+      "description": "Maximum width of the message box"
+    }
+  ],
+  "methods": [
+    {
+      "name": "close",
+      "parameters": [],
+      "returns": "void",
+      "description": "Closes the message box and removes it from DOM"
+    },
+    {
+      "name": "show",
+      "parameters": [],
+      "returns": "void",
+      "description": "Shows the message box and emits show event"
+    },
+    {
+      "name": "hide",
+      "parameters": [],
+      "returns": "void",
+      "description": "Hides the message box without removing from DOM"
+    },
+    {
+      "name": "setTitle",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "New title text"
+        }
+      ],
+      "returns": "MessageBox",
+      "description": "Updates the message box title"
+    },
+    {
+      "name": "setMessage",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "New message text"
+        }
+      ],
+      "returns": "MessageBox",
+      "description": "Updates the message box content"
+    },
+    {
+      "name": "setVariant",
+      "parameters": [
+        {
+          "name": "variant",
+          "type": "string",
+          "description": "New variant style"
+        }
+      ],
+      "returns": "MessageBox",
+      "description": "Changes the message box variant and icon"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the message box"
+    }
+  ],
+  "staticMethods": [
+    {
+      "name": "success",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Success message title"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Success message content"
+        },
+        {
+          "name": "buttons",
+          "type": "array",
+          "description": "Optional button configurations"
+        }
+      ],
+      "returns": "MessageBox",
+      "description": "Creates a success variant message box"
+    },
+    {
+      "name": "danger",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Error message title"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Error message content"
+        },
+        {
+          "name": "buttons",
+          "type": "array",
+          "description": "Optional button configurations"
+        }
+      ],
+      "returns": "MessageBox",
+      "description": "Creates a danger variant message box"
+    },
+    {
+      "name": "warning",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Warning message title"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Warning message content"
+        },
+        {
+          "name": "buttons",
+          "type": "array",
+          "description": "Optional button configurations"
+        }
+      ],
+      "returns": "MessageBox",
+      "description": "Creates a warning variant message box"
+    },
+    {
+      "name": "info",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Info message title"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Info message content"
+        },
+        {
+          "name": "buttons",
+          "type": "array",
+          "description": "Optional button configurations"
+        }
+      ],
+      "returns": "MessageBox",
+      "description": "Creates an info variant message box"
+    },
+    {
+      "name": "confirm",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Confirmation dialog title"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Confirmation dialog content"
+        },
+        {
+          "name": "onConfirm",
+          "type": "function",
+          "description": "Callback for confirm action"
+        },
+        {
+          "name": "onCancel",
+          "type": "function",
+          "description": "Callback for cancel action"
+        }
+      ],
+      "returns": "Promise<boolean>",
+      "description": "Creates a confirmation dialog that returns a promise"
+    },
+    {
+      "name": "error",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Error dialog title"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Error dialog content"
+        },
+        {
+          "name": "buttons",
+          "type": "array",
+          "description": "Optional button configurations"
+        }
+      ],
+      "returns": "MessageBox",
+      "description": "Creates and shows an error dialog"
+    },
+    {
+      "name": "show",
+      "parameters": [
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Message box configuration options"
+        }
+      ],
+      "returns": "Promise<string>",
+      "description": "Creates and shows a message box, returns promise with button ID"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-messagebox-button",
+      "description": "Fired when a button is clicked",
+      "detail": {
+        "buttonId": "string",
+        "buttonConfig": "object",
+        "messageBox": "MessageBox"
+      }
+    },
+    {
+      "name": "dotbox-messagebox-close",
+      "description": "Fired when the message box is closed",
+      "detail": {
+        "messageBox": "MessageBox"
+      }
+    },
+    {
+      "name": "dotbox-messagebox-show",
+      "description": "Fired when the message box is shown",
+      "detail": {
+        "messageBox": "MessageBox"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-messagebox",
+    "attributes": [
+      "title",
+      "message",
+      "variant",
+      "closable",
+      "max-width",
+      "buttons"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Message Box",
+      "description": "Simple message box with default styling",
+      "code": "<dotbox-messagebox title=\"Welcome\" message=\"Welcome to our application!\"></dotbox-messagebox>"
+    },
+    {
+      "title": "Message Box Variants",
+      "description": "Message boxes with different variants and icons",
+      "code": "<dotbox-messagebox variant=\"success\" title=\"Success\" message=\"Operation completed successfully!\"></dotbox-messagebox>\n<dotbox-messagebox variant=\"danger\" title=\"Error\" message=\"Something went wrong!\"></dotbox-messagebox>\n<dotbox-messagebox variant=\"warning\" title=\"Warning\" message=\"Please review your input.\"></dotbox-messagebox>\n<dotbox-messagebox variant=\"info\" title=\"Information\" message=\"Here's some helpful information.\"></dotbox-messagebox>"
+    },
+    {
+      "title": "Message Box with Buttons",
+      "description": "Message box with custom action buttons",
+      "code": "<dotbox-messagebox \n  title=\"Confirm Action\" \n  message=\"Are you sure you want to proceed?\" \n  buttons='[{\"id\":\"cancel\",\"text\":\"Cancel\",\"variant\":\"secondary\"},{\"id\":\"confirm\",\"text\":\"Confirm\",\"variant\":\"primary\"}]'\n></dotbox-messagebox>"
+    },
+    {
+      "title": "Non-closable Message Box",
+      "description": "Message box without close button",
+      "code": "<dotbox-messagebox \n  title=\"Important Notice\" \n  message=\"This message requires your attention.\" \n  closable=\"false\" \n  buttons='[{\"id\":\"ok\",\"text\":\"OK\",\"variant\":\"primary\"}]'\n></dotbox-messagebox>"
+    },
+    {
+      "title": "Custom Width Message Box",
+      "description": "Message box with custom maximum width",
+      "code": "<dotbox-messagebox \n  title=\"Large Message\" \n  message=\"This is a longer message that needs more space to display properly.\" \n  max-width=\"500px\"\n></dotbox-messagebox>"
+    }
+  ],
+  "dependencies": [
+    "Button component (for action buttons)"
+  ],
+  "cssClasses": [
+    {
+      "name": ".dotbox-messagebox",
+      "description": "Main container for the message box component"
+    },
+    {
+      "name": ".dotbox-messagebox-primary",
+      "description": "Primary variant styling"
+    },
+    {
+      "name": ".dotbox-messagebox-success",
+      "description": "Success variant styling with green theme"
+    },
+    {
+      "name": ".dotbox-messagebox-danger",
+      "description": "Danger variant styling with red theme"
+    },
+    {
+      "name": ".dotbox-messagebox-warning",
+      "description": "Warning variant styling with yellow theme"
+    },
+    {
+      "name": ".dotbox-messagebox-info",
+      "description": "Info variant styling with blue theme"
+    },
+    {
+      "name": ".dotbox-messagebox-dismiss",
+      "description": "Close button styling"
+    },
+    {
+      "name": ".dotbox-messagebox-header",
+      "description": "Header container with icon and content"
+    },
+    {
+      "name": ".dotbox-messagebox-icon",
+      "description": "Icon container with variant-specific SVG"
+    },
+    {
+      "name": ".dotbox-messagebox-content",
+      "description": "Content container for title and message"
+    },
+    {
+      "name": ".dotbox-messagebox-title",
+      "description": "Title text styling"
+    },
+    {
+      "name": ".dotbox-messagebox-message",
+      "description": "Message content styling"
+    },
+    {
+      "name": ".dotbox-messagebox-actions",
+      "description": "Action buttons container"
+    }
+  ]
+}

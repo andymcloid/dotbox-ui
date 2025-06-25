@@ -1,0 +1,232 @@
+{
+  "name": "Toggle",
+  "description": "An animated toggle switch component with checkmark and cross icons, multiple sizes and color variants.",
+  "category": "Input",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto-generated",
+      "description": "Unique identifier for the toggle element"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "",
+      "description": "Label text displayed next to the toggle"
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the toggle is in the checked (on) state"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the toggle is disabled and cannot be interacted with"
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "default": "medium",
+      "description": "Size of the toggle switch",
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "default": "primary",
+      "description": "Color variant of the toggle",
+      "options": ["primary", "success", "danger"]
+    },
+    {
+      "name": "onChange",
+      "type": "function",
+      "default": "() => {}",
+      "description": "Callback function executed when toggle state changes"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "",
+      "description": "HTML name attribute for form submission"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "",
+      "description": "HTML value attribute for form submission"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setChecked",
+      "parameters": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "description": "New checked state"
+        }
+      ],
+      "returns": "Toggle",
+      "description": "Sets the checked state of the toggle"
+    },
+    {
+      "name": "setDisabled",
+      "parameters": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "New disabled state"
+        }
+      ],
+      "returns": "Toggle",
+      "description": "Sets the disabled state of the toggle"
+    },
+    {
+      "name": "setVariant",
+      "parameters": [
+        {
+          "name": "variant",
+          "type": "string",
+          "description": "New color variant"
+        }
+      ],
+      "returns": "Toggle",
+      "description": "Changes the toggle color variant"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the toggle container"
+    },
+    {
+      "name": "getValue",
+      "parameters": [],
+      "returns": "object",
+      "description": "Returns an object with checked, value, and name properties"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-change",
+      "description": "Fired when the toggle state changes",
+      "detail": {
+        "checked": "boolean",
+        "value": "string",
+        "name": "string"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-toggle",
+    "attributes": [
+      "checked",
+      "disabled",
+      "label",
+      "size",
+      "variant",
+      "name",
+      "value"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Toggle",
+      "description": "Simple toggle with label",
+      "code": "<dotbox-toggle label=\"Enable notifications\"></dotbox-toggle>"
+    },
+    {
+      "title": "Toggle Variants",
+      "description": "Toggle switches in different color variants",
+      "code": "<dotbox-toggle label=\"Primary Toggle\" variant=\"primary\" checked></dotbox-toggle>\n<dotbox-toggle label=\"Success Toggle\" variant=\"success\" checked></dotbox-toggle>\n<dotbox-toggle label=\"Danger Toggle\" variant=\"danger\" checked></dotbox-toggle>"
+    },
+    {
+      "title": "Toggle Sizes",
+      "description": "Toggle switches in different sizes",
+      "code": "<dotbox-toggle label=\"Small Toggle\" size=\"small\" checked></dotbox-toggle>\n<dotbox-toggle label=\"Medium Toggle\" size=\"medium\" checked></dotbox-toggle>\n<dotbox-toggle label=\"Large Toggle\" size=\"large\" checked></dotbox-toggle>"
+    },
+    {
+      "title": "Toggle States",
+      "description": "Toggle in different states",
+      "code": "<dotbox-toggle label=\"Checked Toggle\" checked></dotbox-toggle>\n<dotbox-toggle label=\"Unchecked Toggle\"></dotbox-toggle>\n<dotbox-toggle label=\"Disabled Toggle\" disabled></dotbox-toggle>\n<dotbox-toggle label=\"Disabled Checked\" checked disabled></dotbox-toggle>"
+    },
+    {
+      "title": "Form Integration",
+      "description": "Toggles with form attributes for submission",
+      "code": "<dotbox-toggle label=\"Email notifications\" name=\"email_notifications\" value=\"enabled\" checked></dotbox-toggle>\n<dotbox-toggle label=\"SMS notifications\" name=\"sms_notifications\" value=\"enabled\"></dotbox-toggle>\n<dotbox-toggle label=\"Push notifications\" name=\"push_notifications\" value=\"enabled\" checked></dotbox-toggle>"
+    },
+    {
+      "title": "Settings Panel",
+      "description": "Multiple toggles for application settings",
+      "code": "<dotbox-section title=\"Account Settings\">\n  <div style=\"display: flex; flex-direction: column; gap: 1rem;\">\n    <dotbox-toggle label=\"Account active\" variant=\"success\" checked></dotbox-toggle>\n    <dotbox-toggle label=\"Two-factor authentication\" variant=\"primary\"></dotbox-toggle>\n    <dotbox-toggle label=\"Email notifications\" checked></dotbox-toggle>\n    <dotbox-toggle label=\"Marketing emails\"></dotbox-toggle>\n    <dotbox-toggle label=\"Data sharing\" variant=\"danger\"></dotbox-toggle>\n  </div>\n</dotbox-section>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-toggle-container",
+      "description": "Main container for the toggle component"
+    },
+    {
+      "name": ".dotbox-toggle",
+      "description": "Toggle switch element (label)"
+    },
+    {
+      "name": ".dotbox-toggle-slider",
+      "description": "Background slider track of the toggle"
+    },
+    {
+      "name": ".dotbox-toggle-circle",
+      "description": "Circular handle that slides within the toggle"
+    },
+    {
+      "name": ".dotbox-toggle-icon",
+      "description": "Base class for toggle icons"
+    },
+    {
+      "name": ".dotbox-toggle-cross",
+      "description": "Cross icon displayed in unchecked state"
+    },
+    {
+      "name": ".dotbox-toggle-checkmark",
+      "description": "Checkmark icon displayed in checked state"
+    },
+    {
+      "name": ".dotbox-toggle-label-text",
+      "description": "Label text styling"
+    },
+    {
+      "name": ".dotbox-toggle-small",
+      "description": "Small size variant styling"
+    },
+    {
+      "name": ".dotbox-toggle-medium",
+      "description": "Medium size variant styling (default)"
+    },
+    {
+      "name": ".dotbox-toggle-large",
+      "description": "Large size variant styling"
+    },
+    {
+      "name": ".dotbox-toggle-primary",
+      "description": "Primary color variant styling (default)"
+    },
+    {
+      "name": ".dotbox-toggle-success",
+      "description": "Success (green) color variant styling"
+    },
+    {
+      "name": ".dotbox-toggle-danger",
+      "description": "Danger (red) color variant styling"
+    },
+    {
+      "name": ".dotbox-toggle-disabled",
+      "description": "Disabled state styling"
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+{
+  "name": "Checkbox",
+  "description": "An animated checkbox component with SVG checkmark, multiple sizes, variants, and comprehensive accessibility support.",
+  "category": "Input",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Checkbox",
+      "description": "The text label displayed next to the checkbox"
+    },
+    {
+      "name": "checked",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the checkbox is checked"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the checkbox is disabled and cannot be interacted with"
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "default": "medium",
+      "description": "Size of the checkbox",
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "default": "primary",
+      "description": "Color variant of the checkbox",
+      "options": ["primary", "success", "danger"]
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "",
+      "description": "HTML name attribute for form submission"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "",
+      "description": "HTML value attribute for form submission"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto-generated",
+      "description": "Unique identifier for the checkbox element"
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "",
+      "description": "Additional CSS classes to apply to the checkbox container"
+    },
+    {
+      "name": "onChange",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when checkbox state changes"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setChecked",
+      "parameters": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "description": "New checked state"
+        }
+      ],
+      "returns": "Checkbox",
+      "description": "Updates the checked state of the checkbox"
+    },
+    {
+      "name": "getChecked",
+      "parameters": [],
+      "returns": "boolean",
+      "description": "Returns the current checked state of the checkbox"
+    },
+    {
+      "name": "setDisabled",
+      "parameters": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "New disabled state"
+        }
+      ],
+      "returns": "Checkbox",
+      "description": "Sets the disabled state of the checkbox"
+    },
+    {
+      "name": "setLabel",
+      "parameters": [
+        {
+          "name": "label",
+          "type": "string",
+          "description": "New label text"
+        }
+      ],
+      "returns": "Checkbox",
+      "description": "Updates the checkbox label text"
+    },
+    {
+      "name": "setSize",
+      "parameters": [
+        {
+          "name": "size",
+          "type": "string",
+          "description": "New checkbox size"
+        }
+      ],
+      "returns": "Checkbox",
+      "description": "Changes the checkbox size (small, medium, large)"
+    },
+    {
+      "name": "setVariant",
+      "parameters": [
+        {
+          "name": "variant",
+          "type": "string",
+          "description": "New checkbox variant"
+        }
+      ],
+      "returns": "Checkbox",
+      "description": "Changes the checkbox color variant (primary, success, danger)"
+    },
+    {
+      "name": "focus",
+      "parameters": [],
+      "returns": "Checkbox",
+      "description": "Focuses the checkbox input element"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the checkbox container"
+    },
+    {
+      "name": "getInput",
+      "parameters": [],
+      "returns": "HTMLInputElement",
+      "description": "Returns the checkbox input element"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the checkbox from DOM and cleans up"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-change",
+      "description": "Fired when the checkbox state changes (Web Component only)",
+      "detail": {
+        "checked": "boolean",
+        "value": "string",
+        "name": "string"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-checkbox",
+    "attributes": [
+      "label",
+      "checked",
+      "disabled",
+      "size",
+      "variant",
+      "name",
+      "value"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Checkbox",
+      "description": "Simple checkbox with default styling",
+      "code": "<dotbox-checkbox label=\"Accept terms and conditions\"></dotbox-checkbox>"
+    },
+    {
+      "title": "Checkbox Variants",
+      "description": "Different color variants for checkboxes",
+      "code": "<dotbox-checkbox label=\"Primary\" variant=\"primary\"></dotbox-checkbox>\n<dotbox-checkbox label=\"Success\" variant=\"success\"></dotbox-checkbox>\n<dotbox-checkbox label=\"Danger\" variant=\"danger\"></dotbox-checkbox>"
+    },
+    {
+      "title": "Checkbox Sizes",
+      "description": "Checkboxes in different sizes",
+      "code": "<dotbox-checkbox label=\"Small\" size=\"small\"></dotbox-checkbox>\n<dotbox-checkbox label=\"Medium\" size=\"medium\"></dotbox-checkbox>\n<dotbox-checkbox label=\"Large\" size=\"large\"></dotbox-checkbox>"
+    },
+    {
+      "title": "Checkbox States",
+      "description": "Checked and disabled checkbox states",
+      "code": "<dotbox-checkbox label=\"Checked by default\" checked></dotbox-checkbox>\n<dotbox-checkbox label=\"Disabled checkbox\" disabled></dotbox-checkbox>\n<dotbox-checkbox label=\"Checked and disabled\" checked disabled></dotbox-checkbox>"
+    },
+    {
+      "title": "Form Integration",
+      "description": "Checkbox with form attributes for submission",
+      "code": "<dotbox-checkbox label=\"Subscribe to newsletter\" name=\"newsletter\" value=\"yes\"></dotbox-checkbox>\n<dotbox-checkbox label=\"Remember me\" name=\"remember\" value=\"true\"></dotbox-checkbox>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-checkbox-container",
+      "description": "Main container for the checkbox component"
+    },
+    {
+      "name": ".dotbox-checkbox-label",
+      "description": "Label element containing checkbox and text"
+    },
+    {
+      "name": ".dotbox-checkbox-box",
+      "description": "Visual checkbox element with border and background"
+    },
+    {
+      "name": ".dotbox-checkbox-text",
+      "description": "Text label displayed next to the checkbox"
+    },
+    {
+      "name": ".small",
+      "description": "Small size variant styling"
+    },
+    {
+      "name": ".medium",
+      "description": "Medium size variant styling (default)"
+    },
+    {
+      "name": ".large",
+      "description": "Large size variant styling"
+    },
+    {
+      "name": ".primary",
+      "description": "Primary color variant styling (default)"
+    },
+    {
+      "name": ".success",
+      "description": "Success (green) color variant styling"
+    },
+    {
+      "name": ".danger",
+      "description": "Danger (red) color variant styling"
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "name": "Button",
+  "description": "A versatile button component with multiple variants, sizes, and states. Supports loading states, icons, and custom click handlers.",
+  "category": "Input",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "text",
+      "type": "string",
+      "default": "Button",
+      "description": "The text content displayed on the button"
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "default": "primary",
+      "description": "Visual style variant of the button",
+      "options": ["primary", "secondary", "danger", "success"]
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "default": "medium",
+      "description": "Size of the button",
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "default": "button",
+      "description": "HTML button type attribute",
+      "options": ["button", "submit", "reset"]
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the button is disabled and cannot be clicked"
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the button is in a loading state with spinner"
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "default": null,
+      "description": "Icon to display before the button text (HTML or emoji)"
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "",
+      "description": "Additional CSS classes to apply to the button"
+    },
+    {
+      "name": "onClick",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when button is clicked"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setText",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "description": "New button text"
+        }
+      ],
+      "returns": "Button",
+      "description": "Updates the button text content"
+    },
+    {
+      "name": "setIcon",
+      "parameters": [
+        {
+          "name": "icon",
+          "type": "string",
+          "description": "New icon content"
+        }
+      ],
+      "returns": "Button",
+      "description": "Updates the button icon"
+    },
+    {
+      "name": "setLoading",
+      "parameters": [
+        {
+          "name": "loading",
+          "type": "boolean",
+          "description": "Loading state"
+        }
+      ],
+      "returns": "Button",
+      "description": "Sets the loading state with spinner"
+    },
+    {
+      "name": "setDisabled",
+      "parameters": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disabled state"
+        }
+      ],
+      "returns": "Button",
+      "description": "Sets the disabled state"
+    },
+    {
+      "name": "setVariant",
+      "parameters": [
+        {
+          "name": "variant",
+          "type": "string",
+          "description": "Button variant"
+        }
+      ],
+      "returns": "Button",
+      "description": "Changes the button variant style"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the button"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the button from DOM and cleans up"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-click",
+      "description": "Fired when the button is clicked (Web Component only)",
+      "detail": {
+        "variant": "string",
+        "size": "string",
+        "text": "string",
+        "disabled": "boolean",
+        "loading": "boolean",
+        "icon": "string|null"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-button",
+    "attributes": [
+      "variant",
+      "size", 
+      "disabled",
+      "loading",
+      "text",
+      "icon"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Button",
+      "description": "Simple primary button with default styling",
+      "code": "<dotbox-button>Click me</dotbox-button>"
+    },
+    {
+      "title": "Button Variants",
+      "description": "Different button styles and variants",
+      "code": "<dotbox-button variant=\"primary\">Primary</dotbox-button>\n<dotbox-button variant=\"secondary\">Secondary</dotbox-button>\n<dotbox-button variant=\"success\">Success</dotbox-button>\n<dotbox-button variant=\"danger\">Danger</dotbox-button>"
+    },
+    {
+      "title": "Button Sizes",
+      "description": "Buttons in different sizes",
+      "code": "<dotbox-button size=\"small\">Small</dotbox-button>\n<dotbox-button size=\"medium\">Medium</dotbox-button>\n<dotbox-button size=\"large\">Large</dotbox-button>"
+    },
+    {
+      "title": "Button States",
+      "description": "Loading and disabled button states",
+      "code": "<dotbox-button loading>Loading...</dotbox-button>\n<dotbox-button disabled>Disabled</dotbox-button>"
+    },
+    {
+      "title": "Button with Icon",
+      "description": "Button with icon and text",
+      "code": "<dotbox-button icon=\"🚀\">Launch</dotbox-button>\n<dotbox-button icon=\"💾\" variant=\"secondary\">Save</dotbox-button>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".btn",
+      "description": "Base button class with core styling"
+    },
+    {
+      "name": ".btn-primary",
+      "description": "Primary button variant styling"
+    },
+    {
+      "name": ".btn-secondary", 
+      "description": "Secondary button variant styling"
+    },
+    {
+      "name": ".btn-success",
+      "description": "Success button variant styling"
+    },
+    {
+      "name": ".btn-danger",
+      "description": "Danger button variant styling"
+    },
+    {
+      "name": ".btn-small",
+      "description": "Small button size styling"
+    },
+    {
+      "name": ".btn-medium",
+      "description": "Medium button size styling"
+    },
+    {
+      "name": ".btn-large",
+      "description": "Large button size styling"
+    },
+    {
+      "name": ".btn-loading",
+      "description": "Loading state styling with spinner"
+    },
+    {
+      "name": ".btn-spinner",
+      "description": "Spinner animation for loading state"
+    }
+  ]
+}

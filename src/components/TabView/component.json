@@ -1,0 +1,170 @@
+{
+  "name": "TabView",
+  "description": "A flexible tabbed interface component supporting multiple content panes with navigation tabs, icons, and customizable content.",
+  "category": "Navigation",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "tabs",
+      "type": "array",
+      "default": "[]",
+      "description": "Array of tab objects with id, label, icon, and content properties"
+    },
+    {
+      "name": "activeTab",
+      "type": "string",
+      "default": "first tab id",
+      "description": "ID of the currently active tab"
+    }
+  ],
+  "methods": [
+    {
+      "name": "switchTab",
+      "parameters": [
+        {
+          "name": "tabId",
+          "type": "string",
+          "description": "ID of the tab to switch to"
+        }
+      ],
+      "returns": "void",
+      "description": "Switches to the specified tab"
+    },
+    {
+      "name": "onTabChange",
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "function",
+          "description": "Function to call when tab changes"
+        }
+      ],
+      "returns": "void",
+      "description": "Registers a callback for tab change events"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the tab view"
+    },
+    {
+      "name": "addTab",
+      "parameters": [
+        {
+          "name": "tab",
+          "type": "object",
+          "description": "Tab object to add"
+        }
+      ],
+      "returns": "TabView",
+      "description": "Adds a new tab to the tab view (Web Component only)"
+    },
+    {
+      "name": "removeTab",
+      "parameters": [
+        {
+          "name": "tabId",
+          "type": "string",
+          "description": "ID of the tab to remove"
+        }
+      ],
+      "returns": "TabView",
+      "description": "Removes a tab from the tab view (Web Component only)"
+    },
+    {
+      "name": "getActiveTab",
+      "parameters": [],
+      "returns": "string",
+      "description": "Returns the ID of the currently active tab (Web Component only)"
+    },
+    {
+      "name": "getTabs",
+      "parameters": [],
+      "returns": "array",
+      "description": "Returns a copy of the tabs array (Web Component only)"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-tab-change",
+      "description": "Fired when the active tab changes (Web Component only)",
+      "detail": {
+        "activeTab": "string",
+        "tabs": "array"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-tab-view",
+    "attributes": [
+      "active-tab",
+      "data-tabs"
+    ],
+    "childElements": [
+      "dotbox-tab-panel"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Tab View",
+      "description": "Simple tab view with multiple panels",
+      "code": "<dotbox-tab-view active-tab=\"overview\">\n  <dotbox-tab-panel id=\"overview\" label=\"Overview\">\n    <h3>Overview</h3>\n    <p>This is the overview tab content.</p>\n  </dotbox-tab-panel>\n  <dotbox-tab-panel id=\"details\" label=\"Details\">\n    <h3>Details</h3>\n    <p>This is the details tab content.</p>\n  </dotbox-tab-panel>\n  <dotbox-tab-panel id=\"settings\" label=\"Settings\">\n    <h3>Settings</h3>\n    <p>This is the settings tab content.</p>\n  </dotbox-tab-panel>\n</dotbox-tab-view>"
+    },
+    {
+      "title": "Tab View with Icons",
+      "description": "Tab view with icons in tab headers",
+      "code": "<dotbox-tab-view>\n  <dotbox-tab-panel id=\"dashboard\" label=\"Dashboard\" icon=\"📊\">\n    <h3>Dashboard</h3>\n    <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;\">\n      <dotbox-metric label=\"Users\" value=\"1,234\" trend=\"up\"></dotbox-metric>\n      <dotbox-metric label=\"Revenue\" value=\"$12,500\" trend=\"up\"></dotbox-metric>\n    </div>\n  </dotbox-tab-panel>\n  <dotbox-tab-panel id=\"users\" label=\"Users\" icon=\"👥\">\n    <h3>User Management</h3>\n    <p>Manage your users here.</p>\n  </dotbox-tab-panel>\n  <dotbox-tab-panel id=\"settings\" label=\"Settings\" icon=\"⚙️\">\n    <h3>Application Settings</h3>\n    <dotbox-form layout=\"vertical\">\n      <dotbox-textbox label=\"App Name\" value=\"My App\"></dotbox-textbox>\n      <dotbox-checkbox label=\"Enable notifications\"></dotbox-checkbox>\n    </dotbox-form>\n  </dotbox-tab-panel>\n</dotbox-tab-view>"
+    },
+    {
+      "title": "Tab View with JSON Data",
+      "description": "Tab view using JSON data attribute",
+      "code": "<dotbox-tab-view \n  data-tabs='[\n    {\"id\":\"tab1\",\"label\":\"First Tab\",\"content\":\"<p>Content for first tab</p>\"},\n    {\"id\":\"tab2\",\"label\":\"Second Tab\",\"content\":\"<p>Content for second tab</p>\"},\n    {\"id\":\"tab3\",\"label\":\"Third Tab\",\"icon\":\"🎯\",\"content\":\"<p>Content for third tab with icon</p>\"}\n  ]' \n  active-tab=\"tab2\"\n></dotbox-tab-view>"
+    },
+    {
+      "title": "Tab View with Forms",
+      "description": "Tab view containing form elements in different tabs",
+      "code": "<dotbox-tab-view>\n  <dotbox-tab-panel id=\"personal\" label=\"Personal Info\">\n    <dotbox-form layout=\"vertical\">\n      <dotbox-textbox label=\"First Name\" required></dotbox-textbox>\n      <dotbox-textbox label=\"Last Name\" required></dotbox-textbox>\n      <dotbox-textbox label=\"Email\" type=\"email\" required></dotbox-textbox>\n    </dotbox-form>\n  </dotbox-tab-panel>\n  <dotbox-tab-panel id=\"preferences\" label=\"Preferences\">\n    <dotbox-form layout=\"vertical\">\n      <dotbox-dropdown label=\"Theme\" options='[{\"value\":\"light\",\"label\":\"Light\"},{\"value\":\"dark\",\"label\":\"Dark\"}]'></dotbox-dropdown>\n      <dotbox-checkbox label=\"Email notifications\"></dotbox-checkbox>\n      <dotbox-checkbox label=\"SMS notifications\"></dotbox-checkbox>\n    </dotbox-form>\n  </dotbox-tab-panel>\n  <dotbox-tab-panel id=\"security\" label=\"Security\">\n    <dotbox-form layout=\"vertical\">\n      <dotbox-textbox label=\"Current Password\" type=\"password\"></dotbox-textbox>\n      <dotbox-textbox label=\"New Password\" type=\"password\"></dotbox-textbox>\n      <dotbox-textbox label=\"Confirm Password\" type=\"password\"></dotbox-textbox>\n    </dotbox-form>\n  </dotbox-tab-panel>\n</dotbox-tab-view>"
+    },
+    {
+      "title": "Programmatic Tab Control",
+      "description": "Tab view with external tab switching controls",
+      "code": "<div style=\"margin-bottom: 1rem;\">\n  <dotbox-button onclick=\"document.getElementById('my-tabs').switchTab('tab1')\">Go to Tab 1</dotbox-button>\n  <dotbox-button onclick=\"document.getElementById('my-tabs').switchTab('tab2')\">Go to Tab 2</dotbox-button>\n  <dotbox-button onclick=\"document.getElementById('my-tabs').switchTab('tab3')\">Go to Tab 3</dotbox-button>\n</div>\n\n<dotbox-tab-view id=\"my-tabs\">\n  <dotbox-tab-panel id=\"tab1\" label=\"Tab 1\">\n    <h3>First Tab</h3>\n    <p>You can switch between tabs using the buttons above.</p>\n  </dotbox-tab-panel>\n  <dotbox-tab-panel id=\"tab2\" label=\"Tab 2\">\n    <h3>Second Tab</h3>\n    <p>This is the second tab content.</p>\n  </dotbox-tab-panel>\n  <dotbox-tab-panel id=\"tab3\" label=\"Tab 3\">\n    <h3>Third Tab</h3>\n    <p>This is the third tab content.</p>\n  </dotbox-tab-panel>\n</dotbox-tab-view>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".tabview-container",
+      "description": "Main container for the tab view component"
+    },
+    {
+      "name": ".tabview-nav",
+      "description": "Navigation container for tab buttons"
+    },
+    {
+      "name": ".tabview-btn",
+      "description": "Individual tab button styling"
+    },
+    {
+      "name": ".tabview-btn.active",
+      "description": "Active tab button styling"
+    },
+    {
+      "name": ".tabview-icon",
+      "description": "Icon container within tab buttons"
+    },
+    {
+      "name": ".tabview-content",
+      "description": "Container for all tab content panes"
+    },
+    {
+      "name": ".tabview-pane",
+      "description": "Individual tab content pane"
+    },
+    {
+      "name": ".tabview-pane.active",
+      "description": "Active tab content pane (visible)"
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "name": "CodeBlock",
+  "description": "Enhanced code block component with syntax highlighting, live preview, expandable editor, and JSFiddle integration.",
+  "category": "Display",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "language",
+      "type": "string",
+      "default": "javascript",
+      "description": "Programming language for syntax highlighting (html, css, javascript, json, etc.)",
+      "options": ["html", "css", "javascript", "json", "xml", "markdown", "typescript", "python", "java", "c", "cpp", "php", "ruby", "go", "rust", "swift", "kotlin"]
+    },
+    {
+      "name": "code",
+      "type": "string",
+      "default": "",
+      "description": "The source code content to display and highlight"
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "default": true,
+      "description": "Enable live preview pane that renders the code in real-time"
+    },
+    {
+      "name": "expandable",
+      "type": "boolean",
+      "default": true,
+      "description": "Show expand/collapse button in toolbar to increase editor height"
+    },
+    {
+      "name": "fiddle",
+      "type": "boolean",
+      "default": true,
+      "description": "Show JSFiddle button in toolbar to open code in JSFiddle"
+    },
+    {
+      "name": "previewType",
+      "type": "string",
+      "default": "auto",
+      "description": "How to render the preview pane",
+      "options": ["auto", "html", "javascript"]
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "default": "",
+      "description": "Optional title to display in the toolbar"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto-generated",
+      "description": "Unique identifier for the code block instance"
+    },
+    {
+      "name": "jsfiddle",
+      "type": "object",
+      "default": "new JSFiddle()",
+      "description": "Custom JSFiddle instance with optional prerender function for advanced setup"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setCode",
+      "parameters": [
+        {
+          "name": "code",
+          "type": "string",
+          "description": "New code content"
+        }
+      ],
+      "returns": "CodeBlock",
+      "description": "Updates the code content and refreshes syntax highlighting and preview"
+    },
+    {
+      "name": "setLanguage",
+      "parameters": [
+        {
+          "name": "language",
+          "type": "string",
+          "description": "New programming language"
+        }
+      ],
+      "returns": "CodeBlock",
+      "description": "Changes the syntax highlighting language"
+    },
+    {
+      "name": "togglePreview",
+      "parameters": [],
+      "returns": "CodeBlock",
+      "description": "Shows or hides the preview pane"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the code block container"
+    }
+  ],
+  "events": [
+    {
+      "name": "code-changed",
+      "description": "Fired when the code content is modified in the editor",
+      "detail": {
+        "code": "string",
+        "language": "string"
+      }
+    },
+    {
+      "name": "preview-updated",
+      "description": "Fired when the preview pane is refreshed",
+      "detail": {
+        "success": "boolean",
+        "error": "string|null"
+      }
+    },
+    {
+      "name": "expanded",
+      "description": "Fired when the code block is expanded or collapsed",
+      "detail": {
+        "expanded": "boolean",
+        "height": "string"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-code-block",
+    "attributes": [
+      "language",
+      "code",
+      "preview",
+      "expandable",
+      "fiddle",
+      "preview-type",
+      "title"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic HTML Code Block",
+      "description": "Simple code block with HTML syntax highlighting",
+      "code": "<dotbox-code-block language=\"html\">\n<div class=\"hello\">Hello World</div>\n</dotbox-code-block>"
+    },
+    {
+      "title": "JavaScript with Preview",
+      "description": "JavaScript code with live preview and expandable editor",
+      "code": "<dotbox-code-block language=\"javascript\" expandable=\"true\" title=\"Interactive Demo\">\nconst btn = new Dotbox.Button({ text: 'Click me!' });\ndocument.body.appendChild(btn.getElement());\n</dotbox-code-block>"
+    },
+    {
+      "title": "Full-Featured Code Block",
+      "description": "All features enabled: preview, expandable, JSFiddle integration",
+      "code": "<dotbox-code-block language=\"html\" expandable=\"true\" fiddle=\"true\" title=\"Complete Example\">\n<dotbox-button variant=\"primary\">Primary Button</dotbox-button>\n<dotbox-button variant=\"secondary\">Secondary Button</dotbox-button>\n</dotbox-code-block>"
+    }
+  ],
+  "dependencies": [
+    "JSFiddle.js",
+    "Prism.js (CDN)"
+  ],
+  "cssClasses": [
+    {
+      "name": ".dotbox-codeblock-container",
+      "description": "Main container for the entire code block component"
+    },
+    {
+      "name": ".dotbox-codeblock-toolbar",
+      "description": "Toolbar containing title and action buttons"
+    },
+    {
+      "name": ".dotbox-codeblock-preview",
+      "description": "Live preview pane container"
+    },
+    {
+      "name": ".dotbox-codeblock-preview-content",
+      "description": "Content area within the preview pane"
+    },
+    {
+      "name": ".dotbox-codeblock",
+      "description": "The actual code editor area with syntax highlighting"
+    }
+  ]
+}

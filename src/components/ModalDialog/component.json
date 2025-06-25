@@ -1,0 +1,288 @@
+{
+  "name": "ModalDialog",
+  "description": "A flexible modal dialog component with overlay, customizable content areas (header, body, footer), and comprehensive event handling.",
+  "category": "Display",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto-generated",
+      "description": "Unique identifier for the modal dialog"
+    },
+    {
+      "name": "destroyOnClose",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to destroy the modal when closed"
+    },
+    {
+      "name": "closeOnOverlayClick",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether clicking the overlay closes the modal"
+    },
+    {
+      "name": "closeOnEsc",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether pressing ESC closes the modal"
+    },
+    {
+      "name": "onOpen",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when modal opens"
+    },
+    {
+      "name": "onClose",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when modal closes"
+    },
+    {
+      "name": "onDestroy",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when modal is destroyed"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setTitle",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Title text for the modal header"
+        }
+      ],
+      "returns": "ModalDialog",
+      "description": "Sets the modal title with automatic close button"
+    },
+    {
+      "name": "setBody",
+      "parameters": [
+        {
+          "name": "content",
+          "type": "string|HTMLElement",
+          "description": "Content for the modal body"
+        }
+      ],
+      "returns": "ModalDialog",
+      "description": "Sets the modal body content"
+    },
+    {
+      "name": "setFooter",
+      "parameters": [
+        {
+          "name": "content",
+          "type": "string|HTMLElement",
+          "description": "Content for the modal footer"
+        }
+      ],
+      "returns": "ModalDialog",
+      "description": "Sets the modal footer content"
+    },
+    {
+      "name": "addFooterButton",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "description": "Button text"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "description": "CSS class for the button"
+        },
+        {
+          "name": "onclick",
+          "type": "function",
+          "description": "Click handler for the button"
+        }
+      ],
+      "returns": "HTMLButtonElement",
+      "description": "Adds a button to the modal footer"
+    },
+    {
+      "name": "show",
+      "parameters": [],
+      "returns": "ModalDialog",
+      "description": "Shows the modal dialog"
+    },
+    {
+      "name": "close",
+      "parameters": [],
+      "returns": "ModalDialog",
+      "description": "Closes the modal dialog"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Destroys the modal and removes it from DOM"
+    },
+    {
+      "name": "onOpenCallback",
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "function",
+          "description": "Function to call when modal opens"
+        }
+      ],
+      "returns": "ModalDialog",
+      "description": "Sets the onOpen callback function"
+    },
+    {
+      "name": "onCloseCallback",
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "function",
+          "description": "Function to call when modal closes"
+        }
+      ],
+      "returns": "ModalDialog",
+      "description": "Sets the onClose callback function"
+    },
+    {
+      "name": "onDestroyCallback",
+      "parameters": [
+        {
+          "name": "callback",
+          "type": "function",
+          "description": "Function to call when modal is destroyed"
+        }
+      ],
+      "returns": "ModalDialog",
+      "description": "Sets the onDestroy callback function"
+    },
+    {
+      "name": "setPadding",
+      "parameters": [
+        {
+          "name": "padding",
+          "type": "string|number",
+          "description": "Padding value for modal body"
+        }
+      ],
+      "returns": "ModalDialog",
+      "description": "Sets custom padding for the modal body"
+    },
+    {
+      "name": "setBodyContainerMode",
+      "parameters": [
+        {
+          "name": "isContainer",
+          "type": "boolean",
+          "description": "Whether to enable container mode"
+        }
+      ],
+      "returns": "ModalDialog",
+      "description": "Enables/disables container mode for full-size child components"
+    }
+  ],
+  "events": [
+    {
+      "name": "dialogShown",
+      "description": "Fired when the modal is shown",
+      "detail": {}
+    },
+    {
+      "name": "dotbox-open",
+      "description": "Fired when the modal opens (Web Component only)",
+      "detail": {
+        "id": "string"
+      }
+    },
+    {
+      "name": "dotbox-close",
+      "description": "Fired when the modal closes (Web Component only)",
+      "detail": {
+        "id": "string"
+      }
+    },
+    {
+      "name": "dotbox-destroy",
+      "description": "Fired when the modal is destroyed (Web Component only)",
+      "detail": {
+        "id": "string"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-modal-dialog",
+    "attributes": [
+      "title",
+      "destroy-on-close",
+      "close-on-overlay-click",
+      "close-on-esc",
+      "show"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Modal Dialog",
+      "description": "Simple modal with title and content",
+      "code": "<dotbox-modal-dialog title=\"Welcome\" show>\n  <p>This is the modal content. You can put any HTML here.</p>\n</dotbox-modal-dialog>"
+    },
+    {
+      "title": "Modal with Custom Settings",
+      "description": "Modal with custom close behavior",
+      "code": "<dotbox-modal-dialog \n  title=\"Important Notice\" \n  close-on-overlay-click=\"false\" \n  close-on-esc=\"false\"\n>\n  <p>This modal can only be closed with the X button.</p>\n</dotbox-modal-dialog>"
+    },
+    {
+      "title": "Auto-destroy Modal",
+      "description": "Modal that destroys itself when closed",
+      "code": "<dotbox-modal-dialog \n  title=\"Temporary Modal\" \n  destroy-on-close \n  show\n>\n  <p>This modal will be destroyed when closed.</p>\n</dotbox-modal-dialog>"
+    },
+    {
+      "title": "Programmatic Modal Control",
+      "description": "Modal controlled via JavaScript",
+      "code": "<dotbox-modal-dialog id=\"my-modal\" title=\"Controlled Modal\">\n  <p>Control this modal with JavaScript:</p>\n  <button onclick=\"document.getElementById('my-modal').show()\">Show Modal</button>\n  <button onclick=\"document.getElementById('my-modal').close()\">Close Modal</button>\n</dotbox-modal-dialog>"
+    },
+    {
+      "title": "Modal with Rich Content",
+      "description": "Modal containing forms and components",
+      "code": "<dotbox-modal-dialog title=\"User Form\">\n  <dotbox-form layout=\"vertical\">\n    <dotbox-textbox label=\"Name\" required></dotbox-textbox>\n    <dotbox-textbox label=\"Email\" type=\"email\" required></dotbox-textbox>\n    <dotbox-dropdown label=\"Role\" options='[{\"value\":\"user\",\"label\":\"User\"},{\"value\":\"admin\",\"label\":\"Admin\"}]'></dotbox-dropdown>\n  </dotbox-form>\n</dotbox-modal-dialog>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".modal",
+      "description": "Main modal container with overlay positioning"
+    },
+    {
+      "name": ".modal.show",
+      "description": "Visible modal state"
+    },
+    {
+      "name": ".modal-overlay",
+      "description": "Dark overlay background behind the modal"
+    },
+    {
+      "name": ".modal-content",
+      "description": "Main content container with white background"
+    },
+    {
+      "name": ".modal-header",
+      "description": "Modal header section containing title and close button"
+    },
+    {
+      "name": ".modal-body",
+      "description": "Modal body section for main content"
+    },
+    {
+      "name": ".modal-footer",
+      "description": "Modal footer section for action buttons"
+    },
+    {
+      "name": ".modal-close",
+      "description": "Close button styling in modal header"
+    }
+  ]
+}

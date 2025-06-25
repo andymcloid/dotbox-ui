@@ -1,0 +1,143 @@
+{
+  "name": "Section",
+  "description": "A basic content section container component with optional title and flexible content area for organizing page layout.",
+  "category": "Layout",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "title",
+      "type": "string",
+      "default": "",
+      "description": "Optional title displayed as an H2 heading above the content"
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "",
+      "description": "Additional CSS classes to apply to the section container"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto-generated",
+      "description": "Unique identifier for the section element"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setTitle",
+      "parameters": [
+        {
+          "name": "title",
+          "type": "string",
+          "description": "New title text (empty string removes title)"
+        }
+      ],
+      "returns": "Section",
+      "description": "Sets or removes the section title"
+    },
+    {
+      "name": "setContent",
+      "parameters": [
+        {
+          "name": "content",
+          "type": "string|HTMLElement",
+          "description": "Content to display in the section"
+        }
+      ],
+      "returns": "Section",
+      "description": "Sets the section content, replacing any existing content"
+    },
+    {
+      "name": "appendChild",
+      "parameters": [
+        {
+          "name": "element",
+          "type": "HTMLElement",
+          "description": "Element to append to the section content"
+        }
+      ],
+      "returns": "Section",
+      "description": "Appends an element to the section content area"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the main section DOM element"
+    },
+    {
+      "name": "getContentElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the content container DOM element"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the section from DOM and cleans up"
+    },
+    {
+      "name": "appendContent",
+      "parameters": [
+        {
+          "name": "element",
+          "type": "HTMLElement",
+          "description": "Element to append to content"
+        }
+      ],
+      "returns": "Section",
+      "description": "Appends content to the section (Web Component only)"
+    }
+  ],
+  "events": [],
+  "webComponent": {
+    "tag": "dotbox-section",
+    "attributes": [
+      "title"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Section",
+      "description": "Simple section with title and content",
+      "code": "<dotbox-section title=\"About Us\">\n  <p>We are a company focused on creating great user experiences.</p>\n  <p>Our team is passionate about clean design and functionality.</p>\n</dotbox-section>"
+    },
+    {
+      "title": "Section without Title",
+      "description": "Content section without header",
+      "code": "<dotbox-section>\n  <div class=\"card-grid\">\n    <div class=\"card\">Card 1</div>\n    <div class=\"card\">Card 2</div>\n    <div class=\"card\">Card 3</div>\n  </div>\n</dotbox-section>"
+    },
+    {
+      "title": "Section with Components",
+      "description": "Section containing other Dotbox components",
+      "code": "<dotbox-section title=\"User Dashboard\">\n  <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;\">\n    <dotbox-metric label=\"Active Users\" value=\"1,234\" unit=\"users\" trend=\"up\"></dotbox-metric>\n    <dotbox-metric label=\"Revenue\" value=\"$12,500\" trend=\"up\"></dotbox-metric>\n    <dotbox-metric label=\"Conversion Rate\" value=\"3.2\" unit=\"%\" trend=\"stable\"></dotbox-metric>\n  </div>\n</dotbox-section>"
+    },
+    {
+      "title": "Section with Form",
+      "description": "Section containing a form layout",
+      "code": "<dotbox-section title=\"Contact Information\">\n  <dotbox-form layout=\"vertical\" gap=\"medium\">\n    <dotbox-textbox label=\"Full Name\" required></dotbox-textbox>\n    <dotbox-textbox label=\"Email Address\" type=\"email\" required></dotbox-textbox>\n    <dotbox-textbox label=\"Phone Number\" type=\"tel\"></dotbox-textbox>\n    <dotbox-dropdown label=\"Department\" options='[{\"value\":\"sales\",\"label\":\"Sales\"},{\"value\":\"support\",\"label\":\"Support\"}]'></dotbox-dropdown>\n  </dotbox-form>\n</dotbox-section>"
+    },
+    {
+      "title": "Multiple Related Sections",
+      "description": "Multiple sections for page organization",
+      "code": "<dotbox-section title=\"Personal Information\">\n  <dotbox-textbox label=\"First Name\" required></dotbox-textbox>\n  <dotbox-textbox label=\"Last Name\" required></dotbox-textbox>\n</dotbox-section>\n\n<dotbox-section title=\"Account Settings\">\n  <dotbox-checkbox label=\"Enable email notifications\"></dotbox-checkbox>\n  <dotbox-toggle label=\"Account active\"></dotbox-toggle>\n</dotbox-section>\n\n<dotbox-section title=\"Actions\">\n  <dotbox-button variant=\"primary\">Save Changes</dotbox-button>\n  <dotbox-button variant=\"secondary\">Cancel</dotbox-button>\n</dotbox-section>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-section",
+      "description": "Main container for the section component"
+    },
+    {
+      "name": ".dotbox-section-title",
+      "description": "Title heading styling (H2 element)"
+    },
+    {
+      "name": ".dotbox-section-content",
+      "description": "Content container for section body"
+    }
+  ]
+}

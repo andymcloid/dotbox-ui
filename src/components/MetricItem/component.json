@@ -1,0 +1,241 @@
+{
+  "name": "MetricItem",
+  "description": "A reusable metric display component for showing values with labels, units, trends, and threshold-based status indicators.",
+  "category": "Display",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto-generated",
+      "description": "Unique identifier for the metric item"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "default": "Metric",
+      "description": "The label text describing the metric"
+    },
+    {
+      "name": "value",
+      "type": "string|number",
+      "default": 0,
+      "description": "The current value of the metric"
+    },
+    {
+      "name": "unit",
+      "type": "string",
+      "default": "",
+      "description": "The unit of measurement for the metric value"
+    },
+    {
+      "name": "threshold",
+      "type": "number",
+      "default": null,
+      "description": "Error threshold value - when exceeded, metric shows error state"
+    },
+    {
+      "name": "warningThreshold",
+      "type": "number",
+      "default": null,
+      "description": "Warning threshold value - when exceeded, metric shows warning state"
+    },
+    {
+      "name": "container",
+      "type": "HTMLElement",
+      "default": null,
+      "description": "Container element to append the metric to"
+    },
+    {
+      "name": "trend",
+      "type": "string",
+      "default": null,
+      "description": "Trend indicator (up, down, stable)"
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "default": null,
+      "description": "Optional icon HTML to display with the metric"
+    }
+  ],
+  "methods": [
+    {
+      "name": "updateValue",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "string|number",
+          "description": "New metric value"
+        }
+      ],
+      "returns": "void",
+      "description": "Updates the metric value and refreshes status indicators"
+    },
+    {
+      "name": "updateStatus",
+      "parameters": [],
+      "returns": "void",
+      "description": "Updates the status class based on threshold comparison"
+    },
+    {
+      "name": "show",
+      "parameters": [],
+      "returns": "void",
+      "description": "Shows the metric item element"
+    },
+    {
+      "name": "hide",
+      "parameters": [],
+      "returns": "void",
+      "description": "Hides the metric item element"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the metric item from DOM and cleans up"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the metric item"
+    },
+    {
+      "name": "updateValue",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "string",
+          "description": "New metric value"
+        }
+      ],
+      "returns": "MetricItem",
+      "description": "Updates the metric value (Web Component only)"
+    },
+    {
+      "name": "setThreshold",
+      "parameters": [
+        {
+          "name": "threshold",
+          "type": "string",
+          "description": "New threshold value"
+        }
+      ],
+      "returns": "MetricItem",
+      "description": "Sets the error threshold (Web Component only)"
+    },
+    {
+      "name": "setTrend",
+      "parameters": [
+        {
+          "name": "trend",
+          "type": "string",
+          "description": "New trend indicator"
+        }
+      ],
+      "returns": "MetricItem",
+      "description": "Sets the trend indicator (Web Component only)"
+    }
+  ],
+  "events": [],
+  "webComponent": {
+    "tag": "dotbox-metric",
+    "attributes": [
+      "label",
+      "value",
+      "unit",
+      "trend",
+      "icon",
+      "threshold",
+      "warning-threshold"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Metric",
+      "description": "Simple metric with label and value",
+      "code": "<dotbox-metric label=\"CPU Usage\" value=\"45\" unit=\"%\"></dotbox-metric>"
+    },
+    {
+      "title": "Metric with Thresholds",
+      "description": "Metric with warning and error thresholds",
+      "code": "<dotbox-metric \n  label=\"Memory Usage\" \n  value=\"85\" \n  unit=\"%\" \n  warning-threshold=\"70\" \n  threshold=\"90\"\n></dotbox-metric>"
+    },
+    {
+      "title": "Metric with Trend",
+      "description": "Metric showing trend indicators",
+      "code": "<dotbox-metric label=\"Revenue\" value=\"12500\" unit=\"$\" trend=\"up\"></dotbox-metric>\n<dotbox-metric label=\"Expenses\" value=\"8200\" unit=\"$\" trend=\"down\"></dotbox-metric>\n<dotbox-metric label=\"Profit Margin\" value=\"15\" unit=\"%\" trend=\"stable\"></dotbox-metric>"
+    },
+    {
+      "title": "Metric with Icon",
+      "description": "Metric with custom icon",
+      "code": "<dotbox-metric \n  label=\"Active Users\" \n  value=\"1,234\" \n  unit=\"users\" \n  icon=\"👥\" \n  trend=\"up\"\n></dotbox-metric>"
+    },
+    {
+      "title": "System Metrics Dashboard",
+      "description": "Multiple metrics showing system status",
+      "code": "<dotbox-metric label=\"CPU\" value=\"23\" unit=\"%\" warning-threshold=\"70\" threshold=\"90\"></dotbox-metric>\n<dotbox-metric label=\"RAM\" value=\"67\" unit=\"%\" warning-threshold=\"70\" threshold=\"90\"></dotbox-metric>\n<dotbox-metric label=\"Disk\" value=\"89\" unit=\"%\" warning-threshold=\"70\" threshold=\"90\"></dotbox-metric>\n<dotbox-metric label=\"Network\" value=\"12\" unit=\"MB/s\" trend=\"stable\"></dotbox-metric>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".metric-item",
+      "description": "Main container for the metric item component"
+    },
+    {
+      "name": ".metric-item-icon",
+      "description": "Container for the optional metric icon"
+    },
+    {
+      "name": ".metric-item-content",
+      "description": "Container for label and value content"
+    },
+    {
+      "name": ".metric-item-label",
+      "description": "Label text styling"
+    },
+    {
+      "name": ".metric-item-value",
+      "description": "Value display styling"
+    },
+    {
+      "name": ".metric-item-unit",
+      "description": "Unit text styling"
+    },
+    {
+      "name": ".metric-item-trend",
+      "description": "Trend indicator styling"
+    },
+    {
+      "name": ".trend-up",
+      "description": "Upward trend indicator styling"
+    },
+    {
+      "name": ".trend-down",
+      "description": "Downward trend indicator styling"
+    },
+    {
+      "name": ".trend-stable",
+      "description": "Stable trend indicator styling"
+    },
+    {
+      "name": ".metric-item.success",
+      "description": "Success state styling (below warning threshold)"
+    },
+    {
+      "name": ".metric-item.warning",
+      "description": "Warning state styling (above warning threshold)"
+    },
+    {
+      "name": ".metric-item.error",
+      "description": "Error state styling (above error threshold)"
+    },
+    {
+      "name": ".value",
+      "description": "Special styling for metric values"
+    }
+  ]
+}

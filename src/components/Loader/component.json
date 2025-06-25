@@ -1,0 +1,143 @@
+{
+  "name": "Loader",
+  "description": "An animated SVG loading indicator with multiple sizes and color variants for displaying loading states.",
+  "category": "Display",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "size",
+      "type": "string",
+      "default": "medium",
+      "description": "Size of the loader",
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "default": "primary",
+      "description": "Color variant of the loader",
+      "options": ["primary", "secondary", "success", "danger"]
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "",
+      "description": "Additional CSS classes to apply to the loader"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setSize",
+      "parameters": [
+        {
+          "name": "size",
+          "type": "string",
+          "description": "New loader size"
+        }
+      ],
+      "returns": "Loader",
+      "description": "Changes the loader size (small, medium, large)"
+    },
+    {
+      "name": "setVariant",
+      "parameters": [
+        {
+          "name": "variant",
+          "type": "string",
+          "description": "New loader variant"
+        }
+      ],
+      "returns": "Loader",
+      "description": "Changes the loader color variant"
+    },
+    {
+      "name": "show",
+      "parameters": [],
+      "returns": "Loader",
+      "description": "Shows the loader element"
+    },
+    {
+      "name": "hide",
+      "parameters": [],
+      "returns": "Loader",
+      "description": "Hides the loader element"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the loader"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the loader from DOM and cleans up"
+    }
+  ],
+  "events": [],
+  "webComponent": {
+    "tag": "dotbox-loader",
+    "attributes": [
+      "size",
+      "variant"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Loader",
+      "description": "Simple loading indicator with default styling",
+      "code": "<dotbox-loader></dotbox-loader>"
+    },
+    {
+      "title": "Loader Variants",
+      "description": "Loading indicators in different color variants",
+      "code": "<dotbox-loader variant=\"primary\"></dotbox-loader>\n<dotbox-loader variant=\"secondary\"></dotbox-loader>\n<dotbox-loader variant=\"success\"></dotbox-loader>\n<dotbox-loader variant=\"danger\"></dotbox-loader>"
+    },
+    {
+      "title": "Loader Sizes",
+      "description": "Loading indicators in different sizes",
+      "code": "<dotbox-loader size=\"small\"></dotbox-loader>\n<dotbox-loader size=\"medium\"></dotbox-loader>\n<dotbox-loader size=\"large\"></dotbox-loader>"
+    },
+    {
+      "title": "Combined Variants",
+      "description": "Various combinations of size and variant",
+      "code": "<dotbox-loader size=\"small\" variant=\"success\"></dotbox-loader>\n<dotbox-loader size=\"large\" variant=\"danger\"></dotbox-loader>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-loader",
+      "description": "Main container for the loader component with SVG animation"
+    },
+    {
+      "name": ".small",
+      "description": "Small size variant styling"
+    },
+    {
+      "name": ".medium",
+      "description": "Medium size variant styling (default)"
+    },
+    {
+      "name": ".large",
+      "description": "Large size variant styling"
+    },
+    {
+      "name": ".primary",
+      "description": "Primary color variant styling (default)"
+    },
+    {
+      "name": ".secondary",
+      "description": "Secondary color variant styling"
+    },
+    {
+      "name": ".success",
+      "description": "Success (green) color variant styling"
+    },
+    {
+      "name": ".danger",
+      "description": "Danger (red) color variant styling"
+    }
+  ]
+}

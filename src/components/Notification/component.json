@@ -1,0 +1,301 @@
+{
+  "name": "Notification",
+  "description": "A versatile notification system that can display as static badges or animated popup notifications with auto-close functionality.",
+  "category": "Display",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "message",
+      "type": "string",
+      "default": "Notification message",
+      "description": "The notification message content"
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "default": "success",
+      "description": "Visual style variant of the notification",
+      "options": ["success", "danger", "warning", "info"]
+    },
+    {
+      "name": "mode",
+      "type": "string",
+      "default": "static",
+      "description": "Display mode of the notification",
+      "options": ["static", "popup"]
+    },
+    {
+      "name": "position",
+      "type": "string",
+      "default": "bottom-right",
+      "description": "Position for popup notifications",
+      "options": ["bottom-right", "bottom-left", "top-right", "top-left"]
+    },
+    {
+      "name": "autoClose",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether popup notifications auto-close after timeout"
+    },
+    {
+      "name": "timeout",
+      "type": "number",
+      "default": 3000,
+      "description": "Auto-close timeout in milliseconds"
+    },
+    {
+      "name": "showCloseButton",
+      "type": "boolean",
+      "default": "auto (true for popups)",
+      "description": "Whether to show a close button"
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "default": null,
+      "description": "Custom icon HTML (uses default variant icons if null)"
+    },
+    {
+      "name": "onClose",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when notification is closed"
+    }
+  ],
+  "methods": [
+    {
+      "name": "close",
+      "parameters": [],
+      "returns": "void",
+      "description": "Closes the notification and removes it from DOM"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Immediately destroys the notification"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the notification"
+    }
+  ],
+  "staticMethods": [
+    {
+      "name": "show",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Notification message"
+        },
+        {
+          "name": "variant",
+          "type": "string",
+          "description": "Notification variant"
+        },
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Additional options"
+        }
+      ],
+      "returns": "Notification",
+      "description": "Creates and shows a popup notification"
+    },
+    {
+      "name": "success",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Success message"
+        },
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Additional options"
+        }
+      ],
+      "returns": "Notification",
+      "description": "Creates a success popup notification"
+    },
+    {
+      "name": "danger",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Error message"
+        },
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Additional options"
+        }
+      ],
+      "returns": "Notification",
+      "description": "Creates a danger popup notification"
+    },
+    {
+      "name": "warning",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Warning message"
+        },
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Additional options"
+        }
+      ],
+      "returns": "Notification",
+      "description": "Creates a warning popup notification"
+    },
+    {
+      "name": "info",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "Info message"
+        },
+        {
+          "name": "options",
+          "type": "object",
+          "description": "Additional options"
+        }
+      ],
+      "returns": "Notification",
+      "description": "Creates an info popup notification"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-notification-close",
+      "description": "Fired when the notification is closed",
+      "detail": {
+        "notification": "Notification"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-notification",
+    "attributes": [
+      "message",
+      "variant",
+      "mode",
+      "position",
+      "auto-close",
+      "timeout",
+      "show-close-button",
+      "icon"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Static Notifications",
+      "description": "Static notification badges for in-page display",
+      "code": "<dotbox-notification message=\"Operation completed successfully!\" variant=\"success\"></dotbox-notification>\n<dotbox-notification message=\"Please check your input\" variant=\"warning\"></dotbox-notification>\n<dotbox-notification message=\"An error occurred\" variant=\"danger\"></dotbox-notification>\n<dotbox-notification message=\"Here's some information\" variant=\"info\"></dotbox-notification>"
+    },
+    {
+      "title": "Popup Notifications",
+      "description": "Auto-dismissing popup notifications",
+      "code": "<dotbox-notification \n  message=\"File uploaded successfully!\" \n  variant=\"success\" \n  mode=\"popup\" \n  position=\"top-right\"\n></dotbox-notification>"
+    },
+    {
+      "title": "Custom Timeout and Position",
+      "description": "Popup with custom timeout and position",
+      "code": "<dotbox-notification \n  message=\"This notification stays for 5 seconds\" \n  variant=\"info\" \n  mode=\"popup\" \n  position=\"bottom-left\" \n  timeout=\"5000\"\n></dotbox-notification>"
+    },
+    {
+      "title": "Non-auto-closing Popup",
+      "description": "Popup that requires manual dismissal",
+      "code": "<dotbox-notification \n  message=\"Important: Manual action required\" \n  variant=\"warning\" \n  mode=\"popup\" \n  auto-close=\"false\" \n  show-close-button=\"true\"\n></dotbox-notification>"
+    },
+    {
+      "title": "Custom Icon Notification",
+      "description": "Notification with custom icon",
+      "code": "<dotbox-notification \n  message=\"You've got mail!\" \n  variant=\"info\" \n  icon=\"📧\"\n></dotbox-notification>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-notification",
+      "description": "Main container for the notification component"
+    },
+    {
+      "name": ".dotbox-notification-success",
+      "description": "Success variant styling with green theme"
+    },
+    {
+      "name": ".dotbox-notification-danger",
+      "description": "Danger variant styling with red theme"
+    },
+    {
+      "name": ".dotbox-notification-warning",
+      "description": "Warning variant styling with yellow theme"
+    },
+    {
+      "name": ".dotbox-notification-info",
+      "description": "Info variant styling with blue theme"
+    },
+    {
+      "name": ".dotbox-notification-static",
+      "description": "Static display mode styling"
+    },
+    {
+      "name": ".dotbox-notification-popup",
+      "description": "Popup display mode styling"
+    },
+    {
+      "name": ".dotbox-notification-popup-top-right",
+      "description": "Top-right position styling for popups"
+    },
+    {
+      "name": ".dotbox-notification-popup-top-left",
+      "description": "Top-left position styling for popups"
+    },
+    {
+      "name": ".dotbox-notification-popup-bottom-right",
+      "description": "Bottom-right position styling for popups"
+    },
+    {
+      "name": ".dotbox-notification-popup-bottom-left",
+      "description": "Bottom-left position styling for popups"
+    },
+    {
+      "name": ".dotbox-notification-show",
+      "description": "Show animation state for popup notifications"
+    },
+    {
+      "name": ".dotbox-notification-hide",
+      "description": "Hide animation state for popup notifications"
+    },
+    {
+      "name": ".dotbox-notification-icon",
+      "description": "Icon container styling"
+    },
+    {
+      "name": ".dotbox-notification-content",
+      "description": "Content container for message text"
+    },
+    {
+      "name": ".dotbox-notification-message",
+      "description": "Message text styling"
+    },
+    {
+      "name": ".dotbox-notification-close",
+      "description": "Close button styling"
+    },
+    {
+      "name": ".dotbox-notifications-container",
+      "description": "Container for popup notifications in each position"
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+{
+  "name": "ToolButton",
+  "description": "A specialized button component designed for toolbars and navigation bars with icon support, tooltips, and multiple variants.",
+  "category": "Input",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "icon",
+      "type": "string",
+      "default": "⚙️",
+      "description": "Icon content (emoji, SVG, or HTML) displayed on the button"
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "default": "",
+      "description": "Optional text label displayed after the icon"
+    },
+    {
+      "name": "tooltip",
+      "type": "string",
+      "default": "",
+      "description": "Tooltip text shown on hover (HTML title attribute)"
+    },
+    {
+      "name": "variant",
+      "type": "string",
+      "default": "default",
+      "description": "Visual style variant of the tool button",
+      "options": ["default", "primary", "danger"]
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "default": "medium",
+      "description": "Size of the tool button",
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the button is disabled and cannot be clicked"
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the button is in an active/selected state"
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "",
+      "description": "Additional CSS classes to apply to the button"
+    },
+    {
+      "name": "onClick",
+      "type": "function",
+      "default": null,
+      "description": "Callback function executed when button is clicked"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setIcon",
+      "parameters": [
+        {
+          "name": "icon",
+          "type": "string",
+          "description": "New icon content"
+        }
+      ],
+      "returns": "ToolButton",
+      "description": "Updates the button icon"
+    },
+    {
+      "name": "setText",
+      "parameters": [
+        {
+          "name": "text",
+          "type": "string",
+          "description": "New text label"
+        }
+      ],
+      "returns": "ToolButton",
+      "description": "Updates the button text label"
+    },
+    {
+      "name": "setTooltip",
+      "parameters": [
+        {
+          "name": "tooltip",
+          "type": "string",
+          "description": "New tooltip text"
+        }
+      ],
+      "returns": "ToolButton",
+      "description": "Updates the button tooltip"
+    },
+    {
+      "name": "setActive",
+      "parameters": [
+        {
+          "name": "active",
+          "type": "boolean",
+          "description": "New active state"
+        }
+      ],
+      "returns": "ToolButton",
+      "description": "Sets the active/selected state of the button"
+    },
+    {
+      "name": "setDisabled",
+      "parameters": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "New disabled state"
+        }
+      ],
+      "returns": "ToolButton",
+      "description": "Sets the disabled state of the button"
+    },
+    {
+      "name": "setVariant",
+      "parameters": [
+        {
+          "name": "variant",
+          "type": "string",
+          "description": "New button variant"
+        }
+      ],
+      "returns": "ToolButton",
+      "description": "Changes the button variant style"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the button"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the button from DOM and cleans up"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-click",
+      "description": "Fired when the tool button is clicked (Web Component only)",
+      "detail": {
+        "icon": "string",
+        "text": "string",
+        "tooltip": "string",
+        "variant": "string",
+        "size": "string",
+        "disabled": "boolean",
+        "active": "boolean"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-tool-button",
+    "attributes": [
+      "icon",
+      "text",
+      "tooltip",
+      "variant",
+      "size",
+      "disabled",
+      "active"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Tool Buttons",
+      "description": "Simple tool buttons with icons and tooltips",
+      "code": "<dotbox-tool-button icon=\"🏠\" tooltip=\"Home\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"⚙️\" tooltip=\"Settings\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"📊\" tooltip=\"Analytics\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"👤\" tooltip=\"Profile\"></dotbox-tool-button>"
+    },
+    {
+      "title": "Tool Buttons with Text",
+      "description": "Tool buttons combining icons with text labels",
+      "code": "<dotbox-tool-button icon=\"💾\" text=\"Save\" tooltip=\"Save document\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"📂\" text=\"Open\" tooltip=\"Open file\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"✂️\" text=\"Cut\" tooltip=\"Cut selection\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"📋\" text=\"Copy\" tooltip=\"Copy to clipboard\"></dotbox-tool-button>"
+    },
+    {
+      "title": "Tool Button Variants",
+      "description": "Tool buttons in different style variants",
+      "code": "<dotbox-tool-button icon=\"✅\" text=\"Save\" variant=\"primary\" tooltip=\"Save changes\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"🔄\" text=\"Reset\" variant=\"default\" tooltip=\"Reset form\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"🗑️\" text=\"Delete\" variant=\"danger\" tooltip=\"Delete item\"></dotbox-tool-button>"
+    },
+    {
+      "title": "Tool Button Sizes",
+      "description": "Tool buttons in different sizes",
+      "code": "<dotbox-tool-button icon=\"📝\" size=\"small\" tooltip=\"Edit (small)\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"📝\" size=\"medium\" tooltip=\"Edit (medium)\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"📝\" size=\"large\" tooltip=\"Edit (large)\"></dotbox-tool-button>"
+    },
+    {
+      "title": "Tool Button States",
+      "description": "Tool buttons in different states",
+      "code": "<dotbox-tool-button icon=\"🎯\" text=\"Normal\" tooltip=\"Normal state\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"🎯\" text=\"Active\" active tooltip=\"Active state\"></dotbox-tool-button>\n<dotbox-tool-button icon=\"🎯\" text=\"Disabled\" disabled tooltip=\"Disabled state\"></dotbox-tool-button>"
+    },
+    {
+      "title": "Toolbar Example",
+      "description": "Tool buttons arranged in a toolbar layout",
+      "code": "<div style=\"display: flex; gap: 0.25rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa;\">\n  <dotbox-tool-button icon=\"📄\" tooltip=\"New document\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"📂\" tooltip=\"Open file\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"💾\" tooltip=\"Save\" variant=\"primary\"></dotbox-tool-button>\n  <div style=\"width: 1px; height: 24px; background: #ddd; margin: 0 0.25rem;\"></div>\n  <dotbox-tool-button icon=\"↩️\" tooltip=\"Undo\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"↪️\" tooltip=\"Redo\"></dotbox-tool-button>\n  <div style=\"width: 1px; height: 24px; background: #ddd; margin: 0 0.25rem;\"></div>\n  <dotbox-tool-button icon=\"✂️\" tooltip=\"Cut\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"📋\" tooltip=\"Copy\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"📄\" tooltip=\"Paste\"></dotbox-tool-button>\n</div>"
+    },
+    {
+      "title": "Navigation Toolbar",
+      "description": "Tool buttons for navigation with active states",
+      "code": "<div style=\"display: flex; gap: 0.5rem; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;\">\n  <dotbox-tool-button icon=\"🏠\" text=\"Home\" active tooltip=\"Go to homepage\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"📊\" text=\"Dashboard\" tooltip=\"View dashboard\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"👥\" text=\"Users\" tooltip=\"Manage users\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"📁\" text=\"Files\" tooltip=\"File manager\"></dotbox-tool-button>\n  <dotbox-tool-button icon=\"⚙️\" text=\"Settings\" tooltip=\"Application settings\"></dotbox-tool-button>\n</div>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".tool-btn",
+      "description": "Base tool button class with core styling"
+    },
+    {
+      "name": ".tool-btn-default",
+      "description": "Default variant styling"
+    },
+    {
+      "name": ".tool-btn-primary",
+      "description": "Primary variant styling with accent colors"
+    },
+    {
+      "name": ".tool-btn-danger",
+      "description": "Danger variant styling with red theme"
+    },
+    {
+      "name": ".tool-btn-small",
+      "description": "Small size variant styling"
+    },
+    {
+      "name": ".tool-btn-medium",
+      "description": "Medium size variant styling (default)"
+    },
+    {
+      "name": ".tool-btn-large",
+      "description": "Large size variant styling"
+    },
+    {
+      "name": ".tool-btn-active",
+      "description": "Active/selected state styling"
+    },
+    {
+      "name": ".tool-btn-text",
+      "description": "Text label styling within tool buttons"
+    }
+  ]
+}

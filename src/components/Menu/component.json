@@ -1,0 +1,244 @@
+{
+  "name": "Menu",
+  "description": "A flexible navigation menu component with support for flat and hierarchical structures, collapsible groups, and hash-based routing.",
+  "category": "Navigation",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "id",
+      "type": "string",
+      "default": "auto-generated",
+      "description": "Unique identifier for the menu"
+    },
+    {
+      "name": "items",
+      "type": "array",
+      "default": "[]",
+      "description": "Array of menu item objects with id, label, group, and groupHeader properties"
+    },
+    {
+      "name": "selected",
+      "type": "string",
+      "default": null,
+      "description": "ID of the currently selected menu item"
+    },
+    {
+      "name": "onSelect",
+      "type": "function",
+      "default": "() => {}",
+      "description": "Callback function executed when a menu item is selected"
+    },
+    {
+      "name": "bordered",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the menu has borders"
+    },
+    {
+      "name": "compact",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to use compact spacing for menu items"
+    },
+    {
+      "name": "routingMode",
+      "type": "boolean",
+      "default": false,
+      "description": "Enable hash-based URL routing for menu items"
+    },
+    {
+      "name": "collapsibleHeaders",
+      "type": "boolean",
+      "default": false,
+      "description": "Enable collapsible group headers"
+    },
+    {
+      "name": "headerArrowPosition",
+      "type": "string",
+      "default": "right",
+      "description": "Position of arrow icon in collapsible headers",
+      "options": ["left", "right"]
+    }
+  ],
+  "methods": [
+    {
+      "name": "select",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "description": "ID of the menu item to select"
+        }
+      ],
+      "returns": "void",
+      "description": "Selects a menu item by its ID"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the menu"
+    },
+    {
+      "name": "addItem",
+      "parameters": [
+        {
+          "name": "item",
+          "type": "object",
+          "description": "Menu item object to add"
+        }
+      ],
+      "returns": "Menu",
+      "description": "Adds a new menu item (Web Component only)"
+    },
+    {
+      "name": "removeItem",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string",
+          "description": "ID of the menu item to remove"
+        }
+      ],
+      "returns": "Menu",
+      "description": "Removes a menu item by its ID (Web Component only)"
+    },
+    {
+      "name": "toggleGroup",
+      "parameters": [
+        {
+          "name": "groupKey",
+          "type": "string",
+          "description": "Key of the group to toggle"
+        }
+      ],
+      "returns": "Menu",
+      "description": "Toggles the collapsed state of a group (Web Component only)"
+    },
+    {
+      "name": "expandAllGroups",
+      "parameters": [],
+      "returns": "Menu",
+      "description": "Expands all collapsible groups (Web Component only)"
+    },
+    {
+      "name": "collapseAllGroups",
+      "parameters": [],
+      "returns": "Menu",
+      "description": "Collapses all collapsible groups (Web Component only)"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-select",
+      "description": "Fired when a menu item is selected (Web Component only)",
+      "detail": {
+        "selectedId": "string",
+        "items": "array"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-menu",
+    "attributes": [
+      "selected",
+      "bordered",
+      "compact",
+      "items",
+      "data-items",
+      "routing-mode",
+      "collapsible-headers",
+      "header-arrow-position"
+    ]
+  },
+  "examples": [
+    {
+      "title": "Basic Menu",
+      "description": "Simple menu with flat structure",
+      "code": "<dotbox-menu>\n  <dotbox-menu-item id=\"home\" label=\"Home\">Home</dotbox-menu-item>\n  <dotbox-menu-item id=\"about\" label=\"About\">About</dotbox-menu-item>\n  <dotbox-menu-item id=\"contact\" label=\"Contact\">Contact</dotbox-menu-item>\n</dotbox-menu>"
+    },
+    {
+      "title": "Menu with JSON Items",
+      "description": "Menu using JSON attribute for items",
+      "code": "<dotbox-menu items='[{\"id\":\"dashboard\",\"label\":\"Dashboard\"},{\"id\":\"users\",\"label\":\"Users\"},{\"id\":\"settings\",\"label\":\"Settings\"}]' selected=\"dashboard\"></dotbox-menu>"
+    },
+    {
+      "title": "Compact Borderless Menu",
+      "description": "Menu with compact spacing and no borders",
+      "code": "<dotbox-menu compact bordered=\"false\" items='[{\"id\":\"item1\",\"label\":\"Item 1\"},{\"id\":\"item2\",\"label\":\"Item 2\"},{\"id\":\"item3\",\"label\":\"Item 3\"}]'></dotbox-menu>"
+    },
+    {
+      "title": "Menu with Routing",
+      "description": "Menu with hash-based routing enabled",
+      "code": "<dotbox-menu routing-mode items='[{\"id\":\"page1\",\"label\":\"Page 1\"},{\"id\":\"page2\",\"label\":\"Page 2\"},{\"id\":\"page3\",\"label\":\"Page 3\"}]'></dotbox-menu>"
+    },
+    {
+      "title": "Collapsible Group Menu",
+      "description": "Menu with collapsible group headers",
+      "code": "<dotbox-menu collapsible-headers header-arrow-position=\"left\" items='[{\"id\":\"item1\",\"label\":\"Item 1\",\"group\":\"group1\",\"groupHeader\":\"Group One\"},{\"id\":\"item2\",\"label\":\"Item 2\",\"group\":\"group1\"},{\"id\":\"item3\",\"label\":\"Item 3\",\"group\":\"group2\",\"groupHeader\":\"Group Two\"}]'></dotbox-menu>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-menu",
+      "description": "Main container for the menu component"
+    },
+    {
+      "name": ".dotbox-menu-bordered",
+      "description": "Menu with borders around items"
+    },
+    {
+      "name": ".dotbox-menu-borderless",
+      "description": "Menu without borders"
+    },
+    {
+      "name": ".dotbox-menu-compact",
+      "description": "Menu with compact spacing between items"
+    },
+    {
+      "name": ".dotbox-menu-collapsible",
+      "description": "Menu with collapsible group functionality"
+    },
+    {
+      "name": ".dotbox-menu-item",
+      "description": "Individual menu item styling"
+    },
+    {
+      "name": ".dotbox-menu-item.selected",
+      "description": "Selected menu item styling"
+    },
+    {
+      "name": ".dotbox-menu-header",
+      "description": "Group header styling for collapsible menus"
+    },
+    {
+      "name": ".dotbox-menu-header.collapsed",
+      "description": "Collapsed group header styling"
+    },
+    {
+      "name": ".dotbox-menu-header-icon",
+      "description": "Arrow icon in group headers"
+    },
+    {
+      "name": ".dotbox-menu-header-text",
+      "description": "Text content in group headers"
+    },
+    {
+      "name": ".dotbox-menu-header-arrow-left",
+      "description": "Header with arrow positioned on the left"
+    },
+    {
+      "name": ".dotbox-menu-header-arrow-right",
+      "description": "Header with arrow positioned on the right"
+    },
+    {
+      "name": ".dotbox-menu-group",
+      "description": "Container for grouped menu items"
+    },
+    {
+      "name": ".dotbox-menu-group.collapsed",
+      "description": "Collapsed group styling (hidden items)"
+    }
+  ]
+}
