@@ -104,6 +104,115 @@
     transform: translateY(-1px);
 }
 
+/* Delete variant with special red styling and animations */
+.btn-delete {
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background: #e62222;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+    color: white;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    transition: 200ms;
+}
+
+.btn-delete .btn-text {
+    transform: translateX(35px);
+    transition: 200ms;
+}
+
+.btn-delete .btn-icon {
+    position: absolute;
+    border-left: 1px solid #c41b1b;
+    transform: translateX(110px);
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 200ms;
+}
+
+.btn-delete .btn-icon svg {
+    width: 15px;
+    fill: #eee;
+    transition: 200ms;
+}
+
+.btn-delete:hover {
+    background: #ff3636;
+}
+
+.btn-delete:hover .btn-text {
+    color: transparent;
+}
+
+.btn-delete:hover .btn-icon {
+    width: 150px;
+    border-left: none;
+    transform: translateX(0);
+}
+
+.btn-delete:focus {
+    outline: none;
+}
+
+.btn-delete:active .btn-icon svg {
+    transform: scale(0.8);
+}
+
+/* Small delete variant */
+.btn-delete.btn-small {
+    width: 120px;
+    height: 40px;
+}
+
+.btn-delete.btn-small .btn-text {
+    transform: translateX(25px);
+    font-size: 0.875rem;
+}
+
+.btn-delete.btn-small .btn-icon {
+    transform: translateX(85px);
+    height: 30px;
+    width: 30px;
+}
+
+.btn-delete.btn-small:hover .btn-icon {
+    width: 120px;
+}
+
+/* Large delete variant */
+.btn-delete.btn-large {
+    width: 180px;
+    height: 60px;
+}
+
+.btn-delete.btn-large .btn-text {
+    transform: translateX(45px);
+    font-size: 1rem;
+}
+
+.btn-delete.btn-large .btn-icon {
+    transform: translateX(135px);
+    height: 50px;
+    width: 50px;
+}
+
+.btn-delete.btn-large .btn-icon svg {
+    width: 18px;
+}
+
+.btn-delete.btn-large:hover .btn-icon {
+    width: 180px;
+}
+
 /* Loading state */
 .btn-loading {
     pointer-events: none;

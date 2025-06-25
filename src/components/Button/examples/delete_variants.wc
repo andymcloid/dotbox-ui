@@ -1,0 +1,14 @@
+<!-- Delete variant examples with animation -->
+<h4>Delete Variant with Animation</h4>
+<dotbox-button variant="delete" icon="delete" animation>Delete</dotbox-button>
+
+<h4>Delete Variant Sizes</h4>
+<dotbox-button variant="delete" icon="delete" animation size="small">Delete Small</dotbox-button>
+<dotbox-button variant="delete" icon="delete" animation size="medium">Delete Medium</dotbox-button>
+<dotbox-button variant="delete" icon="delete" animation size="large">Delete Large</dotbox-button>
+
+<h4>Delete Without Animation</h4>
+<dotbox-button variant="delete" icon="delete">Delete Static</dotbox-button>
+
+<h4>Delete Without Icon</h4>
+<dotbox-button variant="delete">Delete Text Only</dotbox-button>

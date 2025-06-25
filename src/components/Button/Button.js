@@ -7,12 +7,13 @@ class Button {
         this.options = {
             text: 'Button',
             type: 'button',
-            variant: 'primary', // primary, secondary, danger, success
-            size: 'medium', // small, medium, large
+            variant: 'primary', // primary, secondary, danger, success, delete
+            size: 'small', // small, medium, large
             disabled: false,
             loading: false,
             icon: null,
             className: '',
+            animation: false, // Enable animation for delete variant
             ...options
         };
         
@@ -61,6 +62,11 @@ class Button {
         
         if (this.options.loading) {
             content = '<span class="btn-spinner">⟳</span> Loading...';
+        } else if (this.options.variant === 'delete' && this.options.animation && this.options.icon) {
+            // Special structure for delete variant with animation
+            const defaultIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg>';
+            const iconHtml = this.options.icon === 'delete' ? defaultIcon : this.options.icon;
+            content = `<span class="btn-text">${this.options.text}</span><span class="btn-icon">${iconHtml}</span>`;
         } else {
             if (this.options.icon) {
                 content = `${this.options.icon} ${this.options.text}`;
@@ -91,6 +97,12 @@ class Button {
     
     setIcon(icon) {
         this.options.icon = icon;
+        this.updateContent();
+        return this;
+    }
+    
+    setAnimation(animation) {
+        this.options.animation = animation;
         this.updateContent();
         return this;
     }
@@ -142,7 +154,7 @@ class DotboxButtonElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading'];
+        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading', 'animation'];
     }
 
     attributeChangedCallback() {
@@ -153,9 +165,10 @@ class DotboxButtonElement extends HTMLElement {
 
     render() {
         const variant = this.getAttribute('variant') || 'primary';
-        const size = this.getAttribute('size') || 'medium';
+        const size = this.getAttribute('size') || 'small';
         const disabled = this.hasAttribute('disabled');
         const loading = this.hasAttribute('loading');
+        const animation = this.hasAttribute('animation');
         const icon = this.getAttribute('icon') || null;
         const text = this.getAttribute('text') || this.textContent.trim() || 'Button';
 
@@ -172,10 +185,11 @@ class DotboxButtonElement extends HTMLElement {
             disabled: disabled,
             loading: loading,
             icon: icon,
+            animation: animation,
             onClick: () => {
                 // Dispatch custom event
                 this.dispatchEvent(new CustomEvent('dotbox-click', {
-                    detail: { variant, size, text, disabled, loading, icon },
+                    detail: { variant, size, text, disabled, loading, icon, animation },
                     bubbles: true
                 }));
             }
@@ -220,6 +234,15 @@ class DotboxButtonElement extends HTMLElement {
             this.setAttribute('icon', icon);
         } else {
             this.removeAttribute('icon');
+        }
+        return this;
+    }
+    
+    setAnimation(animation) {
+        if (animation) {
+            this.setAttribute('animation', '');
+        } else {
+            this.removeAttribute('animation');
         }
         return this;
     }

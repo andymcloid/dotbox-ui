@@ -8,7 +8,10 @@
       "Bash(ls:*)",
       "Bash(npm run dev:*)",
       "Bash(python3:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(npm run docs:*)",
+      "Bash(pkill:*)",
+      "Bash(true)"
     ],
     "deny": []
   }

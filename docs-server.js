@@ -122,6 +122,22 @@ app.get('/api/components', (req, res) => {
     }
 });
 
+// Handle SPA routing - serve index.html for all component routes
+app.get('/component/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'docs', 'index.html'));
+});
+
+// Fallback for any other routes - serve index.html to let the SPA handle routing
+app.get('*', (req, res) => {
+    // Check if it's an API route first
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ error: 'API endpoint not found' });
+    }
+    
+    // For all other routes, serve the SPA
+    res.sendFile(path.join(__dirname, 'docs', 'index.html'));
+});
+
 app.listen(port, () => {
     console.log(`Documentation server running at http://localhost:${port}`);
     console.log(`API endpoints available at http://localhost:${port}/api/`);

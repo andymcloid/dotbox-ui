@@ -133,6 +133,7 @@ class CodeBlock {
         const content = document.createElement('div');
         content.className = 'dotbox-codeblock-preview-content';
         content.id = `${this.id}-preview`;
+        content.innerHTML = '<div style="padding: 1rem; color: #666; text-align: center;">Loading preview...</div>';
         
         container.appendChild(header);
         container.appendChild(content);
@@ -199,6 +200,22 @@ class CodeBlock {
             if (type === 'html') {
                 // HTML preview (includes Web Components)
                 content.innerHTML = this.code;
+                
+                // Ensure components are properly initialized after a brief delay
+                setTimeout(() => {
+                    // Force a re-render for any custom elements that might need it
+                    const customElements = content.querySelectorAll('[is], dotbox-*');
+                    customElements.forEach(el => {
+                        if (el.connectedCallback && typeof el.connectedCallback === 'function') {
+                            try {
+                                el.connectedCallback();
+                            } catch (e) {
+                                console.debug('Element already initialized:', el.tagName);
+                            }
+                        }
+                    });
+                }, 50);
+                
             } else if (type === 'javascript') {
                 // JavaScript preview
                 content.innerHTML = '<div id="js-demo"></div>';
