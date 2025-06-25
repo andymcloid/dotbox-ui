@@ -602,6 +602,13 @@ When reporting bugs or requesting features:
 - Button animations use CSS flexbox transitions for smooth effects
 - Component initialization handles SPA routing properly
 
+**Icon Integration Troubleshooting:**
+- If predefined icons show as text instead of SVG, check Button component fallback in `Button.js`
+- Button fallback `predefinedIcons` must include all icons used in the system
+- When adding new predefined icons to Icon component, also add them to Button fallback
+- Common icons needing fallback: 'code', 'arrow-up', 'arrow-down', 'delete', 'check', 'plus'
+- Button fallback ensures icons work even if Icon component loads after Button component
+
 ## 🔄 For AI Assistants: Project Knowledge Persistence
 
 When working with this project after a restart, always:

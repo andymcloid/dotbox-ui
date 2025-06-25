@@ -13,6 +13,7 @@ class Button {
             loading: false,
             icon: null,
             width: null, // Custom width (e.g., '100px', '10em', '50%', etc.)
+            animation: true, // Enable/disable hover animations
             className: '',
             ...options
         };
@@ -55,6 +56,11 @@ class Button {
             classes.push('btn-no-icon');
         } else if (!this.options.text || this.options.text.trim() === '') {
             classes.push('btn-icon-only');
+        }
+        
+        // Add animation class
+        if (!this.options.animation) {
+            classes.push('btn-no-animation');
         }
         
         // Add custom classes
@@ -164,10 +170,13 @@ class Button {
         } else {
             // Fallback if Icon component not available
             const predefinedIcons = {
-                'delete': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
-                'close': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
-                'check': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>',
-                'plus': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/></svg>'
+                'delete': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
+                'close': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
+                'check': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>',
+                'plus': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/></svg>',
+                'code': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z"/></svg>',
+                'arrow-up': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M11 20H13V7.83L18.59 13.41L20 12L12 4L4 12L5.41 13.41L11 7.83V20Z"/></svg>',
+                'arrow-down': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M11 4H13V16.17L18.59 10.59L20 12L12 20L4 12L5.41 10.59L11 16.17V4Z"/></svg>'
             };
             return predefinedIcons[this.options.icon] || this.options.icon;
         }
@@ -240,7 +249,7 @@ class DotboxButtonElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading', 'width'];
+        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading', 'width', 'animation'];
     }
 
     attributeChangedCallback() {
@@ -256,6 +265,7 @@ class DotboxButtonElement extends HTMLElement {
         const loading = this.hasAttribute('loading');
         const icon = this.getAttribute('icon') || null;
         const width = this.getAttribute('width') || null;
+        const animation = this.getAttribute('animation') !== 'false'; // Default to true unless explicitly false
         let text = this.getAttribute('text') || this.textContent.trim() || (icon ? '' : 'Button');
         
         // If text contains the same emoji as the icon, remove it from text
@@ -278,10 +288,11 @@ class DotboxButtonElement extends HTMLElement {
             loading: loading,
             icon: icon,
             width: width,
+            animation: animation,
             onClick: () => {
                 // Dispatch custom event
                 this.dispatchEvent(new CustomEvent('dotbox-click', {
-                    detail: { variant, size, text, disabled, loading, icon, width },
+                    detail: { variant, size, text, disabled, loading, icon, width, animation },
                     bubbles: true
                 }));
             }
@@ -290,6 +301,12 @@ class DotboxButtonElement extends HTMLElement {
         // Clear content and append button
         this.innerHTML = '';
         this.appendChild(this.buttonInstance.getElement());
+        
+        // Apply width to Web Component itself if specified
+        if (width) {
+            this.style.width = width;
+            this.style.display = 'block'; // Ensure it can take full width
+        }
     }
 
     // Expose button methods

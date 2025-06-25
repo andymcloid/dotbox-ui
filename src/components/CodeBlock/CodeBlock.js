@@ -29,11 +29,23 @@ class CodeBlock {
             this.element = this._render();
             if (this.preview) {
                 // Delay preview update to ensure all components are loaded
-                setTimeout(() => {
-                    this._updatePreview();
-                }, 100);
+                this._schedulePreviewUpdate();
             }
         });
+    }
+
+    _schedulePreviewUpdate() {
+        // Wait for dotbox components to be available before updating preview
+        const checkAndUpdate = () => {
+            if (typeof window.Dotbox !== 'undefined' && window.customElements && document.readyState === 'complete') {
+                setTimeout(() => {
+                    this._updatePreview();
+                }, 200);
+            } else {
+                setTimeout(checkAndUpdate, 100);
+            }
+        };
+        checkAndUpdate();
     }
 
     _loadPrism(cb) {
@@ -96,10 +108,11 @@ class CodeBlock {
         // Expand button
         if (this.expandable) {
             const expandBtn = document.createElement('dotbox-button');
-            expandBtn.setAttribute('variant', 'secondary');
+            expandBtn.setAttribute('variant', 'primary');
             expandBtn.setAttribute('size', 'small');
             expandBtn.setAttribute('width', '120px');
-            expandBtn.setAttribute('icon', this.expanded ? '📉' : '📈');
+            expandBtn.setAttribute('animation', 'false');
+            expandBtn.setAttribute('icon', this.expanded ? 'arrow-up' : 'arrow-down');
             expandBtn.setAttribute('text', this.expanded ? 'Collapse' : 'Expand');
             expandBtn.addEventListener('click', () => this._toggleExpand());
             toolbar.appendChild(expandBtn);
@@ -109,9 +122,10 @@ class CodeBlock {
         // JSFiddle button using Dotbox Button
         if (this.fiddle) {
             const fiddleBtn = document.createElement('dotbox-button');
-            fiddleBtn.setAttribute('variant', 'secondary');
+            fiddleBtn.setAttribute('variant', 'primary');
             fiddleBtn.setAttribute('size', 'small');
             fiddleBtn.setAttribute('width', '120px');
+            fiddleBtn.setAttribute('animation', 'false');
             fiddleBtn.setAttribute('icon', 'code');
             fiddleBtn.setAttribute('text', 'JSFiddle');
             fiddleBtn.addEventListener('click', () => {
@@ -135,17 +149,6 @@ class CodeBlock {
         header.innerHTML = `
             <span class="dotbox-codeblock-preview-title">Preview</span>
         `;
-        
-        // Add refresh button using dotbox-button
-        const refreshBtn = document.createElement('dotbox-button');
-        refreshBtn.setAttribute('variant', 'secondary');
-        refreshBtn.setAttribute('size', 'small');
-        refreshBtn.setAttribute('icon', '🔄');
-        refreshBtn.setAttribute('text', '');
-        refreshBtn.addEventListener('click', () => {
-            this.element.querySelector('.dotbox-codeblock').dispatchEvent(new CustomEvent('refresh'));
-        });
-        header.appendChild(refreshBtn);
         
         const content = document.createElement('div');
         content.className = 'dotbox-codeblock-preview-content';
@@ -175,7 +178,10 @@ class CodeBlock {
         if (this.preview) {
             code.addEventListener('input', () => {
                 this.code = code.textContent;
-                this._updatePreview();
+                // Use a shorter delay for live updates
+                setTimeout(() => {
+                    this._updatePreview();
+                }, 100);
             });
             
             // Add refresh event listener
@@ -265,11 +271,11 @@ class CodeBlock {
         if (this.expanded) {
             codeBlock.style.height = this.expandedHeight;
             // Update button attributes while preserving its dotbox-button nature
-            this.expandButton.setAttribute('icon', '📉');
+            this.expandButton.setAttribute('icon', 'arrow-up');
             this.expandButton.setAttribute('text', 'Collapse');
         } else {
             codeBlock.style.height = this.originalHeight;
-            this.expandButton.setAttribute('icon', '📈');
+            this.expandButton.setAttribute('icon', 'arrow-down');
             this.expandButton.setAttribute('text', 'Expand');
         }
     }
@@ -320,6 +326,10 @@ class DotboxCodeBlockElement extends HTMLElement {
     }
 
     connectedCallback() {
+        // Store original code content before rendering
+        if (!this.hasAttribute('code') && !this._originalCode) {
+            this._originalCode = this.textContent.trim();
+        }
         this.render();
     }
 
@@ -335,7 +345,8 @@ class DotboxCodeBlockElement extends HTMLElement {
 
     render() {
         const language = this.getAttribute('language') || 'javascript';
-        const code = this.getAttribute('code') || this.textContent.trim() || '';
+        // Use stored original code if available, otherwise fall back to attribute or current textContent
+        const code = this.getAttribute('code') || this._originalCode || this.textContent.trim() || '';
         const preview = this.getAttribute('preview') !== 'false';
         const expandable = this.getAttribute('expandable') !== 'false';
         const fiddle = this.getAttribute('fiddle') !== 'false';

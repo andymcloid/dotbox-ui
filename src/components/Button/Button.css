@@ -68,29 +68,29 @@
     transition: opacity 300ms ease;
 }
 
-/* Hover animations - ONLY for buttons with BOTH text AND icon */
-.btn:not(.btn-no-icon):not(.btn-icon-only):hover .btn-text {
+/* Hover animations - ONLY for buttons with BOTH text AND icon AND animation enabled */
+.btn:not(.btn-no-icon):not(.btn-icon-only):not(.btn-no-animation):hover .btn-text {
     flex-basis: 0;
     opacity: 0;
     transform: translateX(-10px);
 }
 
-.btn:not(.btn-no-icon):not(.btn-icon-only):hover .btn-icon {
+.btn:not(.btn-no-icon):not(.btn-icon-only):not(.btn-no-animation):hover .btn-icon {
     width: 100%;
 }
 
-.btn:not(.btn-no-icon):not(.btn-icon-only):hover .btn-divider {
+.btn:not(.btn-no-icon):not(.btn-icon-only):not(.btn-no-animation):hover .btn-divider {
     opacity: 0;
 }
 
-.btn:not(.btn-no-icon):not(.btn-icon-only):not(:hover) .btn-text {
+.btn:not(.btn-no-icon):not(.btn-icon-only):not(.btn-no-animation):not(:hover) .btn-text {
     flex-basis: 100%;
     opacity: 1;
     transform: translateX(0);
     transition-delay: 150ms;
 }
 
-.btn:not(.btn-no-icon):not(.btn-icon-only):not(:hover) .btn-divider {
+.btn:not(.btn-no-icon):not(.btn-icon-only):not(.btn-no-animation):not(:hover) .btn-divider {
     transition-delay: 150ms;
 }
 

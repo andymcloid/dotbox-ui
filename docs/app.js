@@ -181,28 +181,40 @@ class DocsApp {
      * Setup theme toggle functionality
      */
     setupThemeToggle() {
-        const themeToggle = document.getElementById('theme-toggle');
-        if (!themeToggle) return;
+        // Add a small delay to ensure components are loaded
+        setTimeout(() => {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (!themeToggle) return;
 
-        // Get current theme and update button accordingly
-        const currentTheme = document.documentElement.classList.contains('theme-dark') ? 'dark' : 'light';
-        this.updateThemeButton(currentTheme);
-        
-        themeToggle.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.contains('theme-dark');
-            
-            if (isDark) {
-                document.documentElement.classList.remove('theme-dark');
-                document.documentElement.classList.add('theme-light');
-                localStorage.setItem('theme', 'light');
-                this.updateThemeButton('light');
-            } else {
-                document.documentElement.classList.remove('theme-light');
-                document.documentElement.classList.add('theme-dark');
-                localStorage.setItem('theme', 'dark');
-                this.updateThemeButton('dark');
+            // Force Web Component initialization if not already done
+            if (themeToggle.connectedCallback && typeof themeToggle.connectedCallback === 'function') {
+                try {
+                    themeToggle.connectedCallback();
+                } catch (e) {
+                    console.debug('Theme toggle already initialized');
+                }
             }
-        });
+
+            // Get current theme and update button accordingly
+            const currentTheme = document.documentElement.classList.contains('theme-dark') ? 'dark' : 'light';
+            this.updateThemeButton(currentTheme);
+            
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.contains('theme-dark');
+                
+                if (isDark) {
+                    document.documentElement.classList.remove('theme-dark');
+                    document.documentElement.classList.add('theme-light');
+                    localStorage.setItem('theme', 'light');
+                    this.updateThemeButton('light');
+                } else {
+                    document.documentElement.classList.remove('theme-light');
+                    document.documentElement.classList.add('theme-dark');
+                    localStorage.setItem('theme', 'dark');
+                    this.updateThemeButton('dark');
+                }
+            });
+        }, 100);
     }
 
     /**
@@ -214,10 +226,10 @@ class DocsApp {
 
         if (theme === 'dark') {
             themeToggle.setAttribute('icon', '🌙');
-            themeToggle.textContent = 'Dark';
+            themeToggle.setAttribute('text', 'Toggle Light Theme');
         } else {
             themeToggle.setAttribute('icon', '☀️');
-            themeToggle.textContent = 'Light';
+            themeToggle.setAttribute('text', 'Toggle Dark Theme');
         }
     }
 
@@ -295,6 +307,9 @@ class DocsApp {
         // Update page title
         document.title = 'Dotbox UI - Component Library';
         
+        // Initialize Web Components
+        this.initializeWebComponents();
+        
         // Scroll to top
         this.contentElement.scrollTop = 0;
     }
@@ -311,6 +326,9 @@ class DocsApp {
         // Update page title
         const component = this.discovery.getComponent(componentId);
         document.title = component ? `${component.name} - Dotbox UI` : 'Component Not Found - Dotbox UI';
+        
+        // Initialize Web Components
+        this.initializeWebComponents();
         
         // Scroll to top
         this.contentElement.scrollTop = 0;
@@ -331,6 +349,40 @@ class DocsApp {
         `;
         
         document.title = 'Page Not Found - Dotbox UI';
+    }
+
+    /**
+     * Initialize Web Components after content injection
+     */
+    initializeWebComponents() {
+        if (!this.contentElement) return;
+        
+        // Wait a bit to ensure DOM is ready
+        setTimeout(() => {
+            // Find all dotbox Web Components in the current content
+            const webComponents = this.contentElement.querySelectorAll('*[is], [data-dotbox], dotbox-button, dotbox-checkbox, dotbox-textbox, dotbox-dropdown, dotbox-loader, dotbox-notification, dotbox-modal, dotbox-section, dotbox-tabs, dotbox-toggle, dotbox-menu, dotbox-form, dotbox-messagebox, dotbox-metric, dotbox-codeblock, dotbox-code-block, dotbox-toolbutton, dotbox-icon');
+            
+            webComponents.forEach(element => {
+                // Force Web Component initialization if not already done
+                if (element.connectedCallback && typeof element.connectedCallback === 'function') {
+                    try {
+                        element.connectedCallback();
+                    } catch (e) {
+                        console.debug('Component already initialized or failed:', element.tagName, e);
+                    }
+                }
+                
+                // Special handling for CodeBlock components to ensure preview updates
+                if (element.tagName.toLowerCase() === 'dotbox-code-block' && element.codeBlockInstance) {
+                    try {
+                        // Force preview update
+                        element.codeBlockInstance._schedulePreviewUpdate();
+                    } catch (e) {
+                        console.debug('CodeBlock preview update failed:', e);
+                    }
+                }
+            });
+        }, 100);
     }
 
     /**
