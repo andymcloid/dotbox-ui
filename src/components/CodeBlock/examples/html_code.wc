@@ -1,0 +1,6 @@
+<dotbox-code-block language="html" title="HTML Example">
+<div class="example">
+  <h1>Hello World</h1>
+  <p>This is a simple HTML example.</p>
+</div>
+</dotbox-code-block>

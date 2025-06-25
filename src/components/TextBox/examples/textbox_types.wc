@@ -1,0 +1,4 @@
+<dotbox-textbox label="Email" type="email" placeholder="your@email.com"></dotbox-textbox>
+<dotbox-textbox label="Password" type="password" placeholder="Enter password"></dotbox-textbox>
+<dotbox-textbox label="Number" type="number" placeholder="Enter a number"></dotbox-textbox>
+<dotbox-textbox label="Textarea" multiline="true" placeholder="Enter multiple lines of text"></dotbox-textbox>

@@ -85,7 +85,11 @@ Thank you for your interest in contributing to Dotbox UI! This document outlines
 src/components/NewComponent/
 ├── NewComponent.js
 ├── NewComponent.css
-└── component.json
+├── component.json
+└── examples/
+    ├── basic_example.wc
+    ├── advanced_example.wc
+    └── states_example.wc
 ```
 
 ### Dynamic Build Integration
@@ -369,19 +373,62 @@ The documentation system is now a **Single Page Application (SPA)** that automat
 
 ### Documentation System Architecture
 
+**🔒 Secure API-Based System:**
+The documentation uses a secure Express server with dedicated API endpoints instead of direct file access.
+
+**API Endpoints:**
+- `GET /api/components` - Lists all available components
+- `GET /api/component/{name}/metadata` - Returns component.json data
+- `GET /api/component/{name}/css` - Returns component CSS
+- `GET /api/component/{name}/js` - Returns component JavaScript
+- `GET /api/component/{name}/examples` - Lists available examples
+- `GET /api/component/{name}/example/{example}` - Returns specific example code
+
 **Core Files:**
 - `docs/index.html` - Main SPA entry point
 - `docs/app.js` - Main application controller with routing
-- `docs/component-discovery.js` - Component metadata loading and discovery
-- `docs/page-generator.js` - HTML page generation from component.json
+- `docs/component-discovery.js` - Component metadata loading via API
+- `docs/page-generator.js` - HTML page generation from API data
 - `docs/dynamic-docs.css` - Complete styling system for documentation
 - `docs/DotboxUIPrerender.js` - JSFiddle integration with prerender functions
+- `docs-server.js` - Express server with secure API endpoints
+
+**Component Examples Structure:**
+
+✅ **All components now include an `examples/` directory with `.wc` files:**
+```
+src/components/Button/examples/
+├── basic_button.wc               # Simple usage
+├── button_variants.wc            # Different variants
+├── button_sizes.wc               # Size variations
+├── button_states.wc              # States (loading, disabled, etc.)
+└── comprehensive_examples.wc     # Complete showcase
+
+src/components/Form/examples/
+├── form_layouts.wc               # Vertical, horizontal, grid layouts
+
+src/components/Menu/examples/
+├── menu_variations.wc            # Different menu configurations
+
++ Examples for all 16 components automatically loaded via API
+```
+
+**Example File Naming:**
+- Use `snake_case` for file names
+- End with `.wc` extension
+- Name should describe the example purpose
+- Examples are automatically loaded and displayed as CodeBlocks
 
 **Running Documentation:**
 ```bash
+# Recommended: Use the Express development server with secure API
+npm run docs
+# Visit http://localhost:3000 for dynamic documentation
+
+# Alternative: Simple HTTP server (limited functionality)
 cd docs
 python3 -m http.server 8080
-# Visit http://localhost:8080 for dynamic documentation
+# Visit http://localhost:8080 for basic documentation
 ```
 
 ### Documentation Features

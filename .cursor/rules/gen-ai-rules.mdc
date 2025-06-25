@@ -1,7 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: true
----
-Always just do changes, don't do alot of suggestions and ask me to say OK to implement. Just do it.
-[CONTRIBUTING.md](mdc:CONTRIBUTING.md) has all the guidelines that you always need to follow!

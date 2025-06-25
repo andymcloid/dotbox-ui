@@ -129,28 +129,23 @@ class PageGenerator {
             const codeBlockId = `example-${component.id}-${index}`;
             const language = this.detectLanguage(example.code);
             
+            // Properly escape HTML for display in code block
+            const escapedCode = this.escapeHtml(example.code);
+            
             return `
-                <div class="example-item">
-                    <h3>${example.title}</h3>
-                    <p class="example-description">${example.description}</p>
-                    <dotbox-code-block 
-                        id="${codeBlockId}"
-                        language="${language}"
-                        title="${example.title}"
-                        expandable="true"
-                        fiddle="true">
-${example.code}
-                    </dotbox-code-block>
-                </div>
+                <dotbox-code-block 
+                    id="${codeBlockId}"
+                    language="${language}"
+                    title="${example.title}"
+                    expandable="true"
+                    fiddle="true">${escapedCode}</dotbox-code-block>
             `;
         }).join('');
 
         return `
             <section class="component-examples">
                 <h2>Examples</h2>
-                <div class="examples-container">
-                    ${examplesHtml}
-                </div>
+                ${examplesHtml}
             </section>
         `;
     }
@@ -450,6 +445,18 @@ ${usage}
                 </section>
             </div>
         `;
+    }
+
+    /**
+     * Escape HTML for safe display in code blocks
+     */
+    escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 }
 

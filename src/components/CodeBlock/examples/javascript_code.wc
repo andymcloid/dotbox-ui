@@ -1,0 +1,10 @@
+<dotbox-code-block language="javascript" title="JavaScript Example" expandable="true">
+const button = new Dotbox.Button({
+  text: 'Click me',
+  variant: 'primary',
+  onClick: () => {
+    console.log('Button clicked!');
+  }
+});
+document.body.appendChild(button.getElement());
+</dotbox-code-block>

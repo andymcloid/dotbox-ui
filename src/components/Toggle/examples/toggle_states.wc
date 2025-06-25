@@ -1,0 +1,4 @@
+<dotbox-toggle label="Default toggle"></dotbox-toggle>
+<dotbox-toggle label="Checked toggle" checked="true"></dotbox-toggle>
+<dotbox-toggle label="Disabled toggle" disabled="true"></dotbox-toggle>
+<dotbox-toggle label="Disabled & checked" checked="true" disabled="true"></dotbox-toggle>

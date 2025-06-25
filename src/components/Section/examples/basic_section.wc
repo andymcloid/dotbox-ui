@@ -1,0 +1,4 @@
+<dotbox-section title="Getting Started">
+  <p>This is a basic section with a title and content. Sections help organize content into logical groups.</p>
+  <dotbox-button variant="primary">Learn More</dotbox-button>
+</dotbox-section>

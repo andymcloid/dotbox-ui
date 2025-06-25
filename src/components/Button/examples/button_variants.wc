@@ -1,0 +1,4 @@
+<dotbox-button variant="primary">Primary</dotbox-button>
+<dotbox-button variant="secondary">Secondary</dotbox-button>
+<dotbox-button variant="success">Success</dotbox-button>
+<dotbox-button variant="danger">Danger</dotbox-button>

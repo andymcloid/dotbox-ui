@@ -161,33 +161,6 @@
       "icon"
     ]
   },
-  "examples": [
-    {
-      "title": "Basic Button",
-      "description": "Simple primary button with default styling",
-      "code": "<dotbox-button>Click me</dotbox-button>"
-    },
-    {
-      "title": "Button Variants",
-      "description": "Different button styles and variants",
-      "code": "<dotbox-button variant=\"primary\">Primary</dotbox-button>\n<dotbox-button variant=\"secondary\">Secondary</dotbox-button>\n<dotbox-button variant=\"success\">Success</dotbox-button>\n<dotbox-button variant=\"danger\">Danger</dotbox-button>"
-    },
-    {
-      "title": "Button Sizes",
-      "description": "Buttons in different sizes",
-      "code": "<dotbox-button size=\"small\">Small</dotbox-button>\n<dotbox-button size=\"medium\">Medium</dotbox-button>\n<dotbox-button size=\"large\">Large</dotbox-button>"
-    },
-    {
-      "title": "Button States",
-      "description": "Loading and disabled button states",
-      "code": "<dotbox-button loading>Loading...</dotbox-button>\n<dotbox-button disabled>Disabled</dotbox-button>"
-    },
-    {
-      "title": "Button with Icon",
-      "description": "Button with icon and text",
-      "code": "<dotbox-button icon=\"🚀\">Launch</dotbox-button>\n<dotbox-button icon=\"💾\" variant=\"secondary\">Save</dotbox-button>"
-    }
-  ],
   "dependencies": [],
   "cssClasses": [
     {

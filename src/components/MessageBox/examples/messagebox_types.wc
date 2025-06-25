@@ -1,0 +1,9 @@
+<dotbox-messagebox title="Success!" message="Your profile has been updated successfully." variant="success" closable="true"></dotbox-messagebox>
+
+<dotbox-messagebox title="Error" message="Failed to save your changes. Please try again." variant="danger" closable="true"></dotbox-messagebox>
+
+<dotbox-messagebox title="Confirmation" message="Are you sure you want to delete this item?" variant="warning" closable="false"></dotbox-messagebox>
+
+<dotbox-messagebox title="Information" message="Your session will expire in 5 minutes." variant="info" closable="true"></dotbox-messagebox>
+
+<dotbox-messagebox title="Welcome!" message="Thank you for joining our platform. Let's get started!" variant="primary" closable="true"></dotbox-messagebox>

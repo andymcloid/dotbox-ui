@@ -1,0 +1,41 @@
+<dotbox-notification message="Operation completed successfully!" variant="success"></dotbox-notification>
+
+<dotbox-notification message="Please fix the errors below" variant="danger"></dotbox-notification>
+
+<dotbox-notification message="Your changes have been saved" variant="info"></dotbox-notification>
+
+<dotbox-notification message="Network connection is slow" variant="warning"></dotbox-notification>
+
+<script>
+// Show popup notifications
+function showSuccess() {
+    Dotbox.Notification.success('Profile updated successfully!');
+}
+
+function showDanger() {
+    Dotbox.Notification.danger('Failed to save changes');
+}
+
+function showWarning() {
+    Dotbox.Notification.warning('Session will expire in 5 minutes');
+}
+
+function showInfo() {
+    Dotbox.Notification.info('New features are available');
+}
+
+function showCustom() {
+    Dotbox.Notification.show('Custom notification', 'success', {
+        position: 'top-left',
+        timeout: 5000
+    });
+}
+</script>
+
+<div style="margin: 2rem 0; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+    <dotbox-button onclick="showSuccess()" variant="success" size="small">Show Success</dotbox-button>
+    <dotbox-button onclick="showDanger()" variant="danger" size="small">Show Error</dotbox-button>
+    <dotbox-button onclick="showWarning()" variant="secondary" size="small">Show Warning</dotbox-button>
+    <dotbox-button onclick="showInfo()" variant="primary" size="small">Show Info</dotbox-button>
+    <dotbox-button onclick="showCustom()" variant="secondary" size="small">Custom Position</dotbox-button>
+</div>

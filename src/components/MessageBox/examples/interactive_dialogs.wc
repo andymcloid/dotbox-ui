@@ -1,0 +1,41 @@
+<script>
+function showConfirmDialog() {
+    Dotbox.MessageBox.confirm('Are you sure you want to proceed?', 'Confirmation')
+        .then(() => {
+            console.log('User confirmed');
+        })
+        .catch(() => {
+            console.log('User cancelled');
+        });
+}
+
+function showSuccessMessage() {
+    Dotbox.MessageBox.success('Operation completed successfully!', 'Success');
+}
+
+function showErrorMessage() {
+    Dotbox.MessageBox.error('Something went wrong. Please try again.', 'Error');
+}
+
+function showCustomMessage() {
+    Dotbox.MessageBox.show({
+        title: 'Custom Message',
+        message: 'This is a custom message with multiple buttons.',
+        variant: 'primary',
+        buttons: [
+            { text: 'Cancel', variant: 'secondary' },
+            { text: 'Save Draft', variant: 'secondary' },
+            { text: 'Publish', variant: 'success' }
+        ]
+    }).then((buttonIndex) => {
+        console.log('Button clicked:', buttonIndex);
+    });
+}
+</script>
+
+<div style="margin: 2rem 0; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+    <dotbox-button onclick="showConfirmDialog()" variant="primary" size="small">Show Confirm</dotbox-button>
+    <dotbox-button onclick="showSuccessMessage()" variant="success" size="small">Show Success</dotbox-button>
+    <dotbox-button onclick="showErrorMessage()" variant="danger" size="small">Show Error</dotbox-button>
+    <dotbox-button onclick="showCustomMessage()" variant="secondary" size="small">Custom Buttons</dotbox-button>
+</div>

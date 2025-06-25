@@ -1,0 +1,4 @@
+<dotbox-button loading>Loading...</dotbox-button>
+<dotbox-button disabled>Disabled</dotbox-button>
+<dotbox-button icon="🚀">Launch</dotbox-button>
+<dotbox-button icon="💾" variant="secondary">Save</dotbox-button>

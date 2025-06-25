@@ -1,0 +1,3 @@
+<dotbox-button size="small">Small</dotbox-button>
+<dotbox-button size="medium">Medium</dotbox-button>
+<dotbox-button size="large">Large</dotbox-button>

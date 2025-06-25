@@ -1,0 +1,14 @@
+<dotbox-dropdown label="Small dropdown" size="small" placeholder="Small">
+  <option value="small1">Small Option 1</option>
+  <option value="small2">Small Option 2</option>
+</dotbox-dropdown>
+
+<dotbox-dropdown label="Medium dropdown" size="medium" placeholder="Medium">
+  <option value="med1">Medium Option 1</option>
+  <option value="med2">Medium Option 2</option>
+</dotbox-dropdown>
+
+<dotbox-dropdown label="Large dropdown" size="large" placeholder="Large">
+  <option value="large1">Large Option 1</option>
+  <option value="large2">Large Option 2</option>
+</dotbox-dropdown>

@@ -1,0 +1,4 @@
+<dotbox-checkbox label="Default checkbox"></dotbox-checkbox>
+<dotbox-checkbox label="Checked checkbox" checked="true"></dotbox-checkbox>
+<dotbox-checkbox label="Disabled checkbox" disabled="true"></dotbox-checkbox>
+<dotbox-checkbox label="Checked & disabled" checked="true" disabled="true"></dotbox-checkbox>

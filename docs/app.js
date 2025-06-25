@@ -79,7 +79,7 @@ class DocsApp {
         const navHtml = `
             <div class="nav-header">
                 <div class="nav-logo">
-                    <img src="/docs/assets/dotbox_logo_only.svg" alt="Dotbox UI">
+                    <img src="/assets/dotbox_logo_only.svg" alt="Dotbox UI">
                     <span>Dotbox UI</span>
                 </div>
                 <div class="nav-stats">

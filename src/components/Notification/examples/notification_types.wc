@@ -1,0 +1,4 @@
+<dotbox-notification type="info" message="This is an info notification"></dotbox-notification>
+<dotbox-notification type="success" message="Operation completed successfully!"></dotbox-notification>
+<dotbox-notification type="warning" message="Please check your input"></dotbox-notification>
+<dotbox-notification type="error" message="Something went wrong"></dotbox-notification>
