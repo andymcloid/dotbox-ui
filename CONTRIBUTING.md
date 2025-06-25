@@ -35,10 +35,11 @@ Thank you for your interest in contributing to Dotbox UI! This document outlines
 ### 4. Build & Distribution
 
 - **All source code and CSS in `src/`**
-- **`npm run build` builds and copies EVERYTHING to `dist/`**:
-  - JS bundle to `dist/bundle.js`
-  - All component CSS merged to `dist/index.css`
-  - `theme.css` copied to `dist/theme.css`
+- **Dynamic Build System**: Components are auto-discovered and integrated
+  - `npm run build` automatically scans `src/components/` folder
+  - Generates `src/index.js` and `src/index.css` dynamically
+  - Builds to `dist/bundle.js`, `dist/index.css`, `dist/theme.css`
+- **No manual index file maintenance** - adding components is automatic
 - **No CSS or JS in `docs/`** - docs is just a consumer
 
 ### 5. Consumption & Documentation
@@ -83,50 +84,40 @@ Thank you for your interest in contributing to Dotbox UI! This document outlines
 ```
 src/components/NewComponent/
 ├── NewComponent.js
-└── NewComponent.css
+├── NewComponent.css
+└── component.json
 ```
 
-### CRITICAL: Build Integration Steps
+### Dynamic Build Integration
 
-After creating your component files, you **MUST** integrate it into the build system:
+**🎉 NEW: Automatic Component Discovery!**
+- Components are now **automatically discovered** by the build system
+- **No manual index file maintenance** required
+- Just create your component folder with the required files and run `npm run build`
 
-#### 1. Add to Main Index Files
-**In `src/index.js`:**
-```javascript
-// Add import
-const NewComponent = require('./components/NewComponent/NewComponent.js');
+#### Component Creation Steps
 
-// Add to Dotbox export object
-const Dotbox = {
-    Button,
-    ModalDialog,
-    // ... other components ...
-    NewComponent,  // <- Add here
-    // ... rest of components ...
-};
-```
+1. **Create Component Directory**: `src/components/NewComponent/`
+2. **Create Component Files**:
+   - `NewComponent.js` (component implementation)
+   - `NewComponent.css` (component styles)
+   - `component.json` (component documentation)
+3. **Run Build**: `npm run build`
+4. **Done!** Your component is automatically integrated
 
-**In `src/index.css`:**
-```css
-@import './styles/main.css';
-@import './components/Button/Button.css';
-/* ... other imports ... */
-@import './components/NewComponent/NewComponent.css';  /* <- Add here */
-/* ... rest of imports ... */
-```
-
-#### 2. Run Build Process
+#### Build Process
 ```bash
 npm run build
 ```
 
-**⚠️ CRITICAL:** Without these steps, your component will NOT work:
-- Web Components won't render (will display as empty custom elements in DOM)
-- JavaScript API will be undefined (`Dotbox.NewComponent` doesn't exist)
-- No styling will be applied (CSS not included in build)
-- Build may fail silently or throw "not a constructor" errors
-
-**Real Example:** ButtonV2 was created but didn't render because it was missing from both `index.js` and `index.css`. The `<dotbox-button-v2>` element appeared in DOM but had no styling or functionality.
+**What happens automatically:**
+- ✅ Build system scans `src/components/` folder
+- ✅ Generates `src/index.js` with all component imports/exports
+- ✅ Generates `src/index.css` with all component CSS imports
+- ✅ Builds JavaScript bundle to `dist/bundle.js`
+- ✅ Builds CSS bundle to `dist/index.css`
+- ✅ Copies theme files to `dist/theme.css`
+- ✅ Component automatically available as `Dotbox.NewComponent` and `<dotbox-new-component>`
 
 ### Component Template (Web Components + JavaScript API)
 ```javascript
@@ -246,6 +237,76 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 ```
 
+### Component Documentation (component.json)
+
+Each component **MUST** include a `component.json` file for automatic documentation generation:
+
+```json
+{
+  "name": "NewComponent",
+  "description": "Brief description of what the component does",
+  "category": "Input|Display|Layout|Navigation",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "propertyName",
+      "type": "string|boolean|number|function|object",
+      "default": "defaultValue",
+      "description": "What this property does",
+      "options": ["option1", "option2"] // Optional for enums
+    }
+  ],
+  "methods": [
+    {
+      "name": "methodName",
+      "parameters": [
+        {
+          "name": "paramName",
+          "type": "string",
+          "description": "Parameter description"
+        }
+      ],
+      "returns": "ReturnType",
+      "description": "What this method does"
+    }
+  ],
+  "events": [
+    {
+      "name": "dotbox-event-name",
+      "description": "When this event is fired",
+      "detail": {
+        "property": "type"
+      }
+    }
+  ],
+  "webComponent": {
+    "tag": "dotbox-new-component",
+    "attributes": ["attr1", "attr2"]
+  },
+  "examples": [
+    {
+      "title": "Basic Usage",
+      "description": "Simple example",
+      "code": "<dotbox-new-component>Content</dotbox-new-component>"
+    }
+  ],
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-newcomponent",
+      "description": "Main component class"
+    }
+  ]
+}
+```
+
+**Documentation Benefits:**
+- **Automatic API Documentation**: Properties, methods, events auto-generated
+- **Live Examples**: CodeBlock components with working previews
+- **IDE Integration**: IntelliSense and auto-completion support
+- **Type Safety**: Clear parameter and return types
+- **Consistency**: Standardized documentation across all components
+
 ## 🎨 Styling Guidelines
 
 ### CSS Variables Usage
@@ -293,110 +354,64 @@ See `src/styles/theme.css` for the complete list. Common variables include:
 4. Test both light and dark themes
 5. Test responsive behavior
 
-### Component Integration
-Add your component to the documentation by:
+### Documentation Integration
 
-#### 3. Add JavaScript Demo Function (if needed)
-**In `docs/index.html`:**
-If your component needs a JavaScript API demo, add it to the `createJSDemo` switch statement:
-```javascript
-case 'newcomponent':
-    createNewComponentJSDemo(container);
-    break;
+**🎉 NEW: Dynamic Documentation System!**
+
+The documentation system is now a **Single Page Application (SPA)** that automatically discovers and generates component documentation:
+
+1. **Component Discovery**: Automatically scans and loads all `component.json` files from `src/components/`
+2. **Dynamic Page Generation**: Creates complete documentation pages with examples, API reference, and usage guides
+3. **Client-Side Routing**: Navigate between components with `/component/component-name` URLs
+4. **Search & Navigation**: Real-time component search with organized categories
+5. **Responsive Design**: Mobile-friendly documentation with collapsible navigation
+6. **Theme Support**: Automatic theme switching with localStorage persistence
+
+### Documentation System Architecture
+
+**Core Files:**
+- `docs/index.html` - Main SPA entry point
+- `docs/app.js` - Main application controller with routing
+- `docs/component-discovery.js` - Component metadata loading and discovery
+- `docs/page-generator.js` - HTML page generation from component.json
+- `docs/dynamic-docs.css` - Complete styling system for documentation
+- `docs/DotboxUIPrerender.js` - JSFiddle integration with prerender functions
+
+**Running Documentation:**
+```bash
+cd docs
+python3 -m http.server 8080
+# Visit http://localhost:8080 for dynamic documentation
 ```
 
-And implement the demo function:
-```javascript
-function createNewComponentJSDemo(container) {
-    const newComponent = new Dotbox.NewComponent({
-        // Demo options
-    });
-    container.appendChild(newComponent.getContainer());
-}
-```
+### Documentation Features
 
-#### 4. Create Example Files
-Create example files in the `docs/examples/` directory. **CRITICAL:** Examples must be extremely simple, following existing patterns:
+**Enhanced CodeBlock System:**
+- **Live Preview**: Examples render with working components above the code
+- **Expandable Editor**: Users can expand code blocks for better editing
+- **JSFiddle Integration**: One-click export to JSFiddle for experimentation
+- **Syntax Highlighting**: Prism.js integration with theme-aware colors
+- **Standard Language Types**: Uses standard language identifiers (html, javascript, css)
 
-**Create `docs/examples/newcomponent.wc`:**
-```html
-<dotbox-newcomponent>Default Component</dotbox-newcomponent>
-
-<dotbox-newcomponent variant="primary">Primary</dotbox-newcomponent>
-<dotbox-newcomponent variant="secondary">Secondary</dotbox-newcomponent>
-<dotbox-newcomponent variant="success">Success</dotbox-newcomponent>
-
-<dotbox-newcomponent size="small">Small</dotbox-newcomponent>
-<dotbox-newcomponent size="medium">Medium</dotbox-newcomponent>
-<dotbox-newcomponent size="large">Large</dotbox-newcomponent>
-
-<dotbox-newcomponent attribute="value">With Attribute</dotbox-newcomponent>
-<dotbox-newcomponent disabled="true">Disabled</dotbox-newcomponent>
-```
-
-**Create `docs/examples/newcomponent.js`:**
-```javascript
-// Basic component
-const component = new Dotbox.NewComponent({
-    text: 'Click me',
-    variant: 'primary',
-    onClick: () => alert('Component clicked!')
-});
-
-// Different variants
-const primaryComponent = new Dotbox.NewComponent({ text: 'Primary', variant: 'primary' });
-const secondaryComponent = new Dotbox.NewComponent({ text: 'Secondary', variant: 'secondary' });
-const successComponent = new Dotbox.NewComponent({ text: 'Success', variant: 'success' });
-
-// Different sizes
-const smallComponent = new Dotbox.NewComponent({ text: 'Small', size: 'small' });
-const mediumComponent = new Dotbox.NewComponent({ text: 'Medium', size: 'medium' });
-const largeComponent = new Dotbox.NewComponent({ text: 'Large', size: 'large' });
-
-// States
-const disabledComponent = new Dotbox.NewComponent({ text: 'Disabled', disabled: true });
-
-// Add all components to the page
-document.body.appendChild(component.getElement());
-document.body.appendChild(primaryComponent.getElement());
-document.body.appendChild(secondaryComponent.getElement());
-document.body.appendChild(successComponent.getElement());
-document.body.appendChild(smallComponent.getElement());
-document.body.appendChild(mediumComponent.getElement());
-document.body.appendChild(largeComponent.getElement());
-document.body.appendChild(disabledComponent.getElement());
-```
-
-**IMPORTANT EXAMPLE RULES:**
-- Keep examples extremely simple - just basic usage patterns
-- Follow existing examples exactly (see `button.wc` and `button.js`)
-- No complex layouts, styling, or explanatory text
-- No custom CSS or HTML structure
-- Just show component variants, sizes, and states
-- Web component examples: Simple tags with attributes only
-
-#### 5. Add to JSON Config
-Update `/docs/components.json` with your component:
+**Example from component.json:**
 ```json
 {
-  "id": "newcomponent",
-  "name": "New Component",
-  "category": "Appropriate Category",
-  "description": "Description of your component.",
-  "codeWC": "examples/newcomponent.wc",
-  "codeJS": "examples/newcomponent.js"
+  "examples": [
+    {
+      "title": "Button Variants",
+      "description": "Different button styles",
+      "code": "<dotbox-button variant=\"primary\">Primary</dotbox-button>\n<dotbox-button variant=\"secondary\">Secondary</dotbox-button>"
+    }
+  ]
 }
 ```
 
-#### 6. Update README
-Add component to Available Components list in `README.md`
-
-#### 7. Test Everything
-```bash
-npm run build
-npm run docs
-```
-Verify your component appears and works in the documentation
+**Results in:**
+- ✅ Live preview showing actual buttons
+- ✅ Expandable code editor
+- ✅ JSFiddle export button
+- ✅ Syntax highlighted code
+- ✅ Responsive design
 
 ## 📋 Best Practices
 
@@ -434,20 +449,25 @@ const menu = new Dotbox.Menu({
 ### Pull Request Process
 1. Create a feature branch: `git checkout -b feature-amazing-component`
 2. Make your changes following these guidelines
-3. **CRITICAL: Complete ALL integration steps above** (index.js, index.css, JSON config, etc.)
+3. **REQUIRED: Create component.json documentation file**
 4. Test thoroughly:
    ```bash
    npm run build
    npm run docs
    ```
-5. Verify your component appears in documentation and works correctly
+5. Verify your component:
+   - ✅ Appears automatically in documentation
+   - ✅ Works correctly in both light/dark themes
+   - ✅ Has proper `component.json` with examples
+   - ✅ Follows CSS variable patterns
+   - ✅ Includes both Web Component and JavaScript APIs
 6. Commit with clear, descriptive messages
 7. Push to your fork
 8. Create a Pull Request with:
    - Clear description of changes
    - Screenshots/GIFs if visual changes
    - Testing instructions
-   - Confirmation that all integration steps were completed
+   - Link to component's documentation page
 
 ### Commit Message Format
 ```
@@ -496,32 +516,38 @@ When reporting bugs or requesting features:
 When working with this project after a restart, always:
 
 1. **Read CONTRIBUTING.md first** - Contains all architecture rules and examples
-2. **Study existing examples** - Look at `docs/examples/button.wc` and `docs/examples/button.js` for proper formatting
-3. **Check components.json** - Shows how components are indexed
+2. **Understand the new build system** - Components are auto-discovered, no manual index maintenance
+3. **Study component.json files** - Primary source of component documentation
 4. **Key files to understand project structure:**
-   - `CONTRIBUTING.md` (this file) - Complete project rules
-   - `src/index.js` - Component exports and build integration  
-   - `src/index.css` - CSS imports for build system
-   - `docs/components.json` - Documentation index
-   - `docs/examples/button.*` - Example formatting patterns
+   - `CONTRIBUTING.md` (this file) - Complete project rules and new systems
+   - `build/generate-index.js` - Dynamic build system that auto-discovers components
+   - `build/build.js` - Main build orchestration script
+   - `src/components/*/component.json` - Component documentation and API definitions
+   - `docs/DotboxUIPrerender.js` - Docs-specific JSFiddle prerender function
+
+**New Architecture (2024):**
+- **Auto-Discovery**: Components automatically found by scanning `src/components/`
+- **Dynamic Index Files**: `src/index.js` and `src/index.css` generated automatically
+- **Component Documentation**: Uses `component.json` for automatic API docs generation
+- **Enhanced CodeBlock**: Live preview, JSFiddle integration, standard language types
+- **No Manual Integration**: Just create component folder and run `npm run build`
 
 **Critical Rules to Remember:**
-- Examples must be extremely simple (follow button.wc/button.js exactly)
-- No complex HTML, CSS, or explanatory content in examples
 - All components need dual API (Web Components + JavaScript)
 - Use CSS variables only, never hardcoded values
-- **MANDATORY:** Components must be added to index.js, index.css, and components.json
-- **ALWAYS run `npm run build` after integration** to verify components work
+- **MANDATORY:** Create `component.json` with examples, properties, methods, events
+- **ALWAYS run `npm run build`** to auto-integrate and verify components work
 - **Test both Web Component and JavaScript API** in documentation
 
 **Integration Checklist (Use This Every Time):**
 - [ ] Component files created in `src/components/ComponentName/`
-- [ ] Import added to `src/index.js`
-- [ ] Export added to `src/index.js` Dotbox object
-- [ ] CSS import added to `src/index.css`
-- [ ] `npm run build` runs successfully
+  - [ ] `ComponentName.js` (implementation)
+  - [ ] `ComponentName.css` (styles)
+  - [ ] `component.json` (documentation)
+- [ ] `npm run build` runs successfully and auto-discovers component
 - [ ] Component appears and functions in documentation
 - [ ] Both `<dotbox-component>` and `new Dotbox.Component()` work
+- [ ] Examples in `component.json` render correctly with live preview
 
 ---
 

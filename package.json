@@ -4,14 +4,15 @@
   "description": "A modern, reusable UI component library",
   "main": "dist/index.js",
   "scripts": {
-    "build:js": "esbuild src/index.js --bundle --outfile=dist/bundle.js --loader:.css=file",
-    "build:css": "esbuild src/index.css --bundle --outfile=dist/index.css",
-    "build": "npm run build:js && npm run build:css && npm run copy-themes",
-    "copy-themes": "mkdir -p dist && cp src/styles/theme.css dist/theme.css",
-    "build:prod": "esbuild src/index.js --bundle --minify --outdir=dist --loader:.css=file",
-    "dev": "webpack --mode development --watch",
+    "generate-index": "node build/generate-index.js",
+    "build": "node build/build.js",
+    "build:watch": "node build/build.js && webpack --mode development --watch",
+    "build:prod": "node build/build.js && npx esbuild src/index.js --bundle --minify --outfile=dist/bundle.js --loader:.css=file",
+    "dev": "npm run build && webpack --mode development --watch",
     "test": "jest",
-    "docs": "npm run build && node docs-server.js"
+    "docs": "npm run build && node docs-server.js",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean"
   },
   "dependencies": {
     "express": "^4.18.2"

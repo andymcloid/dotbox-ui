@@ -310,12 +310,40 @@ class MessageBox {
     }
 
     static show(options = {}) {
-        const messageBox = new MessageBox(options);
-        
-        // Add to body and show
-        document.body.appendChild(messageBox.getElement());
-        messageBox.show();
-        return messageBox;
+        return new Promise((resolve, reject) => {
+            // Add default OK button if no buttons provided
+            if (!options.buttons || options.buttons.length === 0) {
+                options.buttons = [
+                    {
+                        id: 'ok',
+                        text: 'OK',
+                        variant: options.variant || 'primary',
+                        onClick: (messageBox) => {
+                            messageBox.close();
+                            resolve(true);
+                        }
+                    }
+                ];
+            } else {
+                // Add resolve to existing button callbacks
+                options.buttons = options.buttons.map(button => ({
+                    ...button,
+                    onClick: (messageBox, buttonConfig) => {
+                        if (button.onClick) {
+                            button.onClick(messageBox, buttonConfig);
+                        }
+                        messageBox.close();
+                        resolve(button.id || button.text);
+                    }
+                }));
+            }
+
+            const messageBox = new MessageBox(options);
+            
+            // Add to body and show
+            document.body.appendChild(messageBox.getElement());
+            messageBox.show();
+        });
     }
 }
 

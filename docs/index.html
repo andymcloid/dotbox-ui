@@ -1,590 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="theme-light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dotbox UI - Component Library</title>
-    <link rel="icon" type="image/svg+xml" href="./assets/dotbox_logo_only.svg">
+    <link rel="icon" type="image/svg+xml" href="/docs/assets/dotbox_logo_only.svg">
+    
+    <!-- Load Dotbox UI styles -->
     <link rel="stylesheet" href="/dist/index.css">
     <link rel="stylesheet" href="/dist/theme.css">
-    <link rel="stylesheet" href="./docs.css">
+    
+    <!-- Dynamic documentation styles -->
+    <link rel="stylesheet" href="/docs/dynamic-docs.css">
 </head>
 <body>
-    <nav class="nav">
-        <div class="logo">
-            <img src="./assets/dotbox_logo_only.svg" alt="Dotbox Logo">
-            <span class="logo-text">Dotbox <span style="color: var(--color-text);">UI</span></span>
-        </div>
-        <div id="theme-dropdown-container" style="margin-bottom: 0.75rem;"></div>
-        <div id="type-dropdown-container" style="margin-bottom: 0.75rem;"></div>
-        <hr style="border: none; border-top: 1px solid var(--color-border); margin: 1rem 0;">
-        <div id="nav-menu"></div>
-    </nav>
+    <div class="docs-app">
+        <!-- Dynamic Navigation Sidebar -->
+        <aside class="docs-navigation" id="navigation">
+            <!-- Navigation will be generated dynamically -->
+        </aside>
 
-    <div class="content">
-        <div class="container">
-            <!-- Intro Section -->
-            <dotbox-section title="Dotbox UI Components">
-                <p class="component-description">A modern, lightweight UI component library for building beautiful web applications.</p>
-            </dotbox-section>
+        <!-- Main Content Area -->
+        <main class="docs-content" id="content">
+            <!-- Content will be generated dynamically -->
+        </main>
 
-            <!-- Dynamic component sections will be inserted here -->
-            <div id="dynamic-sections"></div>
+        <!-- Loading Indicator -->
+        <div class="docs-loading" id="loading" style="display: none;">
+            <dotbox-loader size="large"></dotbox-loader>
+            <span style="margin-left: 1rem;">Loading components...</span>
         </div>
     </div>
 
+    <!-- Load Dotbox UI bundle -->
     <script src="/dist/bundle.js"></script>
+    
+    <!-- Load Dotbox UI prerender for JSFiddle integration -->
+    <script src="/docs/DotboxUIPrerender.js"></script>
+    
+    <!-- Load dynamic documentation system -->
+    <script src="/docs/component-discovery.js"></script>
+    <script src="/docs/page-generator.js"></script>
+    <script src="/docs/app.js"></script>
+
     <script>
-        // Global components data
-        let componentsData = [];
-        // Store loaded component code for JSFiddle
-        let loadedComponentsCode = {};
+        // Initialize theme from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.className = `theme-${savedTheme}`;
+        });
 
-        // Load components configuration
-        async function loadComponentsData() {
-            try {
-                const response = await fetch('./components.json');
-                componentsData = await response.json();
-                initializeDocumentation();
-            } catch (error) {
-                console.error('Failed to load components data:', error);
-                // Fallback to empty array
-                componentsData = [];
-                initializeDocumentation();
-            }
-        }
-
-        async function initializeDocumentation() {
-            createNavigationMenu();
-            await createComponentSections();
-            setupThemeDropdown();
-            setupTypeDropdown();
-            setInitialTheme();
-            // Apply initial filter (Web Components only)
-            updateCodeExampleVisibility();
-            
-            // Set up intersection observer for active menu highlighting
-            setupActiveMenuObserver();
-            
-            // Set up hash change listener for direct navigation
-            window.addEventListener('hashchange', () => {
-                const hash = window.location.hash.substring(1);
-                if (hash) {
-                    setTimeout(() => updateActiveMenuItem(hash), 100);
-                }
-            });
-            
-            // Set initial active item if there's a hash
-            const initialHash = window.location.hash.substring(1);
-            if (initialHash) {
-                setTimeout(() => updateActiveMenuItem(initialHash), 200);
-            }
-        }
-
-        function createNavigationMenu() {
-            const navContainer = document.getElementById('nav-menu');
-            
-            // Create items with group information for collapsible headers
-            const menuItems = componentsData.map(comp => ({
-                id: comp.id,
-                label: comp.name,
-                group: comp.category || 'Other',
-                groupHeader: comp.category || 'Other'
-            }));
-
-            // Create single menu with collapsible headers
-            const navigationMenu = new Dotbox.Menu({
-                items: menuItems,
-                selected: '',
-                bordered: false,
-                compact: true,
-                routingMode: true,
-                collapsibleHeaders: true,
-                onSelect: (id) => {
-                    // Update selected state
-                    updateActiveMenuItem(id);
-                    
-                    // Scroll to element
-                    const element = document.getElementById(id);
-                    if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            });
-
-            navContainer.appendChild(navigationMenu.getElement());
-            
-            // Store reference for later updates
-            window.navigationMenu = navigationMenu;
-        }
-        
-        function updateActiveMenuItem(selectedId) {
-            // Update the menu's selected state
-            if (window.navigationMenu && window.navigationMenu.menuInstance) {
-                window.navigationMenu.menuInstance.select(selectedId);
-            }
-        }
-
-        async function createComponentSections() {
-            const dynamicSections = document.getElementById('dynamic-sections');
-
-            for (const component of componentsData) {
-                // Create section using Dotbox Section component
-                const sectionElement = document.createElement('dotbox-section');
-                sectionElement.id = component.id;
-                sectionElement.setAttribute('title', component.name);
-
-                // Create content with description and demo areas
-                sectionElement.innerHTML = `
-                    <p class="component-description">${component.description}</p>
-                    
-                    <div class="component-demo">
-                        <div id="${component.id}-wc-section" style="margin-bottom: 2rem;">
-                            <div id="${component.id}-wc-demo"></div>
-                        </div>
-                        
-                        <div id="${component.id}-js-section">
-                            <div id="${component.id}-js-demo"></div>
-                        </div>
-                    </div>
-
-                    <div class="component-code">
-                        <div id="${component.id}-code-demo"></div>
-                        <div class="jsfiddle-link" style="margin-top: 1rem;">
-                            <dotbox-button 
-                                variant="secondary" 
-                                size="small" 
-                                id="${component.id}-jsfiddle-btn"
-                                onclick="openJSFiddle('${component.id}')">
-                                🚀 Try in JSFiddle
-                            </dotbox-button>
-                        </div>
-                    </div>
-                `;
-
-                dynamicSections.appendChild(sectionElement);
-
-                // Load example code if referencing external files
-                let wcCode = component.codeWC;
-                let jsCode = component.codeJS;
-
-                if (component.codeWC && component.codeWC.startsWith('examples/')) {
-                    try {
-                        const response = await fetch(component.codeWC);
-                        wcCode = await response.text();
-                    } catch (error) {
-                        console.error(`Failed to load ${component.codeWC}:`, error);
-                        wcCode = '<!-- Example file not found -->';
-                    }
-                }
-
-                if (component.codeJS && component.codeJS.startsWith('examples/')) {
-                    try {
-                        const response = await fetch(component.codeJS);
-                        jsCode = await response.text();
-                    } catch (error) {
-                        console.error(`Failed to load ${component.codeJS}:`, error);
-                        jsCode = '// Example file not found';
-                    }
-                }
-
-                // Store loaded code for JSFiddle and other uses
-                loadedComponentsCode[component.id] = {
-                    codeWC: wcCode,
-                    codeJS: jsCode
-                };
-
-                // Create live Web Component demos (parse and execute the HTML)
-                createLiveDemo(component.id + '-wc-demo', wcCode);
-
-                // Create JavaScript API demos (execute only JavaScript parts)
-                createJSDemo(component.id + '-js-demo', { ...component, codeJS: jsCode });
-
-                // Create code examples
-                createCodeExample(component.id + '-code-demo', { ...component, codeWC: wcCode, codeJS: jsCode });
-            }
-        }
-
-        function createLiveDemo(containerId, wcCode) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            // Extract HTML parts (not script tags) and insert them
-            const htmlParts = wcCode.replace(/<script[\s\S]*?<\/script>/gi, '');
-            container.innerHTML = htmlParts;
-
-            // Extract and execute script parts
-            const scriptMatches = wcCode.match(/<script[\s\S]*?<\/script>/gi);
-            if (scriptMatches) {
-                scriptMatches.forEach(scriptTag => {
-                    // Extract just the JavaScript code (remove script tags)
-                    const scriptContent = scriptTag.replace(/<\/?script[^>]*>/gi, '');
-                    try {
-                        // Create a new script element and execute it
-                        const scriptElement = document.createElement('script');
-                        scriptElement.textContent = scriptContent;
-                        document.head.appendChild(scriptElement);
-                        // Remove it immediately after execution to avoid duplicates
-                        document.head.removeChild(scriptElement);
-                    } catch (error) {
-                        console.error('Error executing Web Component demo script:', error);
-                    }
-                });
-            }
-        }
-
-        function createJSDemo(containerId, component) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            // Check if this is an external file (no script tags) or inline code (with script tags)
-            if (component.codeJS.includes('<script>')) {
-                // Legacy inline code with script tags
-                executeScriptFromCode(component.codeJS, container);
-            } else {
-                // External file - pure JavaScript
-                executeJavaScript(component.codeJS, container);
-            }
-        }
-
-        function executeJavaScript(jsCode, container) {
-            try {
-                // Replace document.body.appendChild with container.appendChild for demos
-                const modifiedScript = jsCode.replace(
-                    /document\.body\.appendChild/g, 
-                    `arguments[0].appendChild`
-                );
-                
-                // Create a function and execute it with container as argument
-                const scriptFunction = new Function('container', modifiedScript);
-                scriptFunction.call(null, container);
-            } catch (error) {
-                console.error('Error executing JavaScript demo:', error);
-                console.error('Script content that failed:', jsCode);
-            }
-        }
-
-        function executeScriptFromCode(code, container) {
-            // Extract and execute script parts from JSON code
-            const scriptMatches = code.match(/<script[\s\S]*?<\/script>/gi);
-            if (scriptMatches) {
-                scriptMatches.forEach(scriptTag => {
-                    // Extract just the JavaScript code (remove script tags)
-                    const scriptContent = scriptTag.replace(/<\/?script[^>]*>/gi, '');
-                    try {
-                        // Replace document.body.appendChild with container.appendChild for demos
-                        const modifiedScript = scriptContent.replace(
-                            /document\.body\.appendChild/g, 
-                            `arguments[0].appendChild`
-                        );
-                        
-                        // Create a function and execute it with container as argument
-                        const scriptFunction = new Function('container', modifiedScript);
-                        scriptFunction.call(null, container);
-                    } catch (error) {
-                        console.error('Error executing JS demo script:', error);
-                        console.error('Script content that failed:', scriptContent);
-                    }
-                });
-            }
-        }
-
-
-        function createCodeExample(containerId, component) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            // The component object now contains the loaded content, not file paths
-            let wcCode = component.codeWC || '';
-            let jsCode = component.codeJS || '';
-
-            // Clean up any literal \n sequences that might exist
-            wcCode = wcCode.replace(/\\n/g, '\n');
-            jsCode = jsCode.replace(/\\n/g, '\n');
-
-            // Combine both Web Components and JavaScript examples
-            const combinedCode = wcCode + '\n\n' + jsCode;
-
-            const codeBlock = new Dotbox.CodeBlock({
-                language: 'html',
-                code: combinedCode
-            });
-
-            container.appendChild(codeBlock.getElement());
-        }
-
-
-        // Global filter state
-        let currentCodeType = 'webcomponents'; // 'webcomponents', 'javascript'
-
-        function setupThemeDropdown() {
-            const themeDropdown = new Dotbox.Dropdown({
-                label: 'Theme',
-                allowNull: false, // No placeholder/null option
-                options: [
-                    { value: 'light', label: 'Light' },
-                    { value: 'dark', label: 'Dark' }
-                ],
-                value: localStorage.getItem('dotbox-theme') || 'light',
-                size: 'small',
-                onChange: (e) => {
-                    setTheme(e.target.value);
-                }
-            });
-            document.getElementById('theme-dropdown-container').appendChild(themeDropdown.getContainer());
-        }
-
-        function setupTypeDropdown() {
-            const typeDropdown = new Dotbox.Dropdown({
-                label: 'Code Examples',
-                allowNull: false, // No placeholder/null option
-                options: [
-                    { value: 'webcomponents', label: 'Web Components' },
-                    { value: 'javascript', label: 'JavaScript API' }
-                ],
-                value: 'webcomponents', // Default to Web Components
-                size: 'small',
-                onChange: (e) => {
-                    currentCodeType = e.target.value;
-                    updateCodeExampleVisibility();
-                }
-            });
-            document.getElementById('type-dropdown-container').appendChild(typeDropdown.getContainer());
-        }
-
-        function updateCodeExampleVisibility() {
-            // Update all component sections based on filter
-            componentsData.forEach(component => {
-                const wcSection = document.getElementById(`${component.id}-wc-section`);
-                const jsSection = document.getElementById(`${component.id}-js-section`);
-                const codeDemo = document.getElementById(`${component.id}-code-demo`);
-
-                if (wcSection && jsSection) {
-                    // Show/hide demo sections
-                    switch (currentCodeType) {
-                        case 'webcomponents':
-                            wcSection.style.display = 'block';
-                            jsSection.style.display = 'none';
-                            break;
-                        case 'javascript':
-                            wcSection.style.display = 'none';
-                            jsSection.style.display = 'block';
-                            break;
-                        default:
-                            wcSection.style.display = 'block';
-                            jsSection.style.display = 'none';
-                            break;
-                    }
-                }
-
-                // Update code examples
-                if (codeDemo) {
-                    updateCodeExample(component.id + '-code-demo', component);
-                }
-            });
-        }
-
-        function updateCodeExample(containerId, component) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            // Get the loaded code content (fallback to original if not loaded)
-            const loadedCode = loadedComponentsCode[component.id] || component;
-
-            // Clear existing code block
-            container.innerHTML = '';
-
-            let codeToShow = '';
-            switch (currentCodeType) {
-                case 'webcomponents':
-                    codeToShow = loadedCode.codeWC;
-                    break;
-                case 'javascript':
-                    codeToShow = loadedCode.codeJS;
-                    break;
-                default:
-                    codeToShow = loadedCode.codeWC;
-                    break;
-            }
-
-            const codeBlock = new Dotbox.CodeBlock({
-                language: 'html',
-                code: codeToShow.replace(/\\n/g, '\n')
-            });
-
-            container.appendChild(codeBlock.getElement());
-        }
-
-        function setTheme(theme) {
-            document.documentElement.classList.remove('theme-light', 'theme-dark');
-            document.documentElement.classList.add('theme-' + theme);
-            localStorage.setItem('dotbox-theme', theme);
-        }
-
-        function setInitialTheme() {
-            const saved = localStorage.getItem('dotbox-theme') || 'light';
-            setTheme(saved);
-        }
-
-        function setupActiveMenuObserver() {
-            // Create intersection observer to highlight active menu items
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-                        const sectionId = entry.target.id;
-                        if (sectionId && window.navigationMenu) {
-                            updateActiveMenuItem(sectionId);
-                        }
-                    }
-                });
-            }, {
-                rootMargin: '-20% 0px -60% 0px',
-                threshold: [0, 0.25, 0.5, 0.75, 1]
-            });
-
-            // Observe all component sections
+        // Enhanced JSFiddle integration with DotboxUIPrerender
+        window.addEventListener('load', () => {
+            // Wait for components to load, then enhance CodeBlock components
             setTimeout(() => {
-                componentsData.forEach(component => {
-                    const element = document.getElementById(component.id);
-                    if (element) {
-                        observer.observe(element);
+                const codeBlocks = document.querySelectorAll('dotbox-code-block');
+                codeBlocks.forEach(codeBlock => {
+                    // Create JSFiddle instance with DotboxUIPrerender
+                    if (window.DotboxUIPrerender && codeBlock.codeBlockInstance) {
+                        codeBlock.codeBlockInstance.jsfiddle = new JSFiddle({
+                            prerender: window.DotboxUIPrerender
+                        });
                     }
                 });
-            }, 100);
-        }
-
-        function openJSFiddle(componentId) {
-            const component = componentsData.find(c => c.id === componentId);
-            if (!component) return;
-            
-            // Get the loaded code content (fallback to original if not loaded)
-            const loadedCode = loadedComponentsCode[componentId] || component;
-            
-            // Get the current code type being displayed
-            let codeToUse = '';
-            switch (currentCodeType) {
-                case 'webcomponents':
-                    codeToUse = loadedCode.codeWC;
-                    break;
-                case 'javascript':
-                    codeToUse = loadedCode.codeJS;
-                    break;
-                default:
-                    codeToUse = loadedCode.codeWC;
-                    break;
-            }
-            
-            // Clean up the code for JSFiddle
-            const cleanCode = codeToUse.replace(/\\n/g, '\n');
-            
-            // Prepare separated content for JSFiddle
-            const htmlContent = '<div class="theme-toggle">\n' +
-                '    <dotbox-button variant="secondary" size="small" onclick="toggleTheme()">\n' +
-                '        🌙 Toggle Theme\n' +
-                '    </dotbox-button>\n' +
-                '</div>\n\n' +
-                '<div class="demo-container">\n' +
-                '    <h1>' + component.name + ' Example</h1>\n' +
-                '    <p>' + component.description + '</p>\n\n' +
-                '    <div class="component-demo">\n' +
-                '        ' + cleanCode + '\n' +
-                '    </div>\n' +
-                '</div>';
-            
-            const cssContent = '/* Import Dotbox UI styles from jsDelivr CDN */\n' +
-                '@import url("https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/index.css");\n' +
-                '@import url("https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/theme.css");\n\n' +
-                'html {\n' +
-                '    /* Set theme class on html element */\n' +
-                '}\n\n' +
-                'html.theme-light {\n' +
-                '    /* Light theme is default */\n' +
-                '}\n\n' +
-                'html.theme-dark {\n' +
-                '    /* Dark theme overrides */\n' +
-                '}\n\n' +
-                'body {\n' +
-                '    font-family: var(--font-family);\n' +
-                '    background: var(--color-bg);\n' +
-                '    color: var(--color-text);\n' +
-                '    padding: 2rem;\n' +
-                '    margin: 0;\n' +
-                '}\n\n' +
-                '.demo-container {\n' +
-                '    max-width: 800px;\n' +
-                '    margin: 0 auto;\n' +
-                '}\n\n' +
-                '.theme-toggle {\n' +
-                '    position: fixed;\n' +
-                '    top: 1rem;\n' +
-                '    right: 1rem;\n' +
-                '    z-index: 1000;\n' +
-                '}';
-            
-            const jsContent = '// Load Dotbox UI from jsDelivr CDN\n' +
-                '// Note: The CSS is loaded via @import in the CSS panel\n\n' +
-                '// Load the JavaScript bundle\n' +
-                'const script = document.createElement("script");\n' +
-                'script.src = "https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/bundle.js";\n' +
-                'document.head.appendChild(script);\n\n' +
-                '// Set initial theme\n' +
-                'document.documentElement.className = "theme-light";\n\n' +
-                '// Theme toggle function\n' +
-                'function toggleTheme() {\n' +
-                '    const isLight = document.documentElement.classList.contains("theme-light");\n' +
-                '    document.documentElement.className = isLight ? "theme-dark" : "theme-light";\n' +
-                '}';
-            
-            // Create a form to submit to JSFiddle
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://jsfiddle.net/api/post/library/pure/';
-            form.target = '_blank';
-            
-            // Add the HTML content
-            const htmlInput = document.createElement('input');
-            htmlInput.type = 'hidden';
-            htmlInput.name = 'html';
-            htmlInput.value = htmlContent;
-            
-            // Add the CSS content
-            const cssInput = document.createElement('input');
-            cssInput.type = 'hidden';
-            cssInput.name = 'css';
-            cssInput.value = cssContent;
-            
-            // Add the JavaScript content
-            const jsInput = document.createElement('input');
-            jsInput.type = 'hidden';
-            jsInput.name = 'js';
-            jsInput.value = jsContent;
-            
-            // Add title
-            const titleInput = document.createElement('input');
-            titleInput.type = 'hidden';
-            titleInput.name = 'title';
-            titleInput.value = component.name + ' - Dotbox UI Example';
-            
-            // Add description
-            const descInput = document.createElement('input');
-            descInput.type = 'hidden';
-            descInput.name = 'description';
-            descInput.value = component.description + ' - Built with Dotbox UI';
-            
-            form.appendChild(htmlInput);
-            form.appendChild(cssInput);
-            form.appendChild(jsInput);
-            form.appendChild(titleInput);
-            form.appendChild(descInput);
-            
-            // Submit the form
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-        }
-
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', loadComponentsData);
+            }, 1000);
+        });
     </script>
 </body>
 </html>
