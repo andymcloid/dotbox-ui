@@ -8,6 +8,7 @@
 @import './components/CodeBlock/CodeBlock.css';
 @import './components/Dropdown/Dropdown.css';
 @import './components/Form/Form.css';
+@import './components/Icon/Icon.css';
 @import './components/Loader/Loader.css';
 @import './components/Menu/Menu.css';
 @import './components/MessageBox/MessageBox.css';
@@ -18,4 +19,3 @@
 @import './components/TabView/TabView.css';
 @import './components/TextBox/TextBox.css';
 @import './components/Toggle/Toggle.css';
-@import './components/ToolButton/ToolButton.css';

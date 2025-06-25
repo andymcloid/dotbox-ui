@@ -12,6 +12,7 @@ class Button {
             disabled: false,
             loading: false,
             icon: null,
+            width: null, // Custom width (e.g., '100px', '10em', '50%', etc.)
             className: '',
             ...options
         };
@@ -30,6 +31,7 @@ class Button {
         
         this.updateClasses();
         this.updateContent();
+        this.applyCustomStyles();
         
         return this.element;
     }
@@ -112,6 +114,12 @@ class Button {
         this.element.innerHTML = content;
     }
     
+    applyCustomStyles() {
+        if (this.options.width) {
+            this.element.style.width = this.options.width;
+        }
+    }
+    
     bindEvents() {
         if (this.onClick) {
             this.element.addEventListener('click', (e) => {
@@ -125,15 +133,44 @@ class Button {
     getIconHtml() {
         if (!this.options.icon) return '';
         
-        // Default icons for common variants
-        const defaultIcons = {
-            'delete': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
-            'close': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
-            'check': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>',
-            'plus': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/></svg>'
-        };
+        // Determine icon type and properties
+        let iconType = 'predefined';
+        let iconProps = { name: this.options.icon, color: 'currentColor' };
         
-        return defaultIcons[this.options.icon] || this.options.icon;
+        // Check if it's an emoji
+        if (/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u.test(this.options.icon)) {
+            iconType = 'emoji';
+            iconProps = { emoji: this.options.icon };
+        }
+        // Check if it's custom SVG (contains '<svg')
+        else if (this.options.icon.includes('<svg')) {
+            iconType = 'svg';
+            iconProps = { svg: this.options.icon };
+        }
+        // Check if it's an image URL
+        else if (this.options.icon.match(/\.(jpg|jpeg|png|gif|svg|webp)$/i) || this.options.icon.startsWith('http')) {
+            iconType = 'image';
+            iconProps = { src: this.options.icon, alt: 'Icon' };
+        }
+        
+        // Create Icon component and return its HTML
+        if (typeof Icon !== 'undefined') {
+            const icon = new Icon({
+                type: iconType,
+                size: 'medium',
+                ...iconProps
+            });
+            return icon.getElement().outerHTML;
+        } else {
+            // Fallback if Icon component not available
+            const predefinedIcons = {
+                'delete': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
+                'close': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
+                'check': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>',
+                'plus': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/></svg>'
+            };
+            return predefinedIcons[this.options.icon] || this.options.icon;
+        }
     }
     
     // Public methods
@@ -147,6 +184,12 @@ class Button {
         this.options.icon = icon;
         this.updateClasses();
         this.updateContent();
+        return this;
+    }
+    
+    setWidth(width) {
+        this.options.width = width;
+        this.applyCustomStyles();
         return this;
     }
     
@@ -197,7 +240,7 @@ class DotboxButtonElement extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading'];
+        return ['variant', 'size', 'disabled', 'text', 'icon', 'loading', 'width'];
     }
 
     attributeChangedCallback() {
@@ -212,7 +255,14 @@ class DotboxButtonElement extends HTMLElement {
         const disabled = this.hasAttribute('disabled');
         const loading = this.hasAttribute('loading');
         const icon = this.getAttribute('icon') || null;
-        const text = this.getAttribute('text') || this.textContent.trim() || 'Button';
+        const width = this.getAttribute('width') || null;
+        let text = this.getAttribute('text') || this.textContent.trim() || (icon ? '' : 'Button');
+        
+        // If text contains the same emoji as the icon, remove it from text
+        if (icon && text && /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u.test(icon)) {
+            // Remove the emoji from text if it's the same as the icon
+            text = text.replace(icon, '').trim();
+        }
 
         // Clean up previous instance
         if (this.buttonInstance) {
@@ -227,10 +277,11 @@ class DotboxButtonElement extends HTMLElement {
             disabled: disabled,
             loading: loading,
             icon: icon,
+            width: width,
             onClick: () => {
                 // Dispatch custom event
                 this.dispatchEvent(new CustomEvent('dotbox-click', {
-                    detail: { variant, size, text, disabled, loading, icon },
+                    detail: { variant, size, text, disabled, loading, icon, width },
                     bubbles: true
                 }));
             }
@@ -275,6 +326,15 @@ class DotboxButtonElement extends HTMLElement {
             this.setAttribute('icon', icon);
         } else {
             this.removeAttribute('icon');
+        }
+        return this;
+    }
+    
+    setWidth(width) {
+        if (width) {
+            this.setAttribute('width', width);
+        } else {
+            this.removeAttribute('width');
         }
         return this;
     }

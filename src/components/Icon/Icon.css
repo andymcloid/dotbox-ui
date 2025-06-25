@@ -1,0 +1,56 @@
+/* Icon Component Styles */
+.dotbox-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+    color: currentColor;
+}
+
+/* Icon types */
+.dotbox-icon-predefined svg,
+.dotbox-icon-svg svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.dotbox-icon-emoji {
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-align: center;
+}
+
+.dotbox-icon-image {
+    overflow: hidden;
+}
+
+.dotbox-icon-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* Size variants */
+.dotbox-icon-small {
+    width: 16px;
+    height: 16px;
+    font-size: 14px;
+}
+
+.dotbox-icon-medium {
+    width: 20px;
+    height: 20px;
+    font-size: 18px;
+}
+
+.dotbox-icon-large {
+    width: 24px;
+    height: 24px;
+    font-size: 22px;
+}
+
+/* Custom sizes will be handled via inline styles */

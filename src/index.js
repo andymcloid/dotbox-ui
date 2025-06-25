@@ -8,6 +8,7 @@ const Checkbox = require('./components/Checkbox/Checkbox.js');
 const CodeBlock = require('./components/CodeBlock/CodeBlock.js');
 const Dropdown = require('./components/Dropdown/Dropdown.js');
 const Form = require('./components/Form/Form.js');
+const Icon = require('./components/Icon/Icon.js');
 const Loader = require('./components/Loader/Loader.js');
 const Menu = require('./components/Menu/Menu.js');
 const MessageBox = require('./components/MessageBox/MessageBox.js');
@@ -18,7 +19,6 @@ const Section = require('./components/Section/Section.js');
 const TabView = require('./components/TabView/TabView.js');
 const TextBox = require('./components/TextBox/TextBox.js');
 const Toggle = require('./components/Toggle/Toggle.js');
-const ToolButton = require('./components/ToolButton/ToolButton.js');
 
 // Import all styles (except theming)
 require('./index.css');
@@ -30,6 +30,7 @@ const Dotbox = {
     CodeBlock,
     Dropdown,
     Form,
+    Icon,
     Loader,
     Menu,
     MessageBox,
@@ -40,7 +41,6 @@ const Dotbox = {
     TabView,
     TextBox,
     Toggle,
-    ToolButton,
 };
 
 // Global export for browser usage

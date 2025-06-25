@@ -28,7 +28,10 @@ class CodeBlock {
         this._loadPrism(() => {
             this.element = this._render();
             if (this.preview) {
-                this._updatePreview();
+                // Delay preview update to ensure all components are loaded
+                setTimeout(() => {
+                    this._updatePreview();
+                }, 100);
             }
         });
     }
@@ -95,7 +98,9 @@ class CodeBlock {
             const expandBtn = document.createElement('dotbox-button');
             expandBtn.setAttribute('variant', 'secondary');
             expandBtn.setAttribute('size', 'small');
-            expandBtn.textContent = this.expanded ? '📉 Collapse' : '📈 Expand';
+            expandBtn.setAttribute('width', '120px');
+            expandBtn.setAttribute('icon', this.expanded ? '📉' : '📈');
+            expandBtn.setAttribute('text', this.expanded ? 'Collapse' : 'Expand');
             expandBtn.addEventListener('click', () => this._toggleExpand());
             toolbar.appendChild(expandBtn);
             this.expandButton = expandBtn;
@@ -106,7 +111,9 @@ class CodeBlock {
             const fiddleBtn = document.createElement('dotbox-button');
             fiddleBtn.setAttribute('variant', 'secondary');
             fiddleBtn.setAttribute('size', 'small');
-            fiddleBtn.textContent = '🚀 Try in JSFiddle';
+            fiddleBtn.setAttribute('width', '120px');
+            fiddleBtn.setAttribute('icon', 'code');
+            fiddleBtn.setAttribute('text', 'JSFiddle');
             fiddleBtn.addEventListener('click', () => {
                 this.jsfiddle.openInJSFiddle(this.code, {
                     language: this.language,
@@ -127,8 +134,18 @@ class CodeBlock {
         header.className = 'dotbox-codeblock-preview-header';
         header.innerHTML = `
             <span class="dotbox-codeblock-preview-title">Preview</span>
-            <button class="dotbox-codeblock-refresh-btn" onclick="this.parentNode.parentNode.querySelector('.dotbox-codeblock').dispatchEvent(new CustomEvent('refresh'))">🔄</button>
         `;
+        
+        // Add refresh button using dotbox-button
+        const refreshBtn = document.createElement('dotbox-button');
+        refreshBtn.setAttribute('variant', 'secondary');
+        refreshBtn.setAttribute('size', 'small');
+        refreshBtn.setAttribute('icon', '🔄');
+        refreshBtn.setAttribute('text', '');
+        refreshBtn.addEventListener('click', () => {
+            this.element.querySelector('.dotbox-codeblock').dispatchEvent(new CustomEvent('refresh'));
+        });
+        header.appendChild(refreshBtn);
         
         const content = document.createElement('div');
         content.className = 'dotbox-codeblock-preview-content';
@@ -204,7 +221,7 @@ class CodeBlock {
                 // Ensure components are properly initialized after a brief delay
                 setTimeout(() => {
                     // Force a re-render for any custom elements that might need it
-                    const customElements = content.querySelectorAll('[is], dotbox-*');
+                    const customElements = content.querySelectorAll('*[is], [data-dotbox], dotbox-button, dotbox-checkbox, dotbox-textbox, dotbox-dropdown, dotbox-loader, dotbox-notification, dotbox-modal, dotbox-section, dotbox-tabs, dotbox-toggle, dotbox-menu, dotbox-form, dotbox-messagebox, dotbox-metric, dotbox-codeblock, dotbox-toolbutton, dotbox-icon');
                     customElements.forEach(el => {
                         if (el.connectedCallback && typeof el.connectedCallback === 'function') {
                             try {
@@ -214,7 +231,7 @@ class CodeBlock {
                             }
                         }
                     });
-                }, 50);
+                }, 150); // Increased delay for better reliability
                 
             } else if (type === 'javascript') {
                 // JavaScript preview
@@ -247,10 +264,13 @@ class CodeBlock {
         
         if (this.expanded) {
             codeBlock.style.height = this.expandedHeight;
-            this.expandButton.textContent = '📉 Collapse';
+            // Update button attributes while preserving its dotbox-button nature
+            this.expandButton.setAttribute('icon', '📉');
+            this.expandButton.setAttribute('text', 'Collapse');
         } else {
             codeBlock.style.height = this.originalHeight;
-            this.expandButton.textContent = '📈 Expand';
+            this.expandButton.setAttribute('icon', '📈');
+            this.expandButton.setAttribute('text', 'Expand');
         }
     }
 

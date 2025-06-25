@@ -82,12 +82,18 @@
     background: var(--color-bg-panel);
     color: var(--color-text);
     font-size: 0.875rem;
+    margin-bottom: 0.75rem;
 }
 
 .nav-search input:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 2px rgba(255, 182, 5, 0.2);
+}
+
+.nav-theme-toggle {
+    display: flex;
+    justify-content: center;
 }
 
 .nav-menu {

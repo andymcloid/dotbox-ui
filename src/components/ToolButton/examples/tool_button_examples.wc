@@ -1,8 +1,0 @@
-<dotbox-tool-button icon="🔧" label="Settings"></dotbox-tool-button>
-<dotbox-tool-button icon="📁" label="Open File"></dotbox-tool-button>
-<dotbox-tool-button icon="💾" label="Save" variant="primary"></dotbox-tool-button>
-<dotbox-tool-button icon="🗑️" label="Delete" variant="danger"></dotbox-tool-button>
-
-<dotbox-tool-button icon="❓" tooltip="Help"></dotbox-tool-button>
-<dotbox-tool-button icon="⚙️" tooltip="Settings" size="small"></dotbox-tool-button>
-<dotbox-tool-button icon="📤" tooltip="Export" size="large"></dotbox-tool-button>

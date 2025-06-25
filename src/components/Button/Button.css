@@ -1,7 +1,7 @@
 /* Smart Button Component Styles - Modern animated design */
 .btn {
     height: 40px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     border: none;
     border-radius: 5px;
@@ -9,7 +9,7 @@
     cursor: pointer;
     overflow: hidden;
     padding: 0;
-    margin: 1px;
+    margin: 2px;
     transition: background 200ms;
     font-family: var(--font-family);
     user-select: none;
@@ -27,7 +27,7 @@
 .btn .btn-text {
     flex: 1 1 100%;
     color: white;
-    font-weight: bold;
+    font-weight: normal;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -210,9 +210,25 @@
     color: var(--color-text);
 }
 
+.btn-primary .btn-icon {
+    color: var(--color-text);
+}
+
+.btn-primary .btn-icon svg path {
+    fill: var(--color-text) !important;
+}
+
 .btn-primary:hover:not(:disabled) {
     background: var(--color-bg-hover);
     border-color: var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) .btn-icon {
+    color: var(--color-text);
+}
+
+.btn-primary:hover:not(:disabled) .btn-icon svg path {
+    fill: var(--color-text) !important;
 }
 
 .btn-secondary {

@@ -558,6 +558,50 @@ When reporting bugs or requesting features:
 - 🐛 [Issue Tracker](https://github.com/andymcloid/dotbox-ui/issues)
 - 📖 [Documentation](https://andymcloid.github.io/dotbox-ui)
 
+## 🎨 Recent Component Innovations (2024)
+
+### Smart Button Animations & Icon Component
+
+**Advanced Button System** - Recent work has enhanced the Button component with smart conditional animations:
+
+```css
+/* Smart animations only apply to buttons with BOTH text AND icon */
+.btn:not(.btn-no-icon):not(.btn-icon-only):hover .btn-text {
+    flex-basis: 0;
+    opacity: 0;
+    transform: translateX(-10px);
+}
+```
+
+**Button Types & Classes:**
+- `btn-no-icon` - Text-only buttons (no animation)
+- `btn-icon-only` - Icon-only buttons (no animation)
+- `btn` with text + icon - Smart animation on hover
+
+**Icon Component** - New reusable Icon component (`src/components/Icon/`) supports:
+- Predefined SVG icons (code, delete, check, arrow-*, etc.)
+- Emoji icons with automatic detection
+- Custom SVG content
+- Image URLs with fallback handling
+- `currentColor` inheritance for proper theming
+
+**Width Attribute Support** - Button component now supports custom widths:
+```html
+<dotbox-button width="100%">Full Width</dotbox-button>
+<dotbox-button width="120px">Fixed Width</dotbox-button>
+```
+
+**Documentation Integration** - All documentation system buttons now use dotbox-button:
+- Theme toggle button with sun/moon icon switching
+- CodeBlock toolbar buttons with fixed widths
+- Consistent styling across documentation
+
+**Key Implementation Details:**
+- Web Components use `setAttribute('text')` instead of `textContent` for consistent behavior
+- Icon component auto-detects icon type (emoji, SVG, predefined, image)
+- Button animations use CSS flexbox transitions for smooth effects
+- Component initialization handles SPA routing properly
+
 ## 🔄 For AI Assistants: Project Knowledge Persistence
 
 When working with this project after a restart, always:
@@ -577,6 +621,7 @@ When working with this project after a restart, always:
 - **Dynamic Index Files**: `src/index.js` and `src/index.css` generated automatically
 - **Component Documentation**: Uses `component.json` for automatic API docs generation
 - **Enhanced CodeBlock**: Live preview, JSFiddle integration, standard language types
+- **Smart Button System**: Conditional animations, Icon component integration, width attribute support
 - **No Manual Integration**: Just create component folder and run `npm run build`
 
 **Critical Rules to Remember:**
@@ -585,6 +630,8 @@ When working with this project after a restart, always:
 - **MANDATORY:** Create `component.json` with examples, properties, methods, events
 - **ALWAYS run `npm run build`** to auto-integrate and verify components work
 - **Test both Web Component and JavaScript API** in documentation
+- **Use setAttribute('text')** instead of textContent for dotbox-button components
+- **Icon component should be used** for reusable icon display across components
 
 **Integration Checklist (Use This Every Time):**
 - [ ] Component files created in `src/components/ComponentName/`
@@ -595,6 +642,7 @@ When working with this project after a restart, always:
 - [ ] Component appears and functions in documentation
 - [ ] Both `<dotbox-component>` and `new Dotbox.Component()` work
 - [ ] Examples in `component.json` render correctly with live preview
+- [ ] If using icons, consider integrating with Icon component for consistency
 
 ---
 

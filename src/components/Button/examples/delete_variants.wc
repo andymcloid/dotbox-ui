@@ -1,5 +1,5 @@
 <!-- Smart button examples with icons and animations -->
-<h4>Smart Buttons with Icons</h4>
+<h4>Buttons with Icons</h4>
 <dotbox-button variant="danger" icon="delete">Delete</dotbox-button>
 <dotbox-button variant="success" icon="check">Save</dotbox-button>
 <dotbox-button variant="primary" icon="plus">Add New</dotbox-button>

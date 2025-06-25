@@ -23,7 +23,6 @@ class PageGenerator {
                 ${this.generateOverview(component)}
                 ${this.generateExamples(component)}
                 ${this.generateAPI(component)}
-                ${this.generateWebComponent(component)}
                 ${this.generateCSS(component)}
                 ${this.generateFooter(component)}
             </div>

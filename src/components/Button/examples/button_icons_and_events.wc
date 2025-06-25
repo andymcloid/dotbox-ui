@@ -1,0 +1,33 @@
+<!-- Button Icons and Events Examples -->
+<h4>Predefined Icons</h4>
+<dotbox-button variant="danger" icon="delete" onclick="console.log('Delete clicked!')">Delete</dotbox-button>
+<dotbox-button variant="success" icon="check" onclick="console.log('Save clicked!')">Save</dotbox-button>
+<dotbox-button variant="primary" icon="plus" onclick="console.log('Add clicked!')">Add Item</dotbox-button>
+<dotbox-button variant="secondary" icon="edit" onclick="console.log('Edit clicked!')">Edit</dotbox-button>
+
+<h4>Emoji Icons</h4>
+<dotbox-button variant="primary" icon="🚀" onclick="console.log('Launch clicked!')">Launch</dotbox-button>
+<dotbox-button variant="success" icon="⭐" onclick="console.log('Star clicked!')">Favorite</dotbox-button>
+<dotbox-button variant="danger" icon="🔥" onclick="console.log('Fire clicked!')">Hot Deal</dotbox-button>
+<dotbox-button variant="secondary" icon="📁" onclick="console.log('Folder clicked!')">Open</dotbox-button>
+
+<h4>Custom SVG Icons</h4>
+<dotbox-button variant="primary" icon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' onclick="console.log('Star button clicked!')">Rate Us</dotbox-button>
+
+<h4>Icon-Only Buttons with Events</h4>
+<dotbox-button variant="danger" icon="delete" text="" onclick="console.log('Delete icon clicked!')"></dotbox-button>
+<dotbox-button variant="success" icon="check" text="" onclick="console.log('Check icon clicked!')"></dotbox-button>
+<dotbox-button variant="primary" icon="🚀" text="" onclick="console.log('Rocket icon clicked!')"></dotbox-button>
+
+<h4>Event Handling Example</h4>
+<p>Click any button above and check the browser console (F12) to see the event logs!</p>
+
+<script>
+// You can also add event listeners programmatically
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener to all buttons with dotbox-click event
+    document.addEventListener('dotbox-click', function(event) {
+        console.log('Dotbox button clicked:', event.detail);
+    });
+});
+</script>

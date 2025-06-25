@@ -1,0 +1,21 @@
+<!-- Icon Size Examples -->
+<h4>Size Variants</h4>
+<p>Small (16px):</p>
+<dotbox-icon name="check" size="small"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="🚀" size="small"></dotbox-icon>
+
+<p>Medium (20px) - Default:</p>
+<dotbox-icon name="check" size="medium"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="🚀" size="medium"></dotbox-icon>
+
+<p>Large (24px):</p>
+<dotbox-icon name="check" size="large"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="🚀" size="large"></dotbox-icon>
+
+<h4>Custom Colors (SVG only)</h4>
+<p>Predefined icons with custom colors:</p>
+<dotbox-icon name="check" color="green"></dotbox-icon>
+<dotbox-icon name="warning" color="orange"></dotbox-icon>
+<dotbox-icon name="error" color="red"></dotbox-icon>
+<dotbox-icon name="info" color="blue"></dotbox-icon>
+<dotbox-icon name="settings" color="#6366f1"></dotbox-icon>

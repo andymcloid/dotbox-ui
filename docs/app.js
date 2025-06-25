@@ -89,6 +89,9 @@ class DocsApp {
             
             <div class="nav-search">
                 <input type="text" id="component-search" placeholder="Search components...">
+                <div class="nav-theme-toggle">
+                    <dotbox-button id="theme-toggle" variant="primary" size="small" icon="☀️" width="100%">Light</dotbox-button>
+                </div>
             </div>
 
             <nav class="nav-menu">
@@ -110,14 +113,6 @@ class DocsApp {
                         `).join('')}
                     </div>
                 `).join('')}
-                
-                <div class="nav-footer">
-                    <div class="theme-toggle">
-                        <button id="theme-toggle" title="Toggle theme">
-                            🌓 Toggle Theme
-                        </button>
-                    </div>
-                </div>
             </nav>
         `;
 
@@ -189,8 +184,9 @@ class DocsApp {
         const themeToggle = document.getElementById('theme-toggle');
         if (!themeToggle) return;
 
-        // Get current theme
+        // Get current theme and update button accordingly
         const currentTheme = document.documentElement.classList.contains('theme-dark') ? 'dark' : 'light';
+        this.updateThemeButton(currentTheme);
         
         themeToggle.addEventListener('click', () => {
             const isDark = document.documentElement.classList.contains('theme-dark');
@@ -199,12 +195,30 @@ class DocsApp {
                 document.documentElement.classList.remove('theme-dark');
                 document.documentElement.classList.add('theme-light');
                 localStorage.setItem('theme', 'light');
+                this.updateThemeButton('light');
             } else {
                 document.documentElement.classList.remove('theme-light');
                 document.documentElement.classList.add('theme-dark');
                 localStorage.setItem('theme', 'dark');
+                this.updateThemeButton('dark');
             }
         });
+    }
+
+    /**
+     * Update theme button appearance based on current theme
+     */
+    updateThemeButton(theme) {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (!themeToggle) return;
+
+        if (theme === 'dark') {
+            themeToggle.setAttribute('icon', '🌙');
+            themeToggle.textContent = 'Dark';
+        } else {
+            themeToggle.setAttribute('icon', '☀️');
+            themeToggle.textContent = 'Light';
+        }
     }
 
     /**

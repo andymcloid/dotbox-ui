@@ -1,0 +1,217 @@
+{
+  "name": "Icon",
+  "description": "A versatile icon component that supports predefined icons, custom SVG, emoji, and images with standardized sizing and styling.",
+  "category": "Display",
+  "version": "1.0.0",
+  "properties": [
+    {
+      "name": "type",
+      "type": "string",
+      "default": "predefined",
+      "description": "Type of icon to display",
+      "options": ["predefined", "svg", "emoji", "image"]
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "info",
+      "description": "Name of predefined icon (when type='predefined')",
+      "options": ["delete", "close", "check", "plus", "minus", "arrow-left", "arrow-right", "arrow-up", "arrow-down", "edit", "search", "settings", "info", "warning", "error", "download", "upload", "save"]
+    },
+    {
+      "name": "svg",
+      "type": "string",
+      "default": null,
+      "description": "Custom SVG content (when type='svg')"
+    },
+    {
+      "name": "emoji",
+      "type": "string",
+      "default": null,
+      "description": "Emoji character (when type='emoji')"
+    },
+    {
+      "name": "src",
+      "type": "string",
+      "default": null,
+      "description": "Image source URL (when type='image')"
+    },
+    {
+      "name": "alt",
+      "type": "string",
+      "default": "",
+      "description": "Alt text for image icons"
+    },
+    {
+      "name": "size",
+      "type": "string|number",
+      "default": "medium",
+      "description": "Icon size (predefined or custom pixel value)",
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "color",
+      "type": "string",
+      "default": "currentColor",
+      "description": "Color for SVG icons (CSS color value)"
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "",
+      "description": "Additional CSS classes to apply to the icon"
+    }
+  ],
+  "methods": [
+    {
+      "name": "setType",
+      "parameters": [
+        {
+          "name": "type",
+          "type": "string",
+          "description": "Icon type"
+        }
+      ],
+      "returns": "Icon",
+      "description": "Changes the icon type and updates display"
+    },
+    {
+      "name": "setName",
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Predefined icon name"
+        }
+      ],
+      "returns": "Icon",
+      "description": "Changes the predefined icon name"
+    },
+    {
+      "name": "setSvg",
+      "parameters": [
+        {
+          "name": "svg",
+          "type": "string",
+          "description": "SVG content"
+        }
+      ],
+      "returns": "Icon",
+      "description": "Sets custom SVG content and switches to SVG type"
+    },
+    {
+      "name": "setEmoji",
+      "parameters": [
+        {
+          "name": "emoji",
+          "type": "string",
+          "description": "Emoji character"
+        }
+      ],
+      "returns": "Icon",
+      "description": "Sets emoji and switches to emoji type"
+    },
+    {
+      "name": "setImage",
+      "parameters": [
+        {
+          "name": "src",
+          "type": "string",
+          "description": "Image source URL"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "description": "Alt text"
+        }
+      ],
+      "returns": "Icon",
+      "description": "Sets image source and switches to image type"
+    },
+    {
+      "name": "setSize",
+      "parameters": [
+        {
+          "name": "size",
+          "type": "string|number",
+          "description": "Size value"
+        }
+      ],
+      "returns": "Icon",
+      "description": "Updates the icon size"
+    },
+    {
+      "name": "setColor",
+      "parameters": [
+        {
+          "name": "color",
+          "type": "string",
+          "description": "CSS color value"
+        }
+      ],
+      "returns": "Icon",
+      "description": "Updates the icon color (for SVG icons)"
+    },
+    {
+      "name": "getElement",
+      "parameters": [],
+      "returns": "HTMLElement",
+      "description": "Returns the DOM element of the icon"
+    },
+    {
+      "name": "destroy",
+      "parameters": [],
+      "returns": "void",
+      "description": "Removes the icon from DOM and cleans up"
+    }
+  ],
+  "events": [],
+  "webComponent": {
+    "tag": "dotbox-icon",
+    "attributes": [
+      "type",
+      "name", 
+      "svg",
+      "emoji",
+      "src",
+      "alt",
+      "size",
+      "color"
+    ]
+  },
+  "dependencies": [],
+  "cssClasses": [
+    {
+      "name": ".dotbox-icon",
+      "description": "Base icon container with flex layout"
+    },
+    {
+      "name": ".dotbox-icon-predefined",
+      "description": "Styling for predefined SVG icons"
+    },
+    {
+      "name": ".dotbox-icon-svg",
+      "description": "Styling for custom SVG icons"
+    },
+    {
+      "name": ".dotbox-icon-emoji",
+      "description": "Styling for emoji icons"
+    },
+    {
+      "name": ".dotbox-icon-image",
+      "description": "Styling for image icons"
+    },
+    {
+      "name": ".dotbox-icon-small",
+      "description": "Small icon size (16px)"
+    },
+    {
+      "name": ".dotbox-icon-medium",
+      "description": "Medium icon size (20px)"
+    },
+    {
+      "name": ".dotbox-icon-large",
+      "description": "Large icon size (24px)"
+    }
+  ]
+}

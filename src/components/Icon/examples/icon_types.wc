@@ -1,0 +1,31 @@
+<!-- Icon Type Examples -->
+<h4>Predefined Icons</h4>
+<p>Common icons with standardized SVG designs:</p>
+<dotbox-icon type="predefined" name="delete"></dotbox-icon>
+<dotbox-icon type="predefined" name="check"></dotbox-icon>
+<dotbox-icon type="predefined" name="plus"></dotbox-icon>
+<dotbox-icon type="predefined" name="edit"></dotbox-icon>
+<dotbox-icon type="predefined" name="search"></dotbox-icon>
+<dotbox-icon type="predefined" name="settings"></dotbox-icon>
+<dotbox-icon type="predefined" name="info"></dotbox-icon>
+<dotbox-icon type="predefined" name="warning"></dotbox-icon>
+<dotbox-icon type="predefined" name="error"></dotbox-icon>
+<dotbox-icon type="predefined" name="download"></dotbox-icon>
+
+<h4>Emoji Icons</h4>
+<p>Simple emoji characters for friendly interfaces:</p>
+<dotbox-icon type="emoji" emoji="🚀"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="⭐"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="❤️"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="🔥"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="💡"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="📁"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="🎯"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="⚡"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="🎨"></dotbox-icon>
+<dotbox-icon type="emoji" emoji="🔧"></dotbox-icon>
+
+<h4>Custom SVG</h4>
+<p>Custom SVG content for specific needs:</p>
+<dotbox-icon type="svg" svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="purple" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'></dotbox-icon>
+<dotbox-icon type="svg" svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="green"/><path fill="white" d="M9 12l2 2 4-4"/></svg>'></dotbox-icon>

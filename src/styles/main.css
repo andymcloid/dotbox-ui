@@ -1,12 +1,5 @@
 /* DotBox UI Framework - Main Styles */
 
-/* Import component styles */
-@import '../components/Button/Button.css';
-@import '../components/ModalDialog/ModalDialog.css';
-@import '../components/TabView/TabView.css';
-@import '../components/TextBox/TextBox.css';
-@import '../components/MetricItem/MetricItem.css';
-@import '../components/ToolButton/ToolButton.css';
 
 /* Global styles */
 :root {
