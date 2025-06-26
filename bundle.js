@@ -21,6 +21,8 @@
             icon: null,
             width: null,
             // Custom width (e.g., '100px', '10em', '50%', etc.)
+            animation: true,
+            // Enable/disable hover animations
             className: "",
             ...options
           };
@@ -49,6 +51,9 @@
             classes.push("btn-no-icon");
           } else if (!this.options.text || this.options.text.trim() === "") {
             classes.push("btn-icon-only");
+          }
+          if (!this.options.animation) {
+            classes.push("btn-no-animation");
           }
           if (this.options.className) {
             classes.push(this.options.className);
@@ -134,10 +139,13 @@
             return icon.getElement().outerHTML;
           } else {
             const predefinedIcons = {
-              "delete": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
-              "close": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
-              "check": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>',
-              "plus": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#eee" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/></svg>'
+              "delete": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
+              "close": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>',
+              "check": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>',
+              "plus": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z"/></svg>',
+              "code": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z"/></svg>',
+              "arrow-up": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M11 20H13V7.83L18.59 13.41L20 12L12 4L4 12L5.41 13.41L11 7.83V20Z"/></svg>',
+              "arrow-down": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M11 4H13V16.17L18.59 10.59L20 12L12 20L4 12L5.41 10.59L11 16.17V4Z"/></svg>'
             };
             return predefinedIcons[this.options.icon] || this.options.icon;
           }
@@ -198,7 +206,7 @@
           this.render();
         }
         static get observedAttributes() {
-          return ["variant", "size", "disabled", "text", "icon", "loading", "width"];
+          return ["variant", "size", "disabled", "text", "icon", "loading", "width", "animation"];
         }
         attributeChangedCallback() {
           if (this.buttonInstance) {
@@ -212,6 +220,7 @@
           const loading = this.hasAttribute("loading");
           const icon = this.getAttribute("icon") || null;
           const width = this.getAttribute("width") || null;
+          const animation = this.getAttribute("animation") !== "false";
           let text = this.getAttribute("text") || this.textContent.trim() || (icon ? "" : "Button");
           if (icon && text && /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u.test(icon)) {
             text = text.replace(icon, "").trim();
@@ -227,15 +236,20 @@
             loading,
             icon,
             width,
+            animation,
             onClick: () => {
               this.dispatchEvent(new CustomEvent("dotbox-click", {
-                detail: { variant, size, text, disabled, loading, icon, width },
+                detail: { variant, size, text, disabled, loading, icon, width, animation },
                 bubbles: true
               }));
             }
           });
           this.innerHTML = "";
           this.appendChild(this.buttonInstance.getElement());
+          if (width) {
+            this.style.width = width;
+            this.style.display = "block";
+          }
         }
         // Expose button methods
         setDisabled(disabled) {
@@ -729,11 +743,21 @@ ${additionalJS}`;
           this._loadPrism(() => {
             this.element = this._render();
             if (this.preview) {
-              setTimeout(() => {
-                this._updatePreview();
-              }, 100);
+              this._schedulePreviewUpdate();
             }
           });
+        }
+        _schedulePreviewUpdate() {
+          const checkAndUpdate = () => {
+            if (typeof window.Dotbox !== "undefined" && window.customElements && document.readyState === "complete") {
+              setTimeout(() => {
+                this._updatePreview();
+              }, 200);
+            } else {
+              setTimeout(checkAndUpdate, 100);
+            }
+          };
+          checkAndUpdate();
         }
         _loadPrism(cb) {
           if (window.Prism) return cb();
@@ -776,10 +800,11 @@ ${additionalJS}`;
           toolbar.appendChild(spacer);
           if (this.expandable) {
             const expandBtn = document.createElement("dotbox-button");
-            expandBtn.setAttribute("variant", "secondary");
+            expandBtn.setAttribute("variant", "primary");
             expandBtn.setAttribute("size", "small");
             expandBtn.setAttribute("width", "120px");
-            expandBtn.setAttribute("icon", this.expanded ? "\u{1F4C9}" : "\u{1F4C8}");
+            expandBtn.setAttribute("animation", "false");
+            expandBtn.setAttribute("icon", this.expanded ? "arrow-up" : "arrow-down");
             expandBtn.setAttribute("text", this.expanded ? "Collapse" : "Expand");
             expandBtn.addEventListener("click", () => this._toggleExpand());
             toolbar.appendChild(expandBtn);
@@ -787,9 +812,10 @@ ${additionalJS}`;
           }
           if (this.fiddle) {
             const fiddleBtn = document.createElement("dotbox-button");
-            fiddleBtn.setAttribute("variant", "secondary");
+            fiddleBtn.setAttribute("variant", "primary");
             fiddleBtn.setAttribute("size", "small");
             fiddleBtn.setAttribute("width", "120px");
+            fiddleBtn.setAttribute("animation", "false");
             fiddleBtn.setAttribute("icon", "code");
             fiddleBtn.setAttribute("text", "JSFiddle");
             fiddleBtn.addEventListener("click", () => {
@@ -810,15 +836,6 @@ ${additionalJS}`;
           header.innerHTML = `
             <span class="dotbox-codeblock-preview-title">Preview</span>
         `;
-          const refreshBtn = document.createElement("dotbox-button");
-          refreshBtn.setAttribute("variant", "secondary");
-          refreshBtn.setAttribute("size", "small");
-          refreshBtn.setAttribute("icon", "\u{1F504}");
-          refreshBtn.setAttribute("text", "");
-          refreshBtn.addEventListener("click", () => {
-            this.element.querySelector(".dotbox-codeblock").dispatchEvent(new CustomEvent("refresh"));
-          });
-          header.appendChild(refreshBtn);
           const content = document.createElement("div");
           content.className = "dotbox-codeblock-preview-content";
           content.id = `${this.id}-preview`;
@@ -840,7 +857,9 @@ ${additionalJS}`;
           if (this.preview) {
             code.addEventListener("input", () => {
               this.code = code.textContent;
-              this._updatePreview();
+              setTimeout(() => {
+                this._updatePreview();
+              }, 100);
             });
             pre.addEventListener("refresh", () => {
               this._updatePreview();
@@ -906,11 +925,11 @@ ${additionalJS}`;
           const codeBlock = this.codeContainer.querySelector(".dotbox-codeblock");
           if (this.expanded) {
             codeBlock.style.height = this.expandedHeight;
-            this.expandButton.setAttribute("icon", "\u{1F4C9}");
+            this.expandButton.setAttribute("icon", "arrow-up");
             this.expandButton.setAttribute("text", "Collapse");
           } else {
             codeBlock.style.height = this.originalHeight;
-            this.expandButton.setAttribute("icon", "\u{1F4C8}");
+            this.expandButton.setAttribute("icon", "arrow-down");
             this.expandButton.setAttribute("text", "Expand");
           }
         }
@@ -953,6 +972,9 @@ ${additionalJS}`;
           this.codeBlockInstance = null;
         }
         connectedCallback() {
+          if (!this.hasAttribute("code") && !this._originalCode) {
+            this._originalCode = this.textContent.trim();
+          }
           this.render();
         }
         static get observedAttributes() {
@@ -965,7 +987,7 @@ ${additionalJS}`;
         }
         render() {
           const language = this.getAttribute("language") || "javascript";
-          const code = this.getAttribute("code") || this.textContent.trim() || "";
+          const code = this.getAttribute("code") || this._originalCode || this.textContent.trim() || "";
           const preview = this.getAttribute("preview") !== "false";
           const expandable = this.getAttribute("expandable") !== "false";
           const fiddle = this.getAttribute("fiddle") !== "false";
@@ -2125,7 +2147,18 @@ ${additionalJS}`;
             const isCollapsed = this.collapsedGroups.has(groupKey);
             const headerEl = document.createElement("div");
             headerEl.className = "dotbox-menu-header" + (isCollapsed ? " collapsed" : "");
-            const arrowIcon = `<span class="dotbox-menu-header-icon">${isCollapsed ? "\u25BC" : "\u25BC"}</span>`;
+            let arrowIcon;
+            if (typeof window !== "undefined" && window.Dotbox && window.Dotbox.Icon) {
+              const iconComponent = new window.Dotbox.Icon({
+                name: isCollapsed ? "arrow-right" : "arrow-down",
+                size: "12px"
+              });
+              arrowIcon = `<span class="dotbox-menu-header-icon">${iconComponent.getElement().outerHTML}</span>`;
+            } else {
+              const chevronRight = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/></svg>';
+              const chevronDown = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>';
+              arrowIcon = `<span class="dotbox-menu-header-icon">${isCollapsed ? chevronRight : chevronDown}</span>`;
+            }
             const headerText = `<span class="dotbox-menu-header-text">${group.header}</span>`;
             if (this.headerArrowPosition === "left") {
               headerEl.innerHTML = `${arrowIcon}${headerText}`;
