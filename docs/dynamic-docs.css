@@ -96,6 +96,92 @@
     justify-content: center;
 }
 
+/* Menu Component Container */
+.nav-menu-container {
+    padding: 1rem 0;
+}
+
+/* Override Menu component styles for docs navigation */
+.docs-navigation .dotbox-menu {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.docs-navigation .dotbox-menu-header {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.docs-navigation .dotbox-menu-header:hover {
+    color: var(--color-text);
+}
+
+.docs-navigation .dotbox-menu-header-icon {
+    margin-right: 0.5rem;
+    transition: transform 0.15s ease;
+    width: 12px;
+    height: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.docs-navigation .dotbox-menu-header-icon svg,
+.docs-navigation .dotbox-menu-header-icon .dotbox-icon {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.docs-navigation .dotbox-menu-header.collapsed .dotbox-menu-header-icon {
+    transform: rotate(-90deg);
+}
+
+.docs-navigation .dotbox-menu-group {
+    transition: all 0.15s ease;
+    overflow: hidden;
+}
+
+.docs-navigation .dotbox-menu-group.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.docs-navigation .dotbox-menu-item {
+    margin-bottom: 0.25rem;
+    padding: 0.5rem 1.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+    background: transparent;
+    border: none;
+    text-align: left;
+    width: 100%;
+}
+
+.docs-navigation .dotbox-menu-item:hover {
+    color: var(--color-text);
+    background: var(--color-bg-hover);
+}
+
+.docs-navigation .dotbox-menu-item.selected {
+    color: var(--color-primary);
+    background: rgba(255, 182, 5, 0.08);
+    border-left-color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Legacy styles for backward compatibility */
 .nav-menu {
     padding: 1rem 0;
 }

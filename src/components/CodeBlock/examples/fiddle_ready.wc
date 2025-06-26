@@ -1,4 +1,0 @@
-<dotbox-code-block language="html" title="Interactive Example" expandable="true" fiddle="true">
-<dotbox-button variant="primary">Try me in JSFiddle!</dotbox-button>
-<dotbox-button variant="secondary" icon="🎨">Styled Button</dotbox-button>
-</dotbox-code-block>

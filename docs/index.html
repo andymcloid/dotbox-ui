@@ -54,6 +54,11 @@
         window.addEventListener('load', () => {
             // Wait for components to load, then enhance CodeBlock components
             setTimeout(() => {
+                // Create DotboxUIPrerender instance if the factory function exists
+                if (window.createDotboxUIPrerender && !window.DotboxUIPrerender) {
+                    window.DotboxUIPrerender = window.createDotboxUIPrerender();
+                }
+                
                 const codeBlocks = document.querySelectorAll('dotbox-code-block');
                 codeBlocks.forEach(codeBlock => {
                     // Create JSFiddle instance with DotboxUIPrerender

@@ -79,7 +79,22 @@ class Menu {
       // Create header element
       const headerEl = document.createElement('div');
       headerEl.className = 'dotbox-menu-header' + (isCollapsed ? ' collapsed' : '');
-      const arrowIcon = `<span class="dotbox-menu-header-icon">${isCollapsed ? '▼' : '▼'}</span>`;
+      
+      // Create icon using Icon component or fallback
+      let arrowIcon;
+      if (typeof window !== 'undefined' && window.Dotbox && window.Dotbox.Icon) {
+        const iconComponent = new window.Dotbox.Icon({
+          name: isCollapsed ? 'arrow-right' : 'arrow-down',
+          size: '12px'
+        });
+        arrowIcon = `<span class="dotbox-menu-header-icon">${iconComponent.getElement().outerHTML}</span>`;
+      } else {
+        // Fallback to SVG icons
+        const chevronRight = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/></svg>';
+        const chevronDown = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>';
+        arrowIcon = `<span class="dotbox-menu-header-icon">${isCollapsed ? chevronRight : chevronDown}</span>`;
+      }
+      
       const headerText = `<span class="dotbox-menu-header-text">${group.header}</span>`;
       
       if (this.headerArrowPosition === 'left') {

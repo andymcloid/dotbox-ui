@@ -94,35 +94,82 @@ class DocsApp {
                 </div>
             </div>
 
-            <nav class="nav-menu">
-                <div class="nav-item">
-                    <a href="/" class="nav-link" data-route="/">
-                        🏠 Overview
-                    </a>
-                </div>
-                
-                ${navigation.map(nav => `
-                    <div class="nav-category">
-                        <div class="nav-category-title">${nav.category}</div>
-                        ${nav.components.map(comp => `
-                            <div class="nav-item">
-                                <a href="/component/${comp.id}" class="nav-link" data-route="/component/${comp.id}">
-                                    ${comp.name}
-                                </a>
-                            </div>
-                        `).join('')}
-                    </div>
-                `).join('')}
-            </nav>
+            <div class="nav-menu-container">
+                <dotbox-menu id="main-navigation" collapsible-headers compact></dotbox-menu>
+            </div>
         `;
 
         this.navigationElement.innerHTML = navHtml;
 
+        // Setup Menu component
+        this.setupMenuComponent(navigation);
+        
         // Setup search
         this.setupSearch();
         
         // Setup theme toggle
         this.setupThemeToggle();
+    }
+
+    /**
+     * Setup the Menu component with navigation data
+     */
+    setupMenuComponent(navigation) {
+        const menuElement = document.getElementById('main-navigation');
+        if (!menuElement) return;
+
+        // Build menu items from navigation structure
+        const menuItems = [
+            {
+                id: 'overview',
+                label: '🏠 Overview',
+                group: 'main',
+                groupHeader: 'Main'
+            }
+        ];
+
+        // Add component items grouped by category
+        navigation.forEach(nav => {
+            nav.components.forEach(comp => {
+                menuItems.push({
+                    id: comp.id,
+                    label: comp.name,
+                    group: nav.category.toLowerCase().replace(/\s+/g, '-'),
+                    groupHeader: nav.category
+                });
+            });
+        });
+
+        // Set the items as JSON attribute
+        menuElement.setAttribute('data-items', JSON.stringify(menuItems));
+        
+        // Setup menu selection handler
+        menuElement.addEventListener('dotbox-select', (e) => {
+            const selectedId = e.detail.selectedId;
+            if (selectedId === 'overview') {
+                this.navigateTo('/');
+            } else {
+                this.navigateTo(`/component/${selectedId}`);
+            }
+            // Prevent default hash routing
+            e.preventDefault();
+        });
+
+        // Force re-render to pick up the new items
+        if (menuElement.render) {
+            menuElement.render();
+        }
+
+        // Override menu item click handlers to prevent hash routing
+        setTimeout(() => {
+            const menuItems = menuElement.querySelectorAll('.dotbox-menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // Let the dotbox-select event handle navigation
+                });
+            });
+        }, 100);
     }
 
     /**
@@ -145,35 +192,46 @@ class DocsApp {
      * Perform component search
      */
     performSearch(query) {
-        const navItems = document.querySelectorAll('.nav-item');
-        const categories = document.querySelectorAll('.nav-category');
+        const menuElement = document.getElementById('main-navigation');
+        if (!menuElement || !menuElement.menuInstance) return;
 
         if (!query.trim()) {
-            // Show all items
-            navItems.forEach(item => item.style.display = '');
-            categories.forEach(cat => cat.style.display = '');
+            // Show all menu groups and items
+            const menuGroups = menuElement.querySelectorAll('.dotbox-menu-group');
+            const menuHeaders = menuElement.querySelectorAll('.dotbox-menu-header');
+            const menuItems = menuElement.querySelectorAll('.dotbox-menu-item');
+            
+            menuGroups.forEach(group => group.style.display = '');
+            menuHeaders.forEach(header => header.style.display = '');
+            menuItems.forEach(item => item.style.display = '');
             return;
         }
 
         const results = this.discovery.searchComponents(query);
         const resultIds = results.map(comp => comp.id);
+        resultIds.push('overview'); // Always show overview
 
-        // Hide all items first
-        navItems.forEach(item => {
-            const link = item.querySelector('.nav-link');
-            if (link) {
-                const route = link.getAttribute('data-route');
-                if (route && route.startsWith('/component/')) {
-                    const compId = route.replace('/component/', '');
-                    item.style.display = resultIds.includes(compId) ? '' : 'none';
-                }
+        // Hide/show menu items based on search results
+        const menuItems = menuElement.querySelectorAll('.dotbox-menu-item');
+        menuItems.forEach(item => {
+            const itemText = item.textContent.trim();
+            const menuData = menuElement.menuInstance.items.find(data => data.label === itemText);
+            if (menuData) {
+                const shouldShow = resultIds.includes(menuData.id) || 
+                    menuData.label.toLowerCase().includes(query.toLowerCase());
+                item.style.display = shouldShow ? '' : 'none';
             }
         });
 
-        // Show/hide categories based on visible items
-        categories.forEach(category => {
-            const visibleItems = category.querySelectorAll('.nav-item:not([style*="none"])');
-            category.style.display = visibleItems.length > 0 ? '' : 'none';
+        // Show/hide menu groups based on visible items
+        const menuGroups = menuElement.querySelectorAll('.dotbox-menu-group');
+        menuGroups.forEach(group => {
+            const visibleItems = group.querySelectorAll('.dotbox-menu-item:not([style*="none"])');
+            const header = menuElement.querySelector(`[onclick*="${group.getAttribute('data-group')}"]`);
+            if (header) {
+                header.style.display = visibleItems.length > 0 ? '' : 'none';
+            }
+            group.style.display = visibleItems.length > 0 ? '' : 'none';
         });
     }
 
@@ -283,15 +341,18 @@ class DocsApp {
      * Update active navigation item
      */
     updateActiveNavigation(path) {
-        // Remove active class from all nav links
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
+        const menuElement = document.getElementById('main-navigation');
+        if (!menuElement || !menuElement.menuInstance) return;
 
-        // Add active class to current route
-        const activeLink = document.querySelector(`[data-route="${path}"]`);
-        if (activeLink) {
-            activeLink.classList.add('active');
+        let selectedId = null;
+        if (path === '/') {
+            selectedId = 'overview';
+        } else if (path.startsWith('/component/')) {
+            selectedId = path.replace('/component/', '');
+        }
+
+        if (selectedId) {
+            menuElement.menuInstance.select(selectedId);
         }
     }
 

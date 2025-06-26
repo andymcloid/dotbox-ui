@@ -5,7 +5,7 @@
 
 function createDotboxUIPrerender(options = {}) {
     const {
-        cdnBase = 'https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@main/dist/',
+        cdnBase = 'https://cdn.jsdelivr.net/gh/andymcloid/dotbox-ui@release/',
         includeThemeToggle = true
     } = options;
 
@@ -27,58 +27,51 @@ function createDotboxUIPrerender(options = {}) {
             }
         }
 
-        // Generate HTML content
-        const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title}</title>
-</head>
-<body>
-    ${includeThemeToggle ? `
-    <div style="margin-bottom: 1rem;">
-        <button onclick="toggleTheme()" style="padding: 0.5rem 1rem; cursor: pointer; border: 1px solid var(--color-border); background: var(--color-bg-panel); color: var(--color-text); border-radius: var(--radius); font-family: var(--font-family);">
-            🌓 Toggle Theme
-        </button>
-    </div>
-    ` : ''}
-    
-    <div id="demo-container" style="padding: 1rem;">
-        ${detectedType === 'wc' ? code : `<div id="js-demo"></div>`}
-    </div>
-</body>
-</html>`;
+        // Generate HTML content (just body content for JSFiddle)
+        const html = `${includeThemeToggle ? `
+<div style="margin-bottom: 1rem;">
+    <button onclick="toggleTheme()" style="padding: 0.5rem 1rem; cursor: pointer; border: 1px solid var(--color-border); background: var(--color-bg-panel); color: var(--color-text); border-radius: var(--radius); font-family: var(--font-family);">
+        🌓 Toggle Theme
+    </button>
+</div>
+` : ''}
+<div id="demo-container" style="padding: 1rem;">
+    ${detectedType === 'wc' ? code : `<div id="js-demo"></div>`}
+</div>`;
 
         // Generate CSS content with Dotbox UI imports
         const css = `/* Dotbox UI Styles */
 @import url('${cdnBase}index.css');
 @import url('${cdnBase}theme.css');
 
-/* Theme Classes */
-.theme-light {
-    /* Light theme variables loaded from theme.css */
-}
-
-.theme-dark {
-    /* Dark theme variables loaded from theme.css */
-}
-
 /* Demo Styling */
 body {
-    font-family: var(--font-family, 'Inter', 'Segoe UI', Arial, sans-serif);
+    font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif);
     background: var(--color-bg, #f8f9fa);
-    color: var(--color-text, #222);
+    color: var(--color-text, #333);
     margin: 0;
-    padding: 1rem;
+    padding: 1.5rem;
     transition: background-color 0.2s ease, color 0.2s ease;
+    line-height: 1.6;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 #demo-container {
-    background: var(--color-bg-panel, #fff);
+    background: var(--color-bg-panel, #ffffff);
     border-radius: var(--radius, 8px);
     border: 1px solid var(--color-border, #e5e7eb);
-    box-shadow: var(--color-shadow, 0 6px 32px rgba(0,0,0,0.10));
+    box-shadow: var(--color-shadow, 0 4px 16px rgba(0,0,0,0.08));
+    transition: box-shadow 0.2s ease;
+}
+
+/* Ensure proper theme switching */
+html.theme-light {
+    background: #f8f9fa;
+}
+
+html.theme-dark {
+    background: #1a1a1a;
 }`;
 
         // Generate JavaScript content with Dotbox UI loading
@@ -93,13 +86,15 @@ script.onload = function() {
     
     ${detectedType === 'js' ? `
     // JavaScript API Demo
-    try {
-        const container = document.getElementById('js-demo');
-        ${code}
-    } catch (error) {
-        console.error('Demo error:', error);
-        document.getElementById('js-demo').innerHTML = '<div style="color: red; padding: 1rem;">Error: ' + error.message + '</div>';
-    }
+    setTimeout(() => {
+        try {
+            const container = document.getElementById('js-demo');
+            ${code}
+        } catch (error) {
+            console.error('Demo error:', error);
+            document.getElementById('js-demo').innerHTML = '<div style="color: red; padding: 1rem;">Error: ' + error.message + '</div>';
+        }
+    }, 100);
     ` : '// Web Components are already in HTML'}
 };
 document.head.appendChild(script);`;

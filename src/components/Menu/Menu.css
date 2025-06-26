@@ -95,7 +95,24 @@
   font-size: 0.75rem;
   transition: transform 0.2s ease, color 0.2s ease;
   color: var(--color-text-muted);
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+}
+
+/* Ensure SVG icons inside header icons are properly sized */
+.dotbox-menu-header-icon svg {
+  width: 12px;
+  height: 12px;
+  display: block;
+}
+
+/* Icon component inside menu header */
+.dotbox-menu-header-icon .dotbox-icon {
+  width: 12px;
+  height: 12px;
 }
 
 /* Arrow positioning */

@@ -50,12 +50,19 @@
     justify-content: center;
     position: relative;
     transition: width 300ms ease;
+    color: white; /* Default icon color */
 }
 
 .btn .btn-icon svg {
     width: 15px;
     height: 15px;
     transition: transform 150ms ease;
+    fill: white;
+}
+
+/* Default SVG path color for all buttons (white) */
+.btn .btn-icon svg path {
+    fill: white;
 }
 
 .btn .btn-divider {
@@ -214,6 +221,11 @@
     color: var(--color-text);
 }
 
+/* Primary buttons use dark icons */
+.btn-primary .btn-icon svg {
+    fill: var(--color-text);
+}
+
 .btn-primary .btn-icon svg path {
     fill: var(--color-text) !important;
 }
@@ -227,12 +239,22 @@
     color: var(--color-text);
 }
 
+.btn-primary:hover:not(:disabled) .btn-icon svg {
+    fill: var(--color-text);
+}
+
 .btn-primary:hover:not(:disabled) .btn-icon svg path {
     fill: var(--color-text) !important;
 }
 
 .btn-secondary {
     background: var(--color-primary);
+}
+
+/* Secondary buttons keep white icons */
+.btn-secondary .btn-icon svg,
+.btn-secondary .btn-icon svg path {
+    fill: white;
 }
 
 .btn-secondary:hover:not(:disabled) {
@@ -243,12 +265,24 @@
     background: var(--color-success);
 }
 
+/* Success buttons keep white icons */
+.btn-success .btn-icon svg,
+.btn-success .btn-icon svg path {
+    fill: white;
+}
+
 .btn-success:hover:not(:disabled) {
     background: #059669;
 }
 
 .btn-danger {
     background: #e62222;
+}
+
+/* Danger buttons keep white icons */
+.btn-danger .btn-icon svg,
+.btn-danger .btn-icon svg path {
+    fill: white;
 }
 
 .btn-danger:hover:not(:disabled) {
