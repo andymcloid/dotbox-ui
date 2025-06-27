@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "icons": [
+    "arrow-down",
+    "arrow-left",
+    "arrow-right",
+    "arrow-up",
+    "check",
+    "checkmark",
+    "chevron-down",
+    "chevron-right",
+    "close",
+    "code",
+    "delete",
+    "download",
+    "edit",
+    "error",
+    "info",
+    "minus",
+    "plus",
+    "save",
+    "search",
+    "settings",
+    "upload",
+    "warning"
+  ],
+  "generated": "2025-06-27T09:56:33.988Z"
+}
