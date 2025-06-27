@@ -5,9 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "generate-index": "node build/generate-index.js",
-    "build": "node build/build.js",
-    "build:watch": "node build/build.js && webpack --mode development --watch",
-    "build:prod": "node build/build.js && npx esbuild src/index.js --bundle --minify --outfile=dist/bundle.js --loader:.css=file",
+    "generate-sprite": "node build/generate-sprite.js",
+    "build": "node build/build.js && npm run generate-sprite",
+    "build:watch": "node build/build.js && npm run generate-sprite && webpack --mode development --watch",
+    "build:prod": "node build/build.js && npm run generate-sprite && npx esbuild src/index.js --bundle --minify --outfile=dist/bundle.js --loader:.css=file",
     "dev": "npm run build && webpack --mode development --watch",
     "test": "jest",
     "docs": "npm run build && node docs-server.js",
