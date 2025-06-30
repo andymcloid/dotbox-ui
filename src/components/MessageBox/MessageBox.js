@@ -3,6 +3,8 @@
  * A card-style message dialog with variants, title, content, and configurable buttons
  */
 
+const Modal = require('../Modal/Modal');
+
 class MessageBox {
     constructor(options = {}) {
         this.options = {
@@ -16,7 +18,12 @@ class MessageBox {
             ...options
         };
 
-        this.element = null;
+        this.modal = new Modal({
+            closeOnOverlayClick: false, // MessageBox handles its own closing
+            closeOnEsc: false
+        });
+        this.element = this.modal.content;
+        this.modalElement = this.modal.element;
         this.isVisible = false;
 
         this.init();
@@ -25,6 +32,7 @@ class MessageBox {
     init() {
         this.createElement();
         this.bindEvents();
+        this.modal.setContent(this.element);
     }
 
     createElement() {
@@ -32,6 +40,7 @@ class MessageBox {
         this.element = document.createElement('div');
         this.element.className = this.getClasses();
         this.element.style.maxWidth = this.options.maxWidth;
+        this.element.style.display = 'none'; // Initially hide the content
 
         // Get icon for the variant
         const icon = this.getIcon();
@@ -152,15 +161,13 @@ class MessageBox {
             detail: { messageBox: this }
         }));
 
-        // Remove from DOM if it was added programmatically
-        if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-        }
-        
+        this.modal.close();
         this.isVisible = false;
     }
 
     show() {
+        this.modal.show();
+        this.element.style.display = ''; // Show the content
         this.isVisible = true;
         
         // Emit custom event
@@ -170,7 +177,8 @@ class MessageBox {
     }
 
     hide() {
-        this.element.style.display = 'none';
+        this.modal.close();
+        this.element.style.display = 'none'; // Hide the content
         this.isVisible = false;
     }
 
@@ -210,7 +218,7 @@ class MessageBox {
     }
 
     getElement() {
-        return this.element;
+        return this.modalElement;
     }
 
     // Static methods for common use cases
@@ -381,7 +389,7 @@ class DotboxMessageBox extends HTMLElement {
 
     disconnectedCallback() {
         if (this.messageBox) {
-            // Clean up if needed
+            this.messageBox.close();
         }
     }
 

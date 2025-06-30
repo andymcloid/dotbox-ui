@@ -3,6 +3,8 @@
  * A versatile notification system that can display as static badges or animated popups
  */
 
+const Modal = require('../Modal/Modal');
+
 class Notification {
     constructor(options = {}) {
         this.options = {
@@ -18,6 +20,7 @@ class Notification {
             ...options
         };
 
+        this.modal = null;
         this.element = null;
         this.timeoutId = null;
         this.isVisible = false;
@@ -30,6 +33,13 @@ class Notification {
         this.bindEvents();
 
         if (this.options.mode === 'popup') {
+            this.modal = new Modal({
+                closeOnOverlayClick: false,
+                closeOnEsc: false,
+                destroyOnClose: true
+            });
+            this.modal.setContent(this.element);
+            this.modal.show();
             this.showPopup();
         }
     }
@@ -139,24 +149,6 @@ class Notification {
         }
     }
 
-    ensurePopupContainer() {
-        const containerId = `dotbox-notifications-${this.options.position}`;
-        let container = document.getElementById(containerId);
-
-        if (!container) {
-            container = document.createElement('div');
-            container.id = containerId;
-            container.className = `dotbox-notifications-container dotbox-notifications-${this.options.position}`;
-            document.body.appendChild(container);
-        }
-
-        return container;
-    }
-
-    getPopupContainer() {
-        return document.getElementById(`dotbox-notifications-${this.options.position}`);
-    }
-
     showPopup() {
         this.isVisible = true;
         
@@ -175,7 +167,7 @@ class Notification {
             this.element.classList.add('dotbox-notification-hide');
             
             setTimeout(() => {
-                this.destroy();
+                this.modal.close();
             }, 300); // Match CSS animation duration
         } else {
             this.destroy();
@@ -209,7 +201,7 @@ class Notification {
     }
 
     getElement() {
-        return this.element;
+        return this.options.mode === 'popup' ? this.modal.element : this.element;
     }
 
     // Static method to create popup notifications easily
@@ -267,6 +259,10 @@ class DotboxNotification extends HTMLElement {
         
         if (options.mode === 'static') {
             this.appendChild(this.notification.getElement());
+        } else if (options.mode === 'popup') {
+            // For popup mode, the Notification class handles appending to body
+            // We just need to ensure the Web Component element is not displayed
+            this.style.display = 'none';
         }
     }
 

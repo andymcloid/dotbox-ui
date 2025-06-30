@@ -20,7 +20,6 @@ class PageGenerator {
         const html = `
             <div class="component-page">
                 ${this.generateHeader(component)}
-                ${this.generateOverview(component)}
                 ${this.generateExamples(component)}
                 ${this.generateAPI(component)}
                 ${this.generateCSS(component)}
@@ -75,34 +74,7 @@ class PageGenerator {
         return badges.join(' ');
     }
 
-    /**
-     * Generate overview section with quick stats
-     */
-    generateOverview(component) {
-        const stats = [
-            { label: 'Properties', count: component.properties?.length || 0 },
-            { label: 'Methods', count: component.methods?.length || 0 },
-            { label: 'Events', count: component.events?.length || 0 },
-            { label: 'Examples', count: component.examples?.length || 0 }
-        ];
-
-        const statsHtml = stats.map(stat => `
-            <div class="stat-item">
-                <div class="stat-number">${stat.count}</div>
-                <div class="stat-label">${stat.label}</div>
-            </div>
-        `).join('');
-
-        return `
-            <section class="component-overview">
-                <h2>Overview</h2>
-                <div class="component-stats">
-                    ${statsHtml}
-                </div>
-                ${component.dependencies?.length ? this.generateDependencies(component.dependencies) : ''}
-            </section>
-        `;
-    }
+    
 
     /**
      * Generate dependencies section

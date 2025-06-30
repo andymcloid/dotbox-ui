@@ -3,12 +3,26 @@
     <p>Automatically handles ESC key and overlay clicks</p>
 </dotbox-modal-dialog>
 
-<dotbox-button onclick="document.getElementById('my-modal').show()">
+<dotbox-button id="open-modal-button">
     Open Modal
 </dotbox-button>
 
 <script>
-document.getElementById('my-modal').addEventListener('dotbox-open', (e) => {
-    console.log('Modal opened:', e.detail.id);
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('my-modal');
+    const openButton = document.getElementById('open-modal-button');
+
+    if (openButton && modal) {
+        openButton.addEventListener('click', () => {
+            console.log('Attempting to show modal...', modal);
+            modal.show();
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener('dotbox-open', (e) => {
+            console.log('Modal opened:', e.detail.id);
+        });
+    }
 });
 </script>

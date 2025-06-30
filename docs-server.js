@@ -2,7 +2,12 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const app = express();
-const port = 3000;
+// Parse port from command line arguments
+let port = 3000;
+const portIndex = process.argv.indexOf('--port');
+if (portIndex > -1 && process.argv[portIndex + 1]) {
+    port = parseInt(process.argv[portIndex + 1], 10);
+}
 
 // Serve static files from the docs directory
 app.use(express.static(path.join(__dirname, 'docs')));
@@ -113,7 +118,8 @@ app.get('/api/components', (req, res) => {
         const components = fs.readdirSync(componentsDir)
             .filter(dir => {
                 const dirPath = path.join(componentsDir, dir);
-                return fs.statSync(dirPath).isDirectory();
+                const componentJsonPath = path.join(dirPath, 'component.json');
+                return fs.statSync(dirPath).isDirectory() && fs.existsSync(componentJsonPath);
             });
         
         res.json(components);

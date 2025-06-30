@@ -425,6 +425,10 @@ src/components/Menu/examples/
 npm run docs
 # Visit http://localhost:3000 for dynamic documentation
 
+# AI Assistant/Alternative Port: Run on a different port
+npm run docs -- --port 8000
+# Visit http://localhost:8000, useful for AI tools or avoiding port conflicts
+
 # Alternative: Simple HTTP server (limited functionality)
 cd docs
 python3 -m http.server 8080

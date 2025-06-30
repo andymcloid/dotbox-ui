@@ -2,9 +2,11 @@
  * Base ModalDialog Component - Generic and reusable
  * Following SOLID principles for modal functionality
  */
+const Modal = require('../Modal/Modal');
+
 class ModalDialog {
-    constructor(id, options = {}) {
-        this.id = id;
+    constructor(options = {}) {
+        console.log('ModalDialog: constructor', options);
         this.options = {
             destroyOnClose: false,
             closeOnOverlayClick: true,
@@ -12,75 +14,25 @@ class ModalDialog {
             ...options
         };
         
-        this.isOpen = false;
-        this.element = null;
-        this.overlay = null;
-        this.content = null;
-        this.header = null;
-        this.body = null;
-        this.footer = null;
-        
-        this.onOpen = null;
-        this.onClose = null;
-        this.onDestroy = null;
-        
-        this.createModal();
-        this.bindEvents();
-    }
-    
-    createModal() {
-        // Create main modal container
-        this.element = document.createElement('div');
-        this.element.id = this.id;
-        this.element.className = 'modal';
-        this.element.style.display = 'none';
-        
-        // Create overlay
-        this.overlay = document.createElement('div');
-        this.overlay.className = 'modal-overlay';
-        this.element.appendChild(this.overlay);
-        
-        // Create content container
-        this.content = document.createElement('div');
-        this.content.className = 'modal-content';
-        this.element.appendChild(this.content);
-        
-        // Create header
+        this.modal = new Modal(this.options);
+        this.element = this.modal.element;
+        this.content = this.modal.content;
+
         this.header = document.createElement('div');
         this.header.className = 'modal-header';
         this.content.appendChild(this.header);
-        
-        // Create body
+
         this.body = document.createElement('div');
         this.body.className = 'modal-body';
         this.content.appendChild(this.body);
-        
-        // Create footer
+
         this.footer = document.createElement('div');
         this.footer.className = 'modal-footer';
         this.content.appendChild(this.footer);
-        
-        // Add to DOM
-        document.body.appendChild(this.element);
-    }
-    
-    bindEvents() {
-        // Close on overlay click
-        if (this.options.closeOnOverlayClick) {
-            this.overlay.addEventListener('click', () => this.close());
-        }
-        
-        // Close on ESC key
-        if (this.options.closeOnEsc) {
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && this.isOpen) {
-                    this.close();
-                }
-            });
-        }
     }
     
     setTitle(title) {
+        console.log('ModalDialog: setTitle', title);
         this.header.innerHTML = `
             <h3>${title}</h3>
             <button class="modal-close" onclick="this.closest('.modal').modalInstance.close()">✕</button>
@@ -89,6 +41,7 @@ class ModalDialog {
     }
     
     setBody(content) {
+        console.log('ModalDialog: setBody');
         if (typeof content === 'string') {
             this.body.innerHTML = content;
         } else {
@@ -99,6 +52,7 @@ class ModalDialog {
     }
     
     setFooter(content) {
+        console.log('ModalDialog: setFooter');
         if (typeof content === 'string') {
             this.footer.innerHTML = content;
         } else {
@@ -109,6 +63,7 @@ class ModalDialog {
     }
     
     addFooterButton(text, className = 'action-btn', onclick = null) {
+        console.log('ModalDialog: addFooterButton', text);
         const button = document.createElement('button');
         button.textContent = text;
         button.className = className;
@@ -119,101 +74,59 @@ class ModalDialog {
         return button;
     }
     
+    
     show() {
-        if (this.isOpen) return this;
-        
+        console.log('ModalDialog: show');
         // Force close other modals if needed
         this.closeOtherModals();
-        
-        // Show modal
-        this.element.style.display = 'flex';
-        this.element.classList.add('show');
-        this.isOpen = true;
-        
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
-        
+
+        this.modal.show();
         // Store reference for close button
         this.element.modalInstance = this;
-        
-        // Trigger onOpen callback
-        if (this.onOpen) {
-            this.onOpen();
-        }
-        
-        // Emit custom event after modal is shown
-        const event = new CustomEvent('dialogShown', { bubbles: false });
-        this.element.dispatchEvent(event);
-        
         return this;
     }
-    
-    close() {
-        if (!this.isOpen) return this;
-        
-        this.element.style.display = 'none';
-        this.element.classList.remove('show');
-        this.isOpen = false;
-        
-        // Restore body scroll
-        document.body.style.overflow = 'auto';
-        
-        // Trigger onClose callback
-        if (this.onClose) {
-            this.onClose();
-        }
-        
-        // Destroy if configured
-        if (this.options.destroyOnClose) {
-            this.destroy();
-        }
-        
-        return this;
-    }
-    
+
     closeOtherModals() {
-        // Close any other open modals
+        console.log('ModalDialog: closeOtherModals');
         document.querySelectorAll('.modal.show').forEach(modal => {
             if (modal !== this.element && modal.modalInstance) {
                 modal.modalInstance.close();
             }
         });
     }
-    
+
+    close() {
+        console.log('ModalDialog: close');
+        this.modal.close();
+        return this;
+    }
+
     destroy() {
-        if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-        }
-        
-        if (this.onDestroy) {
-            this.onDestroy();
-        }
-        
-        this.element = null;
-        this.overlay = null;
-        this.content = null;
-        this.header = null;
-        this.body = null;
-        this.footer = null;
+        console.log('ModalDialog: destroy');
+        this.modal.destroy();
+        return this;
     }
     
-    // Event handlers
     onOpenCallback(callback) {
-        this.onOpen = callback;
+        console.log('ModalDialog: onOpenCallback');
+        this.modal.onOpenCallback(callback);
         return this;
     }
-    
+
     onCloseCallback(callback) {
-        this.onClose = callback;
+        console.log('ModalDialog: onCloseCallback');
+        this.modal.onCloseCallback(callback);
         return this;
     }
-    
+
     onDestroyCallback(callback) {
-        this.onDestroy = callback;
+        console.log('ModalDialog: onDestroyCallback');
+        this.modal.onDestroyCallback(callback);
         return this;
     }
     
     setPadding(padding) {
+        console.log('ModalDialog: setPadding');
         if (this.body) {
             this.body.style.padding = (typeof padding === 'number') ? `${padding}px` : padding;
         }
@@ -225,6 +138,7 @@ class ModalDialog {
      * setBodyContainerMode(false) restores default modal body padding and scrolling
      */
     setBodyContainerMode(isContainer = true) {
+        console.log('ModalDialog: setBodyContainerMode');
         if (!this.body) return this;
         if (isContainer) {
             this.body.style.padding = '0';
@@ -243,55 +157,22 @@ class ModalDialog {
 class DotboxModalDialogElement extends HTMLElement {
     constructor() {
         super();
+        console.log('DotboxModalDialogElement: constructor');
         this.modalInstance = null;
         this.uniqueId = `modal-${Math.random().toString(36).substr(2, 9)}`;
-    }
 
-    connectedCallback() {
-        // Hide the original content initially
-        this.style.display = 'none';
-        this.render();
-    }
-
-    static get observedAttributes() {
-        return ['title', 'destroy-on-close', 'close-on-overlay-click', 'close-on-esc', 'show'];
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (this.modalInstance) {
-            if (name === 'show') {
-                if (this.hasAttribute('show')) {
-                    this.modalInstance.show();
-                } else {
-                    this.modalInstance.close();
-                }
-            } else {
-                // For other attributes, we need to recreate the modal
-                this.render();
-            }
-        }
-    }
-
-    render() {
-        const title = this.getAttribute('title') || '';
         const destroyOnClose = this.hasAttribute('destroy-on-close');
         const closeOnOverlayClick = this.hasAttribute('close-on-overlay-click') || !this.hasAttribute('close-on-overlay-click');
         const closeOnEsc = this.hasAttribute('close-on-esc') || !this.hasAttribute('close-on-esc');
 
-        // Clean up previous instance
-        if (this.modalInstance) {
-            this.modalInstance.destroy();
-        }
-
-        // Create new modal instance
-        this.modalInstance = new ModalDialog(this.uniqueId, {
+        this.modalInstance = new ModalDialog({
             destroyOnClose: destroyOnClose,
             closeOnOverlayClick: closeOnOverlayClick,
             closeOnEsc: closeOnEsc
         });
 
-        // Set up event callbacks
         this.modalInstance.onOpenCallback(() => {
+            console.log('DotboxModalDialogElement: dotbox-open event');
             this.dispatchEvent(new CustomEvent('dotbox-open', {
                 detail: { id: this.uniqueId },
                 bubbles: true
@@ -299,7 +180,7 @@ class DotboxModalDialogElement extends HTMLElement {
         });
 
         this.modalInstance.onCloseCallback(() => {
-            this.removeAttribute('show');
+            console.log('DotboxModalDialogElement: dotbox-close event');
             this.dispatchEvent(new CustomEvent('dotbox-close', {
                 detail: { id: this.uniqueId },
                 bubbles: true
@@ -307,46 +188,55 @@ class DotboxModalDialogElement extends HTMLElement {
         });
 
         this.modalInstance.onDestroyCallback(() => {
+            console.log('DotboxModalDialogElement: dotbox-destroy event');
             this.dispatchEvent(new CustomEvent('dotbox-destroy', {
                 detail: { id: this.uniqueId },
                 bubbles: true
             }));
         });
+    }
 
-        // Set title if provided
+    connectedCallback() {
+        console.log('DotboxModalDialogElement: connectedCallback');
+        this.style.display = 'none';
+
+        const title = this.getAttribute('title') || '';
+
         if (title) {
             this.modalInstance.setTitle(title);
         }
 
-        // Set body content from slot or innerHTML
-        const bodyContent = this.innerHTML.trim();
-        if (bodyContent) {
-            this.modalInstance.setBody(bodyContent);
+        // Move child nodes to the modal body
+        while (this.firstChild) {
+            this.modalInstance.body.appendChild(this.firstChild);
         }
-
-        // Show if show attribute is present
-        if (this.hasAttribute('show')) {
-            this.modalInstance.show();
-        }
+        // Clear the original content of the Web Component
+        this.innerHTML = '';
     }
 
     // Expose modal methods
     show() {
-        this.setAttribute('show', '');
+        console.log('DotboxModalDialogElement: show');
+        this.modalInstance.show();
         return this;
     }
 
     close() {
-        this.removeAttribute('show');
+        console.log('DotboxModalDialogElement: close');
+        this.modalInstance.close();
         return this;
     }
 
     setTitle(title) {
-        this.setAttribute('title', title);
+        console.log('DotboxModalDialogElement: setTitle');
+        if (this.modalInstance) {
+            this.modalInstance.setTitle(title);
+        }
         return this;
     }
 
     setBody(content) {
+        console.log('DotboxModalDialogElement: setBody');
         if (this.modalInstance) {
             this.modalInstance.setBody(content);
         }
@@ -354,6 +244,7 @@ class DotboxModalDialogElement extends HTMLElement {
     }
 
     setFooter(content) {
+        console.log('DotboxModalDialogElement: setFooter');
         if (this.modalInstance) {
             this.modalInstance.setFooter(content);
         }
@@ -361,6 +252,7 @@ class DotboxModalDialogElement extends HTMLElement {
     }
 
     addFooterButton(text, className = 'action-btn', onclick = null) {
+        console.log('DotboxModalDialogElement: addFooterButton');
         if (this.modalInstance) {
             return this.modalInstance.addFooterButton(text, className, onclick);
         }
@@ -368,6 +260,7 @@ class DotboxModalDialogElement extends HTMLElement {
     }
 
     destroy() {
+        console.log('DotboxModalDialogElement: destroy');
         if (this.modalInstance) {
             this.modalInstance.destroy();
             this.modalInstance = null;
@@ -376,6 +269,7 @@ class DotboxModalDialogElement extends HTMLElement {
     }
 
     setPadding(padding) {
+        console.log('DotboxModalDialogElement: setPadding');
         if (this.modalInstance) {
             this.modalInstance.setPadding(padding);
         }
@@ -383,6 +277,7 @@ class DotboxModalDialogElement extends HTMLElement {
     }
 
     setBodyContainerMode(isContainer = true) {
+        console.log('DotboxModalDialogElement: setBodyContainerMode');
         if (this.modalInstance) {
             this.modalInstance.setBodyContainerMode(isContainer);
         }
@@ -390,19 +285,10 @@ class DotboxModalDialogElement extends HTMLElement {
     }
 
     disconnectedCallback() {
+        console.log('DotboxModalDialogElement: disconnectedCallback');
         if (this.modalInstance) {
             this.modalInstance.destroy();
             this.modalInstance = null;
         }
     }
-}
-
-// Register custom element
-if (typeof customElements !== 'undefined') {
-    customElements.define('dotbox-modal-dialog', DotboxModalDialogElement);
-}
-
-// Export for module usage
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = ModalDialog;
 } 

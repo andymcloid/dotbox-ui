@@ -13,6 +13,7 @@ const Loader = require('./components/Loader/Loader.js');
 const Menu = require('./components/Menu/Menu.js');
 const MessageBox = require('./components/MessageBox/MessageBox.js');
 const MetricItem = require('./components/MetricItem/MetricItem.js');
+const Modal = require('./components/Modal/Modal.js');
 const ModalDialog = require('./components/ModalDialog/ModalDialog.js');
 const Notification = require('./components/Notification/Notification.js');
 const Section = require('./components/Section/Section.js');
@@ -35,6 +36,7 @@ const Dotbox = {
     Menu,
     MessageBox,
     MetricItem,
+    Modal,
     ModalDialog,
     Notification,
     Section,
