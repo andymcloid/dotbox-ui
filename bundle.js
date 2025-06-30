@@ -2335,9 +2335,131 @@ ${additionalJS}`;
     }
   });
 
+  // src/components/Modal/Modal.js
+  var require_Modal = __commonJS({
+    "src/components/Modal/Modal.js"(exports, module) {
+      var Modal = class {
+        constructor(options = {}) {
+          console.log("Modal: constructor", options);
+          this.options = {
+            destroyOnClose: false,
+            closeOnOverlayClick: true,
+            closeOnEsc: true,
+            ...options
+          };
+          this.isOpen = false;
+          this.element = null;
+          this.overlay = null;
+          this.content = null;
+          this.onOpen = null;
+          this.onClose = null;
+          this.onDestroy = null;
+          this.createModal();
+          this.bindEvents();
+        }
+        createModal() {
+          console.log("Modal: createModal");
+          this.element = document.createElement("div");
+          this.element.className = "modal";
+          this.element.style.display = "none";
+          this.overlay = document.createElement("div");
+          this.overlay.className = "modal-overlay";
+          this.element.appendChild(this.overlay);
+          this.content = document.createElement("div");
+          this.content.className = "modal-content";
+          this.element.appendChild(this.content);
+          document.body.appendChild(this.element);
+        }
+        bindEvents() {
+          console.log("Modal: bindEvents");
+          if (this.options.closeOnOverlayClick) {
+            this.overlay.addEventListener("click", () => this.close());
+          }
+          if (this.options.closeOnEsc) {
+            document.addEventListener("keydown", (e) => {
+              if (e.key === "Escape" && this.isOpen) {
+                this.close();
+              }
+            });
+          }
+        }
+        setContent(content) {
+          console.log("Modal: setContent");
+          if (typeof content === "string") {
+            this.content.innerHTML = content;
+          } else {
+            this.content.innerHTML = "";
+            this.content.appendChild(content);
+          }
+          return this;
+        }
+        show() {
+          console.log("Modal: show");
+          if (this.isOpen) return this;
+          this.element.style.display = "flex";
+          this.element.classList.add("show");
+          this.isOpen = true;
+          document.body.style.overflow = "hidden";
+          if (this.onOpen) {
+            this.onOpen();
+          }
+          const event = new CustomEvent("modal-shown", { bubbles: false });
+          this.element.dispatchEvent(event);
+          return this;
+        }
+        close() {
+          console.log("Modal: close");
+          if (!this.isOpen) return this;
+          this.element.style.display = "none";
+          this.element.classList.remove("show");
+          this.isOpen = false;
+          document.body.style.overflow = "auto";
+          if (this.onClose) {
+            this.onClose();
+          }
+          if (this.options.destroyOnClose) {
+            this.destroy();
+          }
+          return this;
+        }
+        destroy() {
+          console.log("Modal: destroy");
+          if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+          }
+          if (this.onDestroy) {
+            this.onDestroy();
+          }
+          this.element = null;
+          this.overlay = null;
+          this.content = null;
+        }
+        onOpenCallback(callback) {
+          console.log("Modal: onOpenCallback");
+          this.onOpen = callback;
+          return this;
+        }
+        onCloseCallback(callback) {
+          console.log("Modal: onCloseCallback");
+          this.onClose = callback;
+          return this;
+        }
+        onDestroyCallback(callback) {
+          console.log("Modal: onDestroyCallback");
+          this.onDestroy = callback;
+          return this;
+        }
+      };
+      if (typeof module !== "undefined" && module.exports) {
+        module.exports = Modal;
+      }
+    }
+  });
+
   // src/components/MessageBox/MessageBox.js
   var require_MessageBox = __commonJS({
     "src/components/MessageBox/MessageBox.js"(exports, module) {
+      var Modal = require_Modal();
       var MessageBox = class _MessageBox {
         constructor(options = {}) {
           this.options = {
@@ -2353,18 +2475,26 @@ ${additionalJS}`;
             maxWidth: options.maxWidth || "380px",
             ...options
           };
-          this.element = null;
+          this.modal = new Modal({
+            closeOnOverlayClick: false,
+            // MessageBox handles its own closing
+            closeOnEsc: false
+          });
+          this.element = this.modal.content;
+          this.modalElement = this.modal.element;
           this.isVisible = false;
           this.init();
         }
         init() {
           this.createElement();
           this.bindEvents();
+          this.modal.setContent(this.element);
         }
         createElement() {
           this.element = document.createElement("div");
           this.element.className = this.getClasses();
           this.element.style.maxWidth = this.options.maxWidth;
+          this.element.style.display = "none";
           const icon = this.getIcon();
           this.element.innerHTML = `
             ${this.options.closable ? `
@@ -2464,18 +2594,19 @@ ${additionalJS}`;
           this.element.dispatchEvent(new CustomEvent("dotbox-messagebox-close", {
             detail: { messageBox: this }
           }));
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
+          this.modal.close();
           this.isVisible = false;
         }
         show() {
+          this.modal.show();
+          this.element.style.display = "";
           this.isVisible = true;
           this.element.dispatchEvent(new CustomEvent("dotbox-messagebox-show", {
             detail: { messageBox: this }
           }));
         }
         hide() {
+          this.modal.close();
           this.element.style.display = "none";
           this.isVisible = false;
         }
@@ -2506,7 +2637,7 @@ ${additionalJS}`;
           return this;
         }
         getElement() {
-          return this.element;
+          return this.modalElement;
         }
         // Static methods for common use cases
         static success(title, message, buttons = []) {
@@ -2653,6 +2784,7 @@ ${additionalJS}`;
         }
         disconnectedCallback() {
           if (this.messageBox) {
+            this.messageBox.close();
           }
         }
         // Methods for programmatic control
@@ -2846,321 +2978,15 @@ ${additionalJS}`;
 
   // src/components/ModalDialog/ModalDialog.js
   var require_ModalDialog = __commonJS({
-    "src/components/ModalDialog/ModalDialog.js"(exports, module) {
-      var ModalDialog = class {
-        constructor(id, options = {}) {
-          this.id = id;
-          this.options = {
-            destroyOnClose: false,
-            closeOnOverlayClick: true,
-            closeOnEsc: true,
-            ...options
-          };
-          this.isOpen = false;
-          this.element = null;
-          this.overlay = null;
-          this.content = null;
-          this.header = null;
-          this.body = null;
-          this.footer = null;
-          this.onOpen = null;
-          this.onClose = null;
-          this.onDestroy = null;
-          this.createModal();
-          this.bindEvents();
-        }
-        createModal() {
-          this.element = document.createElement("div");
-          this.element.id = this.id;
-          this.element.className = "modal";
-          this.element.style.display = "none";
-          this.overlay = document.createElement("div");
-          this.overlay.className = "modal-overlay";
-          this.element.appendChild(this.overlay);
-          this.content = document.createElement("div");
-          this.content.className = "modal-content";
-          this.element.appendChild(this.content);
-          this.header = document.createElement("div");
-          this.header.className = "modal-header";
-          this.content.appendChild(this.header);
-          this.body = document.createElement("div");
-          this.body.className = "modal-body";
-          this.content.appendChild(this.body);
-          this.footer = document.createElement("div");
-          this.footer.className = "modal-footer";
-          this.content.appendChild(this.footer);
-          document.body.appendChild(this.element);
-        }
-        bindEvents() {
-          if (this.options.closeOnOverlayClick) {
-            this.overlay.addEventListener("click", () => this.close());
-          }
-          if (this.options.closeOnEsc) {
-            document.addEventListener("keydown", (e) => {
-              if (e.key === "Escape" && this.isOpen) {
-                this.close();
-              }
-            });
-          }
-        }
-        setTitle(title) {
-          this.header.innerHTML = `
-            <h3>${title}</h3>
-            <button class="modal-close" onclick="this.closest('.modal').modalInstance.close()">\u2715</button>
-        `;
-          return this;
-        }
-        setBody(content) {
-          if (typeof content === "string") {
-            this.body.innerHTML = content;
-          } else {
-            this.body.innerHTML = "";
-            this.body.appendChild(content);
-          }
-          return this;
-        }
-        setFooter(content) {
-          if (typeof content === "string") {
-            this.footer.innerHTML = content;
-          } else {
-            this.footer.innerHTML = "";
-            this.footer.appendChild(content);
-          }
-          return this;
-        }
-        addFooterButton(text, className = "action-btn", onclick = null) {
-          const button = document.createElement("button");
-          button.textContent = text;
-          button.className = className;
-          if (onclick) {
-            button.addEventListener("click", onclick);
-          }
-          this.footer.appendChild(button);
-          return button;
-        }
-        show() {
-          if (this.isOpen) return this;
-          this.closeOtherModals();
-          this.element.style.display = "flex";
-          this.element.classList.add("show");
-          this.isOpen = true;
-          document.body.style.overflow = "hidden";
-          this.element.modalInstance = this;
-          if (this.onOpen) {
-            this.onOpen();
-          }
-          const event = new CustomEvent("dialogShown", { bubbles: false });
-          this.element.dispatchEvent(event);
-          return this;
-        }
-        close() {
-          if (!this.isOpen) return this;
-          this.element.style.display = "none";
-          this.element.classList.remove("show");
-          this.isOpen = false;
-          document.body.style.overflow = "auto";
-          if (this.onClose) {
-            this.onClose();
-          }
-          if (this.options.destroyOnClose) {
-            this.destroy();
-          }
-          return this;
-        }
-        closeOtherModals() {
-          document.querySelectorAll(".modal.show").forEach((modal) => {
-            if (modal !== this.element && modal.modalInstance) {
-              modal.modalInstance.close();
-            }
-          });
-        }
-        destroy() {
-          if (this.element && this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-          }
-          if (this.onDestroy) {
-            this.onDestroy();
-          }
-          this.element = null;
-          this.overlay = null;
-          this.content = null;
-          this.header = null;
-          this.body = null;
-          this.footer = null;
-        }
-        // Event handlers
-        onOpenCallback(callback) {
-          this.onOpen = callback;
-          return this;
-        }
-        onCloseCallback(callback) {
-          this.onClose = callback;
-          return this;
-        }
-        onDestroyCallback(callback) {
-          this.onDestroy = callback;
-          return this;
-        }
-        setPadding(padding) {
-          if (this.body) {
-            this.body.style.padding = typeof padding === "number" ? `${padding}px` : padding;
-          }
-          return this;
-        }
-        /**
-         * setBodyContainerMode(true) disables modal body padding and scrolling, for full-size child components (e.g. TabView)
-         * setBodyContainerMode(false) restores default modal body padding and scrolling
-         */
-        setBodyContainerMode(isContainer = true) {
-          if (!this.body) return this;
-          if (isContainer) {
-            this.body.style.padding = "0";
-            this.body.style.maxHeight = "none";
-          } else {
-            this.body.style.padding = "";
-            this.body.style.maxHeight = "";
-          }
-          return this;
-        }
-      };
-      var DotboxModalDialogElement = class extends HTMLElement {
-        constructor() {
-          super();
-          this.modalInstance = null;
-          this.uniqueId = `modal-${Math.random().toString(36).substr(2, 9)}`;
-        }
-        connectedCallback() {
-          this.style.display = "none";
-          this.render();
-        }
-        static get observedAttributes() {
-          return ["title", "destroy-on-close", "close-on-overlay-click", "close-on-esc", "show"];
-        }
-        attributeChangedCallback(name, oldValue, newValue) {
-          if (this.modalInstance) {
-            if (name === "show") {
-              if (this.hasAttribute("show")) {
-                this.modalInstance.show();
-              } else {
-                this.modalInstance.close();
-              }
-            } else {
-              this.render();
-            }
-          }
-        }
-        render() {
-          const title = this.getAttribute("title") || "";
-          const destroyOnClose = this.hasAttribute("destroy-on-close");
-          const closeOnOverlayClick = this.hasAttribute("close-on-overlay-click") || !this.hasAttribute("close-on-overlay-click");
-          const closeOnEsc = this.hasAttribute("close-on-esc") || !this.hasAttribute("close-on-esc");
-          if (this.modalInstance) {
-            this.modalInstance.destroy();
-          }
-          this.modalInstance = new ModalDialog(this.uniqueId, {
-            destroyOnClose,
-            closeOnOverlayClick,
-            closeOnEsc
-          });
-          this.modalInstance.onOpenCallback(() => {
-            this.dispatchEvent(new CustomEvent("dotbox-open", {
-              detail: { id: this.uniqueId },
-              bubbles: true
-            }));
-          });
-          this.modalInstance.onCloseCallback(() => {
-            this.removeAttribute("show");
-            this.dispatchEvent(new CustomEvent("dotbox-close", {
-              detail: { id: this.uniqueId },
-              bubbles: true
-            }));
-          });
-          this.modalInstance.onDestroyCallback(() => {
-            this.dispatchEvent(new CustomEvent("dotbox-destroy", {
-              detail: { id: this.uniqueId },
-              bubbles: true
-            }));
-          });
-          if (title) {
-            this.modalInstance.setTitle(title);
-          }
-          const bodyContent = this.innerHTML.trim();
-          if (bodyContent) {
-            this.modalInstance.setBody(bodyContent);
-          }
-          if (this.hasAttribute("show")) {
-            this.modalInstance.show();
-          }
-        }
-        // Expose modal methods
-        show() {
-          this.setAttribute("show", "");
-          return this;
-        }
-        close() {
-          this.removeAttribute("show");
-          return this;
-        }
-        setTitle(title) {
-          this.setAttribute("title", title);
-          return this;
-        }
-        setBody(content) {
-          if (this.modalInstance) {
-            this.modalInstance.setBody(content);
-          }
-          return this;
-        }
-        setFooter(content) {
-          if (this.modalInstance) {
-            this.modalInstance.setFooter(content);
-          }
-          return this;
-        }
-        addFooterButton(text, className = "action-btn", onclick = null) {
-          if (this.modalInstance) {
-            return this.modalInstance.addFooterButton(text, className, onclick);
-          }
-          return null;
-        }
-        destroy() {
-          if (this.modalInstance) {
-            this.modalInstance.destroy();
-            this.modalInstance = null;
-          }
-          return this;
-        }
-        setPadding(padding) {
-          if (this.modalInstance) {
-            this.modalInstance.setPadding(padding);
-          }
-          return this;
-        }
-        setBodyContainerMode(isContainer = true) {
-          if (this.modalInstance) {
-            this.modalInstance.setBodyContainerMode(isContainer);
-          }
-          return this;
-        }
-        disconnectedCallback() {
-          if (this.modalInstance) {
-            this.modalInstance.destroy();
-            this.modalInstance = null;
-          }
-        }
-      };
-      if (typeof customElements !== "undefined") {
-        customElements.define("dotbox-modal-dialog", DotboxModalDialogElement);
-      }
-      if (typeof module !== "undefined" && module.exports) {
-        module.exports = ModalDialog;
-      }
+    "src/components/ModalDialog/ModalDialog.js"() {
+      var Modal = require_Modal();
     }
   });
 
   // src/components/Notification/Notification.js
   var require_Notification = __commonJS({
     "src/components/Notification/Notification.js"(exports, module) {
+      var Modal = require_Modal();
       var Notification = class _Notification {
         constructor(options = {}) {
           this.options = {
@@ -3182,6 +3008,7 @@ ${additionalJS}`;
             onClose: options.onClose || null,
             ...options
           };
+          this.modal = null;
           this.element = null;
           this.timeoutId = null;
           this.isVisible = false;
@@ -3191,6 +3018,13 @@ ${additionalJS}`;
           this.createElement();
           this.bindEvents();
           if (this.options.mode === "popup") {
+            this.modal = new Modal({
+              closeOnOverlayClick: false,
+              closeOnEsc: false,
+              destroyOnClose: true
+            });
+            this.modal.setContent(this.element);
+            this.modal.show();
             this.showPopup();
           }
         }
@@ -3278,20 +3112,6 @@ ${additionalJS}`;
             });
           }
         }
-        ensurePopupContainer() {
-          const containerId = `dotbox-notifications-${this.options.position}`;
-          let container = document.getElementById(containerId);
-          if (!container) {
-            container = document.createElement("div");
-            container.id = containerId;
-            container.className = `dotbox-notifications-container dotbox-notifications-${this.options.position}`;
-            document.body.appendChild(container);
-          }
-          return container;
-        }
-        getPopupContainer() {
-          return document.getElementById(`dotbox-notifications-${this.options.position}`);
-        }
         showPopup() {
           this.isVisible = true;
           setTimeout(() => {
@@ -3305,7 +3125,7 @@ ${additionalJS}`;
           if (this.options.mode === "popup") {
             this.element.classList.add("dotbox-notification-hide");
             setTimeout(() => {
-              this.destroy();
+              this.modal.close();
             }, 300);
           } else {
             this.destroy();
@@ -3330,7 +3150,7 @@ ${additionalJS}`;
           }
         }
         getElement() {
-          return this.element;
+          return this.options.mode === "popup" ? this.modal.element : this.element;
         }
         // Static method to create popup notifications easily
         static show(message, variant = "success", options = {}) {
@@ -3378,6 +3198,8 @@ ${additionalJS}`;
           this.notification = new Notification(options);
           if (options.mode === "static") {
             this.appendChild(this.notification.getElement());
+          } else if (options.mode === "popup") {
+            this.style.display = "none";
           }
         }
         disconnectedCallback() {
@@ -4232,7 +4054,7 @@ ${additionalJS}`;
   // src/index.css
   var require_index = __commonJS({
     "src/index.css"(exports, module) {
-      module.exports = "./index-VXU7ZXCU.css";
+      module.exports = "./index-X752F4FA.css";
     }
   });
 
@@ -4249,6 +4071,7 @@ ${additionalJS}`;
       var Menu = require_Menu();
       var MessageBox = require_MessageBox();
       var MetricItem = require_MetricItem();
+      var Modal = require_Modal();
       var ModalDialog = require_ModalDialog();
       var Notification = require_Notification();
       var Section = require_Section();
@@ -4267,6 +4090,7 @@ ${additionalJS}`;
         Menu,
         MessageBox,
         MetricItem,
+        Modal,
         ModalDialog,
         Notification,
         Section,
